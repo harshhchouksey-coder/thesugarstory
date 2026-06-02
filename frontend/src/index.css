@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #F6EFE3; /* Cream */
+    color: #5D4037; /* Cocoa */
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: #5D4037;
+  }
+
+  ::selection {
+    background-color: #C4956A; /* Caramel primary */
+    color: #F6EFE3; /* Cream */
+  }
+
+  /* Exquisite Minimal Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #F6EFE3;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #C4956A;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #5D4037;
+  }
+}
+
+.luxury-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.luxury-hover:hover {
+  letter-spacing: 0.05em;
+  transform: translateY(-1px);
+}
+
+.marquee-rail {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: 2rem;
+}
+
+.marquee-track {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: space-around;
+  min-width: 100%;
+  gap: 2rem;
+  animation: scroll-marquee 25s linear infinite;
+}
+
+@keyframes scroll-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}

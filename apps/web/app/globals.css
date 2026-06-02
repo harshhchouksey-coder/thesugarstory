@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #F6EFE3; /* Cream background */
+    color: #1F1410; /* Cocoa text */
+    font-family: var(--font-inter), sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-cormorant), Georgia, serif;
+    color: #1F1410;
+  }
+
+  ::selection {
+    background-color: #6B3F2A; /* Cocoa caramel */
+    color: #F6EFE3; /* Cream */
+  }
+
+  /* Custom Premium Scrollbar (Aesop-style minimalist) */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #F6EFE3;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #A8A095;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #6B3F2A;
+  }
+}
+
+/* Luxury micro-transition helpers */
+.luxury-btn-hover {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.luxury-btn-hover:hover {
+  letter-spacing: 0.05em;
+  transform: translateY(-1px);
+}
+
+.marquee-container {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: 2rem;
+}
+
+.marquee-content {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: space-around;
+  min-width: 100%;
+  gap: 2rem;
+  animation: scroll-marquee 30s linear infinite;
+}
+
+@keyframes scroll-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
