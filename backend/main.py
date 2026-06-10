@@ -228,11 +228,31 @@ async def check_serviceability(pin: str, productId: str = None):
         date_str = target_date.strftime("%a, %d %b")
         rolling_slots.append(date_str)
 
-    if productId == "prod_taj_mousse" and not is_bhopal:
+    product = None
+    if productId:
+        if db_instance.db is not None:
+            try:
+                product = await db_instance.db.products.find_one({"id": productId})
+            except Exception as e:
+                print(f"Error querying product for serviceability check: {e}")
+        
+        if not product:
+            product = next((p for p in PRODUCTS_SEED_LIST if p.get("id") == productId), None)
+
+    is_local_only = False
+    product_name = "This item"
+    if product:
+        category = product.get("category", "")
+        name = product.get("name", "")
+        product_name = name
+        if category in ["Cakes", "Cheesecakes"] or "theme cake" in name.lower():
+            is_local_only = True
+
+    if is_local_only and not is_bhopal:
         return {
             "serviceable": False,
-            "message": "Taj Signature Mousse Cake is restricted to Bhopal local fresh delivery only.",
-            "alternatives": ["prod_brownies", "prod_tea_cake"]
+            "message": f"{product_name} is restricted to Bhopal local fresh delivery only.",
+            "alternatives": []
         }
 
     return {
