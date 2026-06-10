@@ -304,7 +304,15 @@ async def create_order(payload: CreateOrderRequest):
         "created_at": datetime.now().isoformat()
     }
 
-    mock_db["orders"].append(order)
+    if db_instance.db is not None:
+        try:
+            await db_instance.db.orders.insert_one(order.copy())
+        except Exception as e:
+            print(f"Error persisting order to MongoDB: {e}")
+            mock_db["orders"].append(order)
+    else:
+        mock_db["orders"].append(order)
+
     return {
         "success": True,
         "order": order,
@@ -316,9 +324,19 @@ async def create_order(payload: CreateOrderRequest):
 
 @app.post("/api/orders/verify")
 async def verify_payment(payload: VerifyPaymentRequest):
-    order = next((o for o in mock_db["orders"] if o["id"] == payload.orderId), None)
+    order = None
+    if db_instance.db is not None:
+        try:
+            order = await db_instance.db.orders.find_one({"id": payload.orderId})
+            if not order:
+                order = await db_instance.db.orders.find_one({"razorpay_order_id": payload.razorpayOrderId})
+        except Exception as e:
+            print(f"Error reading order from MongoDB: {e}")
+
     if not order:
-        order = next((o for o in mock_db["orders"] if o.get("razorpay_order_id") == payload.razorpayOrderId), None)
+        order = next((o for o in mock_db["orders"] if o["id"] == payload.orderId), None)
+        if not order:
+            order = next((o for o in mock_db["orders"] if o.get("razorpay_order_id") == payload.razorpayOrderId), None)
     
     if not order:
         order = {
@@ -326,9 +344,17 @@ async def verify_payment(payload: VerifyPaymentRequest):
             "customer": {"email": "patron@example.com", "phone": "7906759188", "name": "Bhopal Gourmet"},
             "billing": {"subtotal": 1499, "bumps": 0, "total": 1499},
             "delivery": {"date": "TBD", "slot": "TBD"},
-            "whatsappConsent": True
+            "whatsappConsent": True,
+            "status": "pending_payment",
+            "created_at": datetime.now().isoformat()
         }
-        mock_db["orders"].append(order)
+        if db_instance.db is not None:
+            try:
+                await db_instance.db.orders.insert_one(order.copy())
+            except Exception as e:
+                print(f"Error creating fallback order in MongoDB: {e}")
+        else:
+            mock_db["orders"].append(order)
     
     # Signature Verification
     if RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET and not payload.isMock:
@@ -350,6 +376,19 @@ async def verify_payment(payload: VerifyPaymentRequest):
         "is_mock": payload.isMock or not (bool(RAZORPAY_KEY_ID) and bool(RAZORPAY_KEY_SECRET))
     }
 
+    if db_instance.db is not None:
+        try:
+            await db_instance.db.orders.update_one(
+                {"id": order["id"]},
+                {"$set": {"status": "new", "payment": order["payment"]}}
+            )
+        except Exception as e:
+            print(f"Error updating verified order in MongoDB: {e}")
+
+    # Remove ObjectId _id if present before returning
+    if "_id" in order:
+        del order["_id"]
+
     # Simulate SMTP Email Dispatch (Confirmation Email)
     print(f"[SMTP EMAIL] Confirmation email invoice dispatched to {order['customer']['email']} with grand total: ₹{order['billing']['total']}.")
     
@@ -368,7 +407,12 @@ async def verify_payment(payload: VerifyPaymentRequest):
 # ==========================================
 @app.post("/api/admin/login")
 async def admin_login(payload: AdminLoginRequest):
-    ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "ShaliniTajBakery2025")
+    ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
+    if not ADMIN_PASSWORD:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="ADMIN_PASSWORD environment variable is not set on the server."
+        )
     if payload.password == ADMIN_PASSWORD:
         return {"success": True, "token": "admin_session_token_shalini_taj_2025"}
     else:
@@ -376,9 +420,20 @@ async def admin_login(payload: AdminLoginRequest):
 
 @app.get("/api/orders")
 async def get_orders():
+    orders_list = []
+    if db_instance.db is not None:
+        try:
+            cursor = db_instance.db.orders.find({}, {"_id": 0})
+            orders_list = await cursor.to_list(length=200)
+        except Exception as e:
+            print(f"Error fetching orders from MongoDB: {e}")
+            orders_list = mock_db["orders"]
+    else:
+        orders_list = mock_db["orders"]
+
     # Return orders, newest first
     sorted_orders = sorted(
-        mock_db["orders"],
+        orders_list,
         key=lambda x: x.get("created_at", ""),
         reverse=True
     )
@@ -386,13 +441,34 @@ async def get_orders():
 
 @app.post("/api/orders/{id}/status")
 async def update_order_status(id: str, payload: UpdateStatusRequest):
-    order = next((o for o in mock_db["orders"] if o["id"] == id), None)
+    order = None
+    if db_instance.db is not None:
+        try:
+            order = await db_instance.db.orders.find_one({"id": id})
+        except Exception as e:
+            print(f"Error reading order from MongoDB for status update: {e}")
+
+    if not order:
+        order = next((o for o in mock_db["orders"] if o["id"] == id), None)
+
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
     
     old_status = order.get("status", "unknown")
     new_status = payload.status
     order["status"] = new_status
+
+    if db_instance.db is not None:
+        try:
+            await db_instance.db.orders.update_one(
+                {"id": id},
+                {"$set": {"status": new_status}}
+            )
+        except Exception as e:
+            print(f"Error updating order status in MongoDB: {e}")
+
+    if "_id" in order:
+        del order["_id"]
     
     # Send mock email update
     print(f"[SMTP EMAIL] Status update for Order {id} sent to {order['customer']['email']}: Status changed from '{old_status}' to '{new_status}'.")
@@ -439,7 +515,7 @@ async def upload_image(file: UploadFile = File(...)):
                 buffer.write(chunk)
                 
         # Return local absolute URL
-        image_url = f"http://localhost:9000/uploads/{secure_filename}"
+        image_url = f"http://localhost:8000/uploads/{secure_filename}"
         return {"success": True, "imageUrl": image_url}
     except Exception as e:
         print(f"Error saving uploaded file: {e}")

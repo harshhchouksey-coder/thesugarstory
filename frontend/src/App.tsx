@@ -11,8 +11,6 @@ import {
   ChevronRight, 
   Phone, 
   Mail, 
-  Send,
-  HelpCircle,
   AlertCircle,
   MessageCircle,
   Lock,
@@ -23,6 +21,8 @@ import {
   Search,
   X
 } from "lucide-react";
+
+const API_BASE = (import.meta as any).env.VITE_API_URL || "http://localhost:8000";
 
 // ScrollReveal component for premium, subtle fade-in-up animations on scroll
 function ScrollReveal({ children, className = "" }: { children: React.ReactNode, className?: string }) {
@@ -148,6 +148,18 @@ const CATEGORIES = [
   "Jar Cakes", "Brownies", "Tea Cakes", "Muffins", "Donuts", "Cookies", "Cakes", "Cheesecakes", "Valentine Hampers"
 ];
 
+const IMAGE_CATEGORIES_MAPPING: Record<string, string> = {
+  "Jar Cakes": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop",
+  "Brownies": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=400&auto=format&fit=crop",
+  "Tea Cakes": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop",
+  "Muffins": "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?q=80&w=400&auto=format&fit=crop",
+  "Donuts": "https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=400&auto=format&fit=crop",
+  "Cookies": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop",
+  "Cakes": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop",
+  "Cheesecakes": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop",
+  "Valentine Hampers": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=400&auto=format&fit=crop"
+};
+
 // Seeded Bhopal Pincodes (462001 - 462044)
 const BHOPAL_PINCODES = [
   "462001", "462002", "462003", "462004", "462008", 
@@ -164,9 +176,145 @@ const DELIVERY_SLOTS = [
   "7:00 PM – 9:00 PM"
 ];
 
+// Reusable premium styling components
+function Container({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className={`max-w-7xl mx-auto px-6 w-full ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+function Button({ 
+  children, 
+  variant = "primary", 
+  className = "", 
+  onClick, 
+  type = "button",
+  disabled = false
+}: { 
+  children: React.ReactNode; 
+  variant?: "primary" | "ghost"; 
+  className?: string; 
+  onClick?: () => void;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
+}) {
+  const baseStyle = "px-8 py-4 font-sans font-semibold text-xs uppercase tracking-[0.2em] transition-all duration-300 ease-out cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg";
+  const variants = {
+    primary: "bg-primary text-cream hover:bg-cocoa shadow-md",
+    ghost: "border border-cocoa text-cocoa hover:bg-cocoa hover:text-cream bg-transparent"
+  };
+  return (
+    <button 
+      type={type}
+      onClick={onClick} 
+      disabled={disabled}
+      className={`${baseStyle} ${variants[variant]} ${className}`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function SectionHeading({ 
+  eyebrow, 
+  title, 
+  className = "",
+  align = "center"
+}: { 
+  eyebrow: string; 
+  title: string; 
+  className?: string;
+  align?: "center" | "left";
+}) {
+  return (
+    <div className={`space-y-3 ${align === "center" ? "text-center" : "text-left"} ${className}`}>
+      <span className="text-xs uppercase tracking-[0.25em] text-primary font-bold font-sans block">
+        {eyebrow}
+      </span>
+      <h2 className="font-serif text-3xl md:text-5xl font-medium tracking-tight text-cocoa">
+        {title}
+      </h2>
+    </div>
+  );
+}
+
+function ProductCard({ 
+  product, 
+  onSelect,
+  onQuickWhatsApp 
+}: { 
+  product: any; 
+  onSelect: (prod: any) => void;
+  onQuickWhatsApp?: (prod: any) => void;
+}) {
+  return (
+    <div 
+      className="group bg-cream/40 border border-stone/20 rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-lg transition-all duration-300 ease-out flex flex-col justify-between p-4"
+    >
+      <div className="space-y-4">
+        {/* Product Card Image Box with rounded-2xl image */}
+        <div className="relative aspect-square overflow-hidden rounded-2xl bg-cocoa/5">
+          <img 
+            src={product.image} 
+            alt={product.name} 
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          {/* Minimum quantity tag */}
+          {product.min_quantity > 1 && (
+            <div className="absolute top-3 left-3 z-10">
+              <span className="bg-gold text-cream text-[9px] font-sans uppercase tracking-widest px-2.5 py-1 font-bold rounded-md">
+                Min {product.min_quantity} pcs
+              </span>
+            </div>
+          )}
+        </div>
+
+        <div className="space-y-2 text-left">
+          <div className="flex justify-between items-baseline gap-2">
+            <h3 className="font-serif text-lg font-semibold text-cocoa group-hover:text-primary transition-colors line-clamp-1">
+              {product.name}
+            </h3>
+            <span className="text-[10px] font-sans text-stone uppercase tracking-wider whitespace-nowrap">
+              {product.weight}
+            </span>
+          </div>
+          <p className="text-stone text-[11px] leading-relaxed line-clamp-2">
+            {product.description}
+          </p>
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center border-t border-stone/10 pt-3 mt-4">
+        <span className="font-serif text-lg font-bold text-cocoa">
+          ₹{product.price}
+        </span>
+        <div className="flex items-center gap-2">
+          {onQuickWhatsApp && (
+            <button
+              onClick={() => onQuickWhatsApp(product)}
+              className="p-2 border border-[#25D366]/40 hover:bg-[#25D366]/5 rounded-lg text-[#25D366] transition-all cursor-pointer"
+              title="Order on WhatsApp"
+            >
+              <MessageCircle size={14} className="fill-current stroke-none" />
+            </button>
+          )}
+          <button
+            onClick={() => onSelect(product)}
+            className="px-4 py-2 bg-primary hover:bg-cocoa text-cream text-[10px] font-sans font-bold uppercase tracking-widest transition-all rounded-lg cursor-pointer"
+          >
+            Select
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   // Navigation Routing States
-  const [currentPage, setCurrentPage] = useState<"home" | "product" | "checkout" | "confirm" | "story" | "admin">("home");
+  const [currentPage, setCurrentPage] = useState<"home" | "shop" | "product" | "checkout" | "confirm" | "story" | "admin">("home");
   const [selectedProduct, setSelectedProduct] = useState<any>(MASTER_PRODUCTS[0]);
   const [cart, setCart] = useState<any[]>([]);
 
@@ -230,7 +378,7 @@ export default function App() {
   // Fetch admin orders helper
   const fetchAdminOrders = async () => {
     try {
-      const res = await fetch("http://localhost:9000/api/orders");
+      const res = await fetch(`${API_BASE}/api/orders`);
       if (res.ok) {
         const data = await res.json();
         setAdminOrders(data);
@@ -244,7 +392,7 @@ export default function App() {
   useEffect(() => {
     async function loadDbProducts() {
       try {
-        const res = await fetch("http://localhost:9000/api/products");
+        const res = await fetch(`${API_BASE}/api/products`);
         if (res.ok) {
           const data = await res.json();
           if (data && data.length > 0) {
@@ -259,7 +407,7 @@ export default function App() {
 
     async function loadSettings() {
       try {
-        const res = await fetch("http://localhost:9000/api/settings");
+        const res = await fetch(`${API_BASE}/api/settings`);
         if (res.ok) {
           const data = await res.json();
           setDeliverySettings(data);
@@ -402,7 +550,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
 
     try {
       // 1. Create Order on Backend
-      const response = await fetch("http://localhost:9000/api/orders", {
+      const response = await fetch(`${API_BASE}/api/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -440,7 +588,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
         // Run in high-fidelity mock payment confirmation mode
         setTimeout(async () => {
           try {
-            const verifyRes = await fetch("http://localhost:9000/api/orders/verify", {
+            const verifyRes = await fetch(`${API_BASE}/api/orders/verify`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -482,7 +630,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
           order_id: razorpay_order_id,
           handler: async function (rzpResponse: any) {
             try {
-              const verifyRes = await fetch("http://localhost:9000/api/orders/verify", {
+              const verifyRes = await fetch(`${API_BASE}/api/orders/verify`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -545,6 +693,17 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
     window.scrollTo(0, 0);
   };
 
+  const handleContactClick = () => {
+    if (currentPage !== "home") {
+      setCurrentPage("home");
+      setTimeout(() => {
+        document.getElementById("footer")?.scrollIntoView({ behavior: "smooth" });
+      }, 150);
+    } else {
+      document.getElementById("footer")?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   // Cart item management helpers
   const handleRemoveFromCart = (productId: string, isEggless: boolean) => {
     setCart(cart.filter(item => !(item.id === productId && item.isEggless === isEggless)));
@@ -579,39 +738,38 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
   return (
     <div className="min-h-screen bg-cream text-cocoa font-sans flex flex-col justify-between selection:bg-primary selection:text-cream">
       
-      {/* Top Tagline Strip */}
-      <div className="bg-cocoa text-cream text-[10px] tracking-[0.2em] py-2 text-center uppercase font-sans font-semibold flex flex-col sm:flex-row justify-center items-center gap-1.5 px-4">
-        <span>"Every bite, a chapter." • Crafted by ex-Taj chef Shalini Singh.</span>
-        <span className="hidden sm:inline">•</span>
-        <span className="text-gold font-bold">✨ Free delivery above ₹{deliverySettings.freeThreshold} in Bhopal!</span>
+      {/* 1. Thin announcement bar */}
+      <div className="bg-primary text-cream text-[10px] tracking-[0.2em] py-2 text-center uppercase font-sans font-semibold px-4 border-b border-stone/10">
+        Free delivery in Bhopal above ₹1,000
       </div>
 
-      {/* Navigation Header */}
-      <header className="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-cocoa/10">
-        <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+      {/* 2. Sticky header */}
+      <header className="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-stone/20">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           
           <button 
-            onClick={() => setCurrentPage("home")}
-            className="font-serif text-2xl md:text-3xl font-medium tracking-[0.06em] text-cocoa hover:opacity-90"
+            onClick={() => { setCurrentPage("home"); window.scrollTo(0, 0); }}
+            className="font-serif italic lowercase text-2xl md:text-3xl font-medium tracking-[0.06em] text-cocoa hover:opacity-90 cursor-pointer bg-transparent border-none p-0"
           >
-            THE SUGAR STORY
+            the sugar story
           </button>
 
           <nav className="hidden md:flex items-center gap-8 text-[11px] font-sans uppercase tracking-widest font-semibold text-cocoa/90">
-            <button onClick={() => { setCurrentPage("home"); window.scrollTo(0, 0); }} className="hover:text-primary transition-colors">Salon Home</button>
-            <button onClick={() => { setCurrentPage("story"); window.scrollTo(0, 0); }} className="hover:text-primary transition-colors">Our Story</button>
-            <button onClick={() => { setSelectedCategoryTab("Cakes"); setCurrentPage("home"); setTimeout(() => document.getElementById("catalog-section")?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="hover:text-primary transition-colors">Cakes</button>
-            <button onClick={() => { setSelectedCategoryTab("Cheesecakes"); setCurrentPage("home"); setTimeout(() => document.getElementById("catalog-section")?.scrollIntoView({ behavior: 'smooth' }), 100); }} className="hover:text-primary transition-colors">Cheesecakes</button>
-            <a href="https://instagram.com/the_sugar_story" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors">@the_sugar_story</a>
+            <button onClick={() => { setCurrentPage("shop"); window.scrollTo(0, 0); }} className="hover:text-primary transition-colors cursor-pointer">Shop</button>
+            <button onClick={() => { setCurrentPage("story"); window.scrollTo(0, 0); }} className="hover:text-primary transition-colors cursor-pointer">Our Story</button>
+            <button onClick={handleContactClick} className="hover:text-primary transition-colors cursor-pointer">Contact</button>
           </nav>
 
           <div className="flex items-center gap-4">
             <button 
               onClick={() => {
-                if (cart.length > 0) setCurrentPage("checkout");
+                if (cart.length > 0) {
+                  setCurrentPage("checkout");
+                  window.scrollTo(0, 0);
+                }
                 else alert("Your shopping bag is empty. Please select a bake!");
               }} 
-              className="relative p-2 text-cocoa hover:text-primary transition-colors"
+              className="relative p-2 text-cocoa hover:text-primary transition-colors cursor-pointer"
               aria-label="Bag"
             >
               <ShoppingBag size={20} strokeWidth={1.8} />
@@ -621,6 +779,16 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                 </span>
               )}
             </button>
+
+            <a 
+              href="https://wa.me/917906759188?text=Hello%20Chef%20Shalini!%20I'd%20like%20to%20place%20an%20order."
+              target="_blank"
+              rel="noreferrer"
+              className="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-cream text-[10px] font-sans font-bold uppercase tracking-widest transition-all rounded-lg flex items-center gap-1.5"
+            >
+              <MessageCircle size={12} className="fill-current stroke-none" />
+              <span className="hidden sm:inline">WhatsApp</span>
+            </a>
           </div>
 
         </div>
@@ -634,180 +802,93 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
             ========================================== */}
         {currentPage === "home" && (
           <div className="w-full">
-            
-            {/* Task 3 - Cinematic Homepage Hero */}
-            <section className="relative h-[85vh] bg-cocoa text-cream flex items-center justify-center text-center px-6 overflow-hidden">
-              <div className="absolute inset-0 bg-cover bg-center opacity-25" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1517433456452-f9633a875f6f?q=80&w=1200&auto=format&fit=crop')" }} />
-              
+            {/* 3. HERO Section */}
+            <section className="relative h-[80vh] bg-cocoa text-cream flex items-center justify-center text-center px-6 overflow-hidden">
+              <div 
+                className="absolute inset-0 bg-cover bg-center opacity-30" 
+                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1517433456452-f9633a875f6f?q=80&w=1200&auto=format&fit=crop')" }} 
+              />
               <div className="relative z-10 max-w-4xl space-y-6">
                 <span className="text-xs uppercase tracking-[0.35em] text-gold font-semibold font-sans">Artisanal Patisserie • Bhopal</span>
-                <h1 className="font-serif text-5xl md:text-8xl tracking-tight leading-tight">
-                  Every bite, <span className="italic font-light text-cream/90">a chapter.</span>
+                <h1 className="font-serif text-5xl md:text-8xl tracking-tight leading-tight italic font-light text-cream/95">
+                  Every bite, a chapter.
                 </h1>
                 <p className="font-sans text-stone text-xs md:text-sm max-w-xl mx-auto leading-relaxed text-[#F6EFE3]/80">
                   Premium handcrafted bakery in Bhopal, by ex-Taj chef Shalini Singh.
                 </p>
                 <div className="pt-6 flex flex-col sm:flex-row gap-4 justify-center">
-                  <button 
+                  <Button 
+                    variant="primary" 
                     onClick={() => {
-                      document.getElementById("catalog-section")?.scrollIntoView({ behavior: 'smooth' });
+                      setCurrentPage("shop");
+                      window.scrollTo(0, 0);
                     }}
-                    className="px-8 py-4 bg-primary hover:bg-primary/95 text-cream font-sans font-semibold text-xs uppercase tracking-[0.2em] transition-all shadow-md cursor-pointer"
                   >
-                    Shop Cakes
-                  </button>
-                   <a 
-                    href="https://wa.me/917906759188"
-                    target="_blank" 
-                    rel="noreferrer"
-                    className="px-8 py-4 border border-cream hover:bg-cream hover:text-cocoa text-cream font-sans font-semibold text-xs uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2"
+                    Shop the Menu
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    className="border-cream text-cream hover:bg-cream hover:text-cocoa"
+                    onClick={() => {
+                      window.open("https://wa.me/917906759188?text=Hello%20Chef%20Shalini!%20I'd%20like%20to%20order%20some%20fresh%20pastries.", "_blank");
+                    }}
                   >
-                    <MessageCircle size={14} className="text-green-400" />
-                    <span>Order on WhatsApp</span>
-                  </a>
+                    <MessageCircle size={14} className="fill-current stroke-none mr-1 inline-block" />
+                    Order on WhatsApp
+                  </Button>
                 </div>
               </div>
             </section>
 
-            {/* Task 3 - Bestsellers row (pick 6 products) */}
+            {/* 4. Trust strip */}
+            <div className="bg-primary/5 border-t border-b border-stone/20 py-6 text-center">
+              <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-16 text-xs font-sans uppercase tracking-[0.2em] font-semibold text-primary">
+                <span>Trained at Taj</span>
+                <span className="hidden sm:inline text-stone/50">•</span>
+                <span>Handcrafted Fresh</span>
+                <span className="hidden sm:inline text-stone/50">•</span>
+                <span>Made in Bhopal</span>
+              </div>
+            </div>
+
+            {/* 5. Bestsellers */}
             <ScrollReveal>
-              <section className="py-24 max-w-6xl mx-auto px-6 border-b border-cocoa/5">
-                <div className="text-center space-y-2 mb-16">
-                  <span className="text-xs uppercase tracking-[0.3em] text-primary font-bold font-sans">Signature Selections</span>
-                  <h2 className="font-serif text-3xl md:text-5xl font-medium tracking-tight">The Bestsellers Row</h2>
-                </div>
+              <section className="py-24 max-w-7xl mx-auto px-6 border-b border-stone/10">
+                <SectionHeading 
+                  eyebrow="Signature Selections" 
+                  title="The Bestsellers Row" 
+                  className="mb-16"
+                />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {bestsellerProducts.map((prod, idx) => (
-                    <div key={idx} className="group border border-cocoa/10 p-4 bg-cream/40 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 ease-out flex flex-col justify-between">
-                      <div className="space-y-4">
-                        <div className="aspect-[4/3] bg-cocoa/5 overflow-hidden relative">
-                          <div className="absolute inset-0 bg-cover bg-center group-hover:scale-102 transition-transform duration-500" style={{ backgroundImage: `url(${prod.image})` }} />
-                          <div className="absolute top-4 left-4">
-                            <span className={`text-[8px] uppercase tracking-widest font-bold font-sans px-2.5 py-1 text-cream bg-cocoa`}>
-                              {prod.category}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="space-y-1 text-left">
-                          <h3 className="font-serif text-xl font-medium group-hover:text-primary transition-colors">{prod.name}</h3>
-                          <p className="font-sans text-stone text-xs leading-relaxed line-clamp-2">{prod.description}</p>
-                        </div>
-                      </div>
-
-                      <div className="flex justify-between items-center border-t border-cocoa/10 pt-4 mt-6">
-                        <span className="font-serif text-lg font-bold">₹{prod.price}</span>
-                        <button 
-                          onClick={() => navigateToProduct(prod)}
-                          className="flex items-center gap-1 text-[10px] font-sans font-bold uppercase tracking-widest text-primary hover:text-cocoa transition-colors"
-                        >
-                          <span>Select Card</span>
-                          <ChevronRight size={10} />
-                        </button>
-                      </div>
-                    </div>
+                  {bestsellerProducts.map((prod) => (
+                    <ProductCard 
+                      key={prod.id} 
+                      product={prod} 
+                      onSelect={navigateToProduct}
+                      onQuickWhatsApp={(p) => {
+                        const msg = `Hello Chef Shalini! I'd like to order the bestseller ${p.name} (${p.weight}) for ₹${p.price}.`;
+                        window.open(`https://wa.me/917906759188?text=${encodeURIComponent(msg)}`, "_blank");
+                      }}
+                    />
                   ))}
                 </div>
               </section>
             </ScrollReveal>
 
-            {/* Task 2 - Rebuilt Product listing page */}
-            <ScrollReveal>
-              <section id="catalog-section" className="py-24 max-w-7xl mx-auto px-6 text-left scroll-mt-20">
-                <div className="flex flex-col md:flex-row items-baseline justify-between mb-12 border-b border-cocoa/10 pb-6 gap-4">
-                  <div className="space-y-2">
-                    <span className="text-xs uppercase tracking-[0.25em] text-primary font-bold font-sans">Freshly Baked Catalog</span>
-                    <h2 className="font-serif text-3xl md:text-5xl font-medium tracking-tight">The Product Catalogue</h2>
-                  </div>
-                  <span className="text-xs font-sans uppercase text-stone tracking-widest">
-                    Showing {activeTabProducts.length} chapters
-                  </span>
-                </div>
-
-                {/* Category filter tabs */}
-                <div className="flex flex-wrap gap-2 mb-12">
-                  {CATEGORIES.map(tab => (
-                    <button
-                      key={tab}
-                      onClick={() => setSelectedCategoryTab(tab)}
-                      className={`px-4 py-2 text-[10px] font-sans uppercase tracking-widest transition-all ${selectedCategoryTab === tab ? "bg-primary text-cream" : "bg-cream text-cocoa border border-cocoa/20 hover:border-primary"}`}
-                    >
-                      {tab}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Mobile-first responsive grid (2 cols mobile, 3-4 desktop) */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
-                  {activeTabProducts.map(prod => (
-                    <div key={prod.id} className="group flex flex-col justify-between bg-cream/40 border border-cocoa/10 p-3 md:p-4 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 ease-out text-left">
-                      
-                      <div className="space-y-4">
-                        {/* Product Card Media Box */}
-                        <div className="relative aspect-square bg-cocoa/5 overflow-hidden">
-                          <div className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-102" style={{ backgroundImage: `url(${prod.image})` }} />
-                          
-                          {/* Minimum quantity tag */}
-                          {prod.min_quantity > 1 && (
-                            <div className="absolute top-2 left-2 z-10">
-                              <span className="bg-[#C9962B] text-cream text-[8px] font-sans uppercase tracking-widest px-2 py-0.5 font-bold">
-                                Min {prod.min_quantity} pcs
-                              </span>
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="space-y-1 text-left">
-                          <h3 className="font-serif text-base md:text-lg font-semibold text-cocoa group-hover:text-primary transition-colors line-clamp-1">
-                            {prod.name}
-                          </h3>
-                          <p className="text-stone text-[11px] leading-relaxed line-clamp-2">
-                            {prod.description}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex justify-between items-center border-t border-cocoa/10 pt-3 mt-4">
-                        <span className="font-serif text-base font-bold text-cocoa">
-                          ₹{prod.price}
-                        </span>
-                        <div className="flex items-center gap-1.5">
-                          <a
-                            href={`https://wa.me/917906759188?text=Hello%20Chef%20Shalini!%20I%20would%20like%20to%20order%20the%20${encodeURIComponent(prod.name)}.`}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="px-2 py-1.5 border border-[#25D366] hover:bg-[#25D366]/5 text-[#25D366] text-[8px] font-sans font-bold uppercase tracking-wider transition-all flex items-center gap-1"
-                          >
-                            <MessageCircle size={10} className="fill-current stroke-none" /> WA Quick
-                          </a>
-                          <button
-                            onClick={() => navigateToProduct(prod)}
-                            className="px-3 py-1.5 bg-cocoa hover:bg-primary text-cream text-[9px] font-sans font-bold uppercase tracking-widest transition-all"
-                          >
-                            Add
-                          </button>
-                        </div>
-                      </div>
-
-                    </div>
-                  ))}
-                </div>
-              </section>
-            </ScrollReveal>
-
-            {/* Founder Strip (Real Facts - Short Version) */}
+            {/* 6. Founder strip */}
             <ScrollReveal>
               <section className="bg-cocoa text-cream py-20 text-left">
-                <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                  <div className="aspect-[3/4] bg-[#D7CCC8]/10 max-w-sm mx-auto w-full p-2 border border-primary/20 relative">
-                    <div className="absolute inset-2 bg-cover bg-center" style={{ backgroundImage: "url('/images/chef-shalini-portrait.jpg')" }} />
-                    <div className="absolute bottom-4 right-4 bg-primary text-cream py-2 px-4 text-[10px] font-sans uppercase tracking-widest font-semibold">
+                <Container className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                  <div className="aspect-[3/4] bg-[#D7CCC8]/10 max-w-sm mx-auto w-full p-2 border border-primary/20 relative rounded-2xl overflow-hidden shadow-xl">
+                    <div className="absolute inset-2 bg-cover bg-center rounded-xl" style={{ backgroundImage: "url('/images/chef-shalini-portrait.jpg')" }} />
+                    <div className="absolute bottom-4 right-4 bg-primary text-cream py-2 px-4 text-[10px] font-sans uppercase tracking-widest font-semibold rounded-lg">
                       Chef Shalini Singh
                     </div>
                   </div>
 
                   <div className="space-y-6">
-                    <span className="text-xs uppercase tracking-[0.3em] text-primary font-bold font-sans">The Founder</span>
+                    <span className="text-xs uppercase tracking-[0.3em] text-primary font-bold font-sans block">The Founder</span>
                     <h2 className="font-serif text-3xl md:text-5xl font-light text-cream/95 leading-tight">
                       "From a Taj kitchen, to your celebration."
                     </h2>
@@ -815,161 +896,275 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                       After crafting desserts for banquets and celebrations at Taj Lakefront Bhopal, Chef Shalini Singh began her own chapter: The Sugar Story. Today every cake, cookie and loaf is made by her hands, with five-star standards and a homemade heart.
                     </p>
                     <div className="pt-2">
-                      <button 
+                      <Button 
+                        variant="ghost"
+                        className="border-cream text-cream hover:bg-cream hover:text-cocoa"
                         onClick={() => {
                           setCurrentPage("story");
                           window.scrollTo(0, 0);
                         }}
-                        className="text-primary hover:text-cream text-xs font-sans font-bold uppercase tracking-wider transition-colors flex items-center gap-1 group"
                       >
-                        <span>Read her story</span>
-                        <span className="group-hover:translate-x-1 transition-transform inline-block">→</span>
-                      </button>
+                        Read her story →
+                      </Button>
                     </div>
-                    <div className="pt-4 flex flex-col gap-2">
+                    <div className="pt-4 flex flex-col gap-2 border-t border-stone/20">
                       <span className="font-signature text-5xl text-primary">Shalini Singh</span>
                       <span className="text-[10px] font-sans text-stone uppercase tracking-widest">Master Pastry Chef & Founder</span>
                     </div>
                   </div>
+                </Container>
+              </section>
+            </ScrollReveal>
+
+            {/* 7. Shop by Category */}
+            <ScrollReveal>
+              <section className="py-24 max-w-7xl mx-auto px-6 border-b border-stone/10">
+                <SectionHeading 
+                  eyebrow="Gourmet Catalog" 
+                  title="Shop by Category" 
+                  className="mb-16"
+                />
+                
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                  {CATEGORIES.map((cat) => {
+                    const image = IMAGE_CATEGORIES_MAPPING[cat] || "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop";
+                    return (
+                      <button
+                        key={cat}
+                        onClick={() => {
+                          setSelectedCategoryTab(cat);
+                          setCurrentPage("shop");
+                          window.scrollTo(0, 0);
+                        }}
+                        className="group relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-stone/20 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 text-left cursor-pointer"
+                      >
+                        <div 
+                          className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                          style={{ backgroundImage: `url('${image}')` }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-cocoa/80 via-cocoa/20 to-transparent" />
+                        <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+                          <div>
+                            <span className="text-[9px] uppercase tracking-[0.2em] text-gold font-sans font-bold block mb-1">
+                              Explore Collection
+                            </span>
+                            <h3 className="font-serif text-lg md:text-xl font-medium text-cream group-hover:text-primary transition-colors">
+                              {cat}
+                            </h3>
+                          </div>
+                          <ChevronRight size={16} className="text-cream group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </section>
             </ScrollReveal>
 
-            {/* Customer Reviews & Trust Badges Section */}
-            <ScrollReveal>
-              <section className="py-24 max-w-7xl mx-auto px-6 text-left border-t border-cocoa/10 bg-cream/20">
-                <div className="space-y-2 mb-12">
-                  <span className="text-xs uppercase tracking-[0.25em] text-primary font-bold font-sans">Patron Appreciations</span>
-                  <h2 className="font-serif text-3xl md:text-5xl font-medium tracking-tight">Customer Testimonials</h2>
+            {/* 8. Why-us band */}
+            <section className="bg-primary/5 py-16 border-b border-stone/20">
+              <Container className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                <div className="space-y-3 p-4">
+                  <Award size={32} className="text-gold mx-auto" />
+                  <h3 className="font-serif text-lg font-semibold text-cocoa">Trained at Taj</h3>
+                  <p className="font-sans text-stone text-xs leading-relaxed">
+                    Five-star pastry craftsmanship and strict culinary excellence honed at the Taj.
+                  </p>
                 </div>
+                <div className="space-y-3 p-4">
+                  <ShieldCheck size={32} className="text-gold mx-auto" />
+                  <h3 className="font-serif text-lg font-semibold text-cocoa">Handcrafted Fresh</h3>
+                  <p className="font-sans text-stone text-xs leading-relaxed">
+                    Bakes made completely fresh from scratch daily, free of commercial stabilizers.
+                  </p>
+                </div>
+                <div className="space-y-3 p-4">
+                  <MapPin size={32} className="text-gold mx-auto" />
+                  <h3 className="font-serif text-lg font-semibold text-cocoa">Made in Bhopal</h3>
+                  <p className="font-sans text-stone text-xs leading-relaxed">
+                    Rooted locally, bringing five-star artisanal pastries directly to Bhopal.
+                  </p>
+                </div>
+                <div className="space-y-3 p-4">
+                  <ShoppingBag size={32} className="text-gold mx-auto" />
+                  <h3 className="font-serif text-lg font-semibold text-cocoa">Pure Ingredients</h3>
+                  <p className="font-sans text-stone text-xs leading-relaxed">
+                    Exclusively using real butter, gourmet chocolate, and natural vanilla.
+                  </p>
+                </div>
+              </Container>
+            </section>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* 9. Reviews */}
+            <ScrollReveal>
+              <section className="py-24 max-w-7xl mx-auto px-6 border-b border-stone/10 bg-cream/20">
+                <SectionHeading 
+                  eyebrow="Patron Appreciations" 
+                  title="Customer Testimonials" 
+                  className="mb-16"
+                />
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
                   {/* Review 1 */}
-                  <div className="bg-cream/40 border border-cocoa/10 p-8 space-y-4 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 relative">
+                  <div className="bg-cream/40 border border-stone/20 p-8 rounded-2xl space-y-4 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                     <div className="flex text-gold gap-1">
-                      <Star size={12} className="fill-current" />
-                      <Star size={12} className="fill-current" />
-                      <Star size={12} className="fill-current" />
-                      <Star size={12} className="fill-current" />
-                      <Star size={12} className="fill-current" />
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={12} className="fill-current" />
+                      ))}
                     </div>
                     <p className="font-serif text-base italic leading-relaxed text-cocoa/90">
                       "Chef Shalini's customized bakes are a true masterpiece of flavors. The Pineapple cake is incredibly moist and light. Truly five-star standards!"
                     </p>
-                    <div className="pt-2 border-t border-cocoa/5">
-                      <p className="font-sans text-[10px] uppercase tracking-wider font-bold text-cocoa">Aishwarya R.</p>
-                      <p className="font-sans text-[9px] text-stone">Arera Colony, Bhopal</p>
+                    <div className="pt-2 border-t border-stone/10">
+                      <p className="font-sans text-[10px] uppercase tracking-wider font-bold text-cocoa">A patron, Bhopal</p>
                     </div>
                   </div>
 
                   {/* Review 2 */}
-                  <div className="bg-cream/40 border border-cocoa/10 p-8 space-y-4 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 relative">
+                  <div className="bg-cream/40 border border-stone/20 p-8 rounded-2xl space-y-4 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                     <div className="flex text-gold gap-1">
-                      <Star size={12} className="fill-current" />
-                      <Star size={12} className="fill-current" />
-                      <Star size={12} className="fill-current" />
-                      <Star size={12} className="fill-current" />
-                      <Star size={12} className="fill-current" />
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={12} className="fill-current" />
+                      ))}
                     </div>
                     <p className="font-serif text-base italic leading-relaxed text-cocoa/90">
                       "Having experienced her desserts at the Taj, I was absolutely thrilled to find her home bakery. The dry fruit tea cakes are exceptional."
                     </p>
-                    <div className="pt-2 border-t border-cocoa/5">
-                      <p className="font-sans text-[10px] uppercase tracking-wider font-bold text-cocoa">Dr. Anurag Sharma</p>
-                      <p className="font-sans text-[9px] text-stone">Gulmohar Colony, Bhopal</p>
+                    <div className="pt-2 border-t border-stone/10">
+                      <p className="font-sans text-[10px] uppercase tracking-wider font-bold text-cocoa">A patron, Bhopal</p>
                     </div>
                   </div>
 
                   {/* Review 3 */}
-                  <div className="bg-cream/40 border border-cocoa/10 p-8 space-y-4 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 relative">
+                  <div className="bg-cream/40 border border-stone/20 p-8 rounded-2xl space-y-4 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                     <div className="flex text-gold gap-1">
-                      <Star size={12} className="fill-current" />
-                      <Star size={12} className="fill-current" />
-                      <Star size={12} className="fill-current" />
-                      <Star size={12} className="fill-current" />
-                      <Star size={12} className="fill-current" />
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={12} className="fill-current" />
+                      ))}
                     </div>
                     <p className="font-serif text-base italic leading-relaxed text-cocoa/90">
                       "The Biscoff Cheesecake is absolutely heavenly. Pure ingredients and elegant presentation. Hands down the best in Bhopal!"
                     </p>
-                    <div className="pt-2 border-t border-cocoa/5">
-                      <p className="font-sans text-[10px] uppercase tracking-wider font-bold text-cocoa">Megha Singh</p>
-                      <p className="font-sans text-[9px] text-stone">Arera Colony, Bhopal</p>
+                    <div className="pt-2 border-t border-stone/10">
+                      <p className="font-sans text-[10px] uppercase tracking-wider font-bold text-cocoa">A patron, Bhopal</p>
                     </div>
-                  </div>
-                </div>
-
-                {/* Trust Badges Bar */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-16 border-t border-cocoa/5 mt-16 text-center">
-                  <div className="flex flex-col items-center space-y-2">
-                    <Award className="text-gold w-8 h-8" />
-                    <span className="font-serif text-xs font-bold uppercase tracking-wider text-cocoa">Trained at Taj</span>
-                    <span className="text-[10px] font-sans text-stone">Taj Hotel culinary standards</span>
-                  </div>
-                  <div className="flex flex-col items-center space-y-2">
-                    <ShieldCheck className="text-gold w-8 h-8" />
-                    <span className="font-serif text-xs font-bold uppercase tracking-wider text-cocoa">Hygienically Packed</span>
-                    <span className="text-[10px] font-sans text-stone">Sealed fresh with love</span>
-                  </div>
-                  <div className="flex flex-col items-center space-y-2">
-                    <ShoppingBag className="text-gold w-8 h-8" />
-                    <span className="font-serif text-xs font-bold uppercase tracking-wider text-cocoa">Freshly Baked Daily</span>
-                    <span className="text-[10px] font-sans text-stone">Zero commercial stabilizers</span>
-                  </div>
-                  <div className="flex flex-col items-center space-y-2">
-                    <Clock className="text-gold w-8 h-8" />
-                    <span className="font-serif text-xs font-bold uppercase tracking-wider text-cocoa">Bhopal Fresh Delivery</span>
-                    <span className="text-[10px] font-sans text-stone">Same-day cutoff at 1:00 PM</span>
                   </div>
                 </div>
               </section>
             </ScrollReveal>
 
+            {/* 10. Final CTA */}
+            <section className="bg-cocoa text-cream py-20 text-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1517433456452-f9633a875f6f?q=80&w=1200&auto=format&fit=crop')" }} />
+              <Container className="relative z-10 space-y-6">
+                <span className="text-xs uppercase tracking-[0.3em] text-gold font-bold font-sans block">Begin Your Story</span>
+                <h2 className="font-serif text-3xl md:text-6xl font-light">Experience Five-Star Confectionery</h2>
+                <p className="font-sans text-stone text-xs md:text-sm max-w-md mx-auto text-[#D7CCC8]">
+                  Every cake, cookie, and loaf is handcrafted to order by Chef Shalini Singh.
+                </p>
+                <div className="pt-4 flex justify-center">
+                  <Button 
+                    variant="primary" 
+                    onClick={() => {
+                      setCurrentPage("shop");
+                      window.scrollTo(0, 0);
+                    }}
+                  >
+                    Shop the Menu
+                  </Button>
+                </div>
+              </Container>
+            </section>
           </div>
+        )}
+
+        {/* ==========================================
+            ROUTER 1.5: SHOP PAGE
+            ========================================== */}
+        {currentPage === "shop" && (
+          <Container className="py-16">
+            <div className="flex flex-col md:flex-row items-baseline justify-between mb-12 border-b border-stone/20 pb-6 gap-4">
+              <SectionHeading 
+                eyebrow="Freshly Baked Catalog" 
+                title="The Product Catalogue" 
+                align="left"
+              />
+              <span className="text-xs font-sans uppercase text-stone tracking-widest">
+                Showing {activeTabProducts.length} chapters
+              </span>
+            </div>
+
+            {/* Premium Category Tabs */}
+            <div className="flex border-b border-stone/20 overflow-x-auto gap-8 mb-12 pb-3 scrollbar-none">
+              {CATEGORIES.map(tab => (
+                <button
+                  key={tab}
+                  onClick={() => setSelectedCategoryTab(tab)}
+                  className={`relative pb-3 text-xs font-sans uppercase tracking-widest font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                    selectedCategoryTab === tab ? "text-primary font-bold" : "text-stone hover:text-cocoa"
+                  }`}
+                >
+                  <span>{tab}</span>
+                  {selectedCategoryTab === tab && (
+                    <span className="absolute bottom-0 left-0 w-full h-[2px] bg-primary transition-all duration-300" />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Product Card Grid (2 cols mobile, 3-4 desktop) with Fade-in on Scroll */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+              {activeTabProducts.map(prod => (
+                <ScrollReveal key={prod.id}>
+                  <ProductCard 
+                    product={prod} 
+                    onSelect={navigateToProduct}
+                    onQuickWhatsApp={(p) => {
+                      const msg = `Hello Chef Shalini! I'd like to order the ${p.name} (${p.weight}) for ₹${p.price}.`;
+                      window.open(`https://wa.me/917906759188?text=${encodeURIComponent(msg)}`, "_blank");
+                    }}
+                  />
+                </ScrollReveal>
+              ))}
+            </div>
+          </Container>
         )}
 
         {/* ==========================================
             ROUTER 5: OUR STORY PAGE
             ========================================== */}
         {currentPage === "story" && (
-          <div className="w-full bg-cream text-cocoa">
-            
+          <div className="w-full">
             {/* Elegant Hero Header */}
             <section className="py-20 text-center max-w-4xl mx-auto px-6 space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-primary font-bold font-sans">Our Story</span>
               <h1 className="font-serif text-4xl md:text-7xl font-light tracking-tight leading-tight">
-                "From a Taj kitchen,<br />
-                <span className="italic font-light text-primary">to your celebration."</span>
+                From a Taj kitchen,<br />
+                <span className="italic font-light text-primary">to your celebration.</span>
               </h1>
               <div className="w-16 h-px bg-primary/40 mx-auto my-8" />
             </section>
 
             {/* Main content grid */}
             <section className="max-w-6xl mx-auto px-6 pb-24 grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-              
               {/* Left Column: Portrait */}
               <div className="lg:col-span-5 space-y-4">
-                <div className="aspect-[3/4] bg-cocoa/5 p-3 border border-cocoa/10 relative shadow-sm">
-                  <div className="absolute inset-3 bg-cover bg-center" style={{ backgroundImage: "url('/images/chef-shalini-portrait.jpg')" }} />
-                  <div className="absolute bottom-6 right-6 bg-primary text-cream py-2.5 px-5 text-[10px] font-sans uppercase tracking-[0.15em] font-semibold shadow-md">
+                <div className="aspect-[3/4] bg-cocoa/5 p-3 border border-cocoa/10 relative rounded-2xl overflow-hidden shadow-md">
+                  <div className="absolute inset-3 bg-cover bg-center rounded-xl" style={{ backgroundImage: "url('/images/chef-shalini-portrait.jpg')" }} />
+                  <div className="absolute bottom-6 right-6 bg-primary text-cream py-2.5 px-5 text-[10px] font-sans uppercase tracking-[0.15em] font-semibold shadow-md rounded-lg">
                     Chef Shalini Singh
                   </div>
                 </div>
-                <p className="text-[10px] font-sans text-stone text-center italic tracking-wider text-cocoa/50">
-                  Founder Portrait (Real photo from Chef Shalini to be added)
-                </p>
               </div>
 
               {/* Right Column: Copy and Signature */}
               <div className="lg:col-span-7 space-y-8 text-left">
-                
-                {/* EXACT REAL FOUNDER COPY */}
-                <div className="space-y-6 text-base md:text-lg font-sans text-cocoa/90 leading-relaxed font-light font-sans">
+                <div className="space-y-6 text-base md:text-lg font-sans text-cocoa/90 leading-relaxed font-light">
                   <p>
-                    Shalini Singh spent years in the pastry kitchen of Taj Lakefront Bhopal, crafting desserts for banquets, fine dining and celebrations — and training the next generation of bakers.
+                    After receiving her Diploma in Food & Beverage from the Chandigarh Institute of Hotel Management in 2018, Chef Shalini Singh refined her culinary craft at Radisson Bhopal and Taj Lakefront Bhopal. Serving as the Bakery & Patisserie Chef at Taj Lakefront from May 2023 to July 2025, she designed desserts for high-profile banquets and elite celebrations.
                   </p>
                   <p>
-                    In July 2025, she began her own chapter: <strong className="font-semibold text-cocoa">The Sugar Story</strong>. Today every cake, cookie and loaf is made by her hands, with five-star standards and a homemade heart.
+                    In July 2025, she founded The Sugar Story, a premium home bakery in Bhopal dedicated to five-star pastry standards and handcrafted excellence. With over four years of professional experience, Chef Shalini continues to train aspiring bakers while personally preparing every cake, cookie, and artisanal loaf from scratch. Every creation is a reflection of local pride, made in Bhopal.
                   </p>
                   <p className="font-semibold text-primary italic font-serif text-xl tracking-wide">
                     Made in Bhopal, with love.
@@ -986,24 +1181,22 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
 
                 {/* Return CTA */}
                 <div className="pt-8">
-                  <button 
+                  <Button 
+                    variant="primary"
                     onClick={() => {
-                      setCurrentPage("home");
-                      setTimeout(() => document.getElementById("catalog-section")?.scrollIntoView({ behavior: 'smooth' }), 100);
+                      setCurrentPage("shop");
+                      window.scrollTo(0, 0);
                     }}
-                    className="px-8 py-4 bg-cocoa hover:bg-primary text-cream font-sans font-semibold text-xs uppercase tracking-[0.25em] transition-all shadow-md"
                   >
                     Explore The Catalogue
-                  </button>
+                  </Button>
                 </div>
-
               </div>
-
             </section>
 
             {/* Three Trust Pillars Grid */}
             <section className="bg-cocoa text-cream py-24 text-left">
-              <div className="max-w-6xl mx-auto px-6 space-y-16">
+              <Container className="space-y-16">
                 <div className="text-center space-y-3">
                   <span className="text-xs uppercase tracking-[0.3em] text-primary font-bold font-sans">Our Core Values</span>
                   <h2 className="font-serif text-3xl md:text-5xl font-light text-cream">The Three Trust Pillars</h2>
@@ -1038,9 +1231,8 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     </p>
                   </div>
                 </div>
-              </div>
+              </Container>
             </section>
-
           </div>
         )}
 
@@ -1762,7 +1954,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     if (!adminPassword) return;
                     setProcessing(true);
                     try {
-                      const res = await fetch("http://localhost:9000/api/admin/login", {
+                      const res = await fetch(`${API_BASE}/api/admin/login`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ password: adminPassword })
@@ -1775,7 +1967,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                         // Fetch fresh orders and settings
                         fetchAdminOrders();
                         // Get settings
-                        const settingsRes = await fetch("http://localhost:9000/api/settings");
+                        const settingsRes = await fetch(`${API_BASE}/api/settings`);
                         if (settingsRes.ok) {
                           const settingsData = await settingsRes.json();
                           setDeliverySettings(settingsData);
@@ -1899,7 +2091,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
 
                             const handleStatusUpdate = async (newStatus: string) => {
                               try {
-                                const res = await fetch(`http://localhost:9000/api/orders/${order.id}/status`, {
+                                const res = await fetch(`${API_BASE}/api/orders/${order.id}/status`, {
                                   method: "POST",
                                   headers: { "Content-Type": "application/json" },
                                   body: JSON.stringify({ status: newStatus })
@@ -2055,7 +2247,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                           const toggleAvailability = async () => {
                             try {
                               const updatedProduct = { ...product, is_available: !product.is_available };
-                              const res = await fetch(`http://localhost:9000/api/products/${product.id}`, {
+                              const res = await fetch(`${API_BASE}/api/products/${product.id}`, {
                                 method: "PUT",
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify(updatedProduct)
@@ -2071,7 +2263,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                           const handleDeleteProduct = async () => {
                             if (!confirm(`Are you absolutely sure you want to delete ${product.name}?`)) return;
                             try {
-                              const res = await fetch(`http://localhost:9000/api/products/${product.id}`, {
+                              const res = await fetch(`${API_BASE}/api/products/${product.id}`, {
                                 method: "DELETE"
                               });
                               if (res.ok) {
@@ -2162,7 +2354,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                         e.preventDefault();
                         setProcessing(true);
                         try {
-                          const res = await fetch("http://localhost:9000/api/settings", {
+                          const res = await fetch(`${API_BASE}/api/settings`, {
                             method: "PUT",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify(deliverySettings)
@@ -2270,8 +2462,8 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                   try {
                     const method = editingProduct ? "PUT" : "POST";
                     const url = editingProduct 
-                      ? `http://localhost:9000/api/products/${editingProduct.id}`
-                      : "http://localhost:9000/api/products";
+                      ? `${API_BASE}/api/products/${editingProduct.id}`
+                      : `${API_BASE}/api/products`;
                     
                     const res = await fetch(url, {
                       method,
@@ -2386,7 +2578,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                             
                             setProcessing(true);
                             try {
-                              const res = await fetch("http://localhost:9000/api/admin/upload", {
+                              const res = await fetch(`${API_BASE}/api/admin/upload`, {
                                 method: "POST",
                                 body: formData
                               });
@@ -2478,7 +2670,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
       </main>
 
       {/* Exquisite Footer (Aesop & Ladurée Inspired) */}
-      <footer className="bg-cocoa text-cream pt-20 pb-10 border-t border-primary/20">
+      <footer id="footer" className="bg-cocoa text-cream pt-20 pb-10 border-t border-primary/20">
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12 border-b border-primary/10 pb-12 text-left">
           
           <div className="space-y-4">

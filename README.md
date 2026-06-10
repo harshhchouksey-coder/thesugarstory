@@ -1,67 +1,66 @@
-# The Sugar Story — Premium Artisan Bakery Monorepo
+# The Sugar Story — Premium Artisan Bakery Storefront
 
-> "Every bite, a chapter. Crafted by ex-Taj chef Shalini Singh."
-
-An enterprise-grade, highly optimized hybrid ecommerce platform featuring local, fresh delivery within Bhopal and pan-India shipping for shelf-stable luxury desserts. Styled at the intersection of **Aesop**, **Ladurée**, and **Magnolia Bakery**.
+ An international luxury patisserie and artisan bakery storefront styled in the spirit of **Aesop**, **Ladurée**, and **Magnolia Bakery**. 
 
 ---
 
-## Repository Architecture
+## 🛠️ Technology Stack
+* **Backend**: FastAPI (Python) + MongoDB (Motor Async Client)
+* **Frontend**: React + Vite + TailwindCSS
+* **Payments**: Razorpay
 
-This is a high-performance **Turborepo monorepo** managed with `pnpm`:
+---
 
-```text
-/
-├── apps/
-│   ├── web/        # Next.js 15 luxury storefront (App Router, Framer Motion, Lenis)
-│   └── admin/      # Medusa Admin v2 custom dashboards & extensions
-├── backend/        # Medusa.js v2 server (Node 20, Custom modules & SQL extensions)
-├── studio/         # Sanity Studio v3 (storytelling posts, occasions, ingredients database)
-├── packages/
-│   └── shared/     # Shared styles, typography models, Bhopal zone data, and TS typings
-├── docker-compose.yml  # Configures PG 16 and Redis local cluster
-└── turbo.json      # Pipeline build configurations
+## 🚀 Local Setup Instructions
+
+### 1. Prerequisites
+* **Python 3.10+**
+* **Node.js 20+**
+* **MongoDB** (running locally or via docker-compose)
+
+### 2. Database Setup
+Start MongoDB database with Docker:
+```bash
+docker compose up -d
 ```
 
+### 3. Backend Setup (FastAPI)
+1. Navigate to the `backend/` directory:
+   ```bash
+   cd backend
+   ```
+2. Install dependencies:
+   ```bash
+   python3 -m pip install -r requirements.txt --break-system-packages
+   ```
+3. Set your environment variables in `.env` (copy from `.env.example` at the root):
+   ```bash
+   # Set at least the following:
+   MONGO_URI="mongodb://admin:adminpassword@localhost:27017/sugarstory_db?authSource=admin"
+   ADMIN_PASSWORD="YourSecurePasswordHere"
+   ```
+4. Start the backend on port `8000`:
+   ```bash
+   uvicorn main:app --port 8000 --reload
+   ```
+   The backend API will be available at `http://localhost:8000`.
+
+### 4. Frontend Setup (React + Vite)
+1. Navigate to the `frontend/` directory:
+   ```bash
+   cd frontend
+   ```
+2. Install packages:
+   ```bash
+   npm install
+   ```
+3. Boot the Vite development server:
+   ```bash
+   npm run dev
+   ```
+   The frontend UI will be available at `http://localhost:3000`.
+
 ---
 
-## Core Features
-
-1. **Serviceability & Pincode Gating**: Local items (fresh cakes, custom theme cakes) check slot serviceability inside Bhopal (30+ pincodes). Pan-India products fetch live delivery timelines using the Shiprocket SDK simulator.
-2. **Kitchen Dashboard & Slot Tracker**: Admin portal tracking slot capacity, cutoff limits, and order lists for baking optimization.
-3. **Loyalty Program**: Auto-enrolls customers, rewarding points (1 point per ₹10 spent). Features tier upgrades: *Reader*, *Storyteller*, *Author*.
-4. **Referrals System**: Dual payouts (referrer and referee) backed by anti-fraud fingerprint analysis.
-5. **WhatsApp & Communication Flows**: Custom 3-stage abandoned-cart sequence (30m, 6h, 72h) integrated via Interakt Business API fallback hooks.
-
----
-
-## Local Setup Instructions
-
-### Prerequisites
-* **Node.js v20+**
-* **pnpm v9+**
-* **Docker & Docker Compose**
-
-### Step-by-Step Staging
-
-1. **Spin up local Databases**:
-   ```bash
-   docker compose up -d
-   ```
-
-2. **Copy Environments**:
-   ```bash
-   cp .env.example .env
-   ```
-
-3. **Install Dependencies**:
-   ```bash
-   pnpm install
-   ```
-
-4. **Run Seed & Run in Dev Mode**:
-   ```bash
-   pnpm dev
-   ```
-
-Storefront will boot at `http://localhost:3000`, Medusa backend admin at `http://localhost:9000`.
+## 🔒 Security & Administration
+To log into Chef Shalini's Admin Portal, set the `ADMIN_PASSWORD` environment variable in your server environment (or local `.env`). There is no hardcoded default fallback.
