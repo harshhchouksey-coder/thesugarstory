@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Clock } from "lucide-react";
-import { seedNotebookPosts } from "../../../backend/src/scripts/seed";
+import { seedNotebookPosts } from "../../../../backend/src/scripts/seed";
 
 export default function TheNotebookPage() {
   const [selectedCat, setSelectedCat] = useState("all");

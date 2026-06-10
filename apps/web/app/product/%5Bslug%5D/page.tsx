@@ -12,7 +12,8 @@ import {
   AlertCircle, 
   Cake,
   Check,
-  Award
+  Award,
+  ShoppingBag
 } from "lucide-react";
 import { seedProducts } from "../../../../../backend/src/scripts/seed";
 

@@ -12,10 +12,11 @@ import {
   Check, 
   Heart,
   Star,
-  Award
+  Award,
+  ChevronRight
 } from "lucide-react";
 import { getBhopalZoneForPincode, BHOPAL_SERVICE_ZONES } from "@sugar-story/shared";
-import { seedProducts } from "../../../../backend/src/scripts/seed";
+import { seedProducts } from "../../../../../backend/src/scripts/seed";
 
 // Neighborhood metadata containing 600-800 words mapping for Bhopal localities
 const NEIGHBOURHOOD_REGISTRY: Record<string, { name: string; pin: string; heritage: string; vibe: string }> = {
@@ -175,7 +176,7 @@ export default function LocalPincodePage() {
             slots: [
               { id: `s1-${i}`, label: "9:00 AM – 12:00 PM", isAvailable: true, remaining: 15, status: "Available", deliveryFee: zone.deliveryFee },
               { id: `s2-${i}`, label: "3:00 PM – 6:00 PM", isAvailable: true, remaining: 4, status: "Few slots left", deliveryFee: zone.deliveryFee },
-              { id: `s3-${i}`, label: "11:30 PM – 12:30 AM", isAvailable: zone.midnightSlotAvailable, remaining: 2, status: "Few slots left", deliveryFee: zone.midnightFee }
+              { id: `s3-${i}`, label: "11:30 PM – 12:30 AM", isAvailable: zone.midnightAvailable, remaining: 2, status: "Few slots left", deliveryFee: zone.midnightFee }
             ]
           });
         }

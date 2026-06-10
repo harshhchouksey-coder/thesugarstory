@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Clock, Calendar, Bookmark, Tag } from "lucide-react";
-import { seedNotebookPosts } from "../../../../backend/src/scripts/seed";
+import { seedNotebookPosts } from "../../../../../backend/src/scripts/seed";
 
 export default function NotebookDetailPage() {
   const params = useParams();

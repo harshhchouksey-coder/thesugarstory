@@ -514,7 +514,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
             contact: custPhone
           },
           theme: {
-            color: "#C4956A"
+            color: "#6B3F2A"
           },
           modal: {
             ondismiss: function () {
@@ -636,7 +636,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
           <div className="w-full">
             
             {/* Task 3 - Cinematic Homepage Hero */}
-            <section className="relative h-[85vh] bg-[#5D4037] text-cream flex items-center justify-center text-center px-6 overflow-hidden">
+            <section className="relative h-[85vh] bg-cocoa text-cream flex items-center justify-center text-center px-6 overflow-hidden">
               <div className="absolute inset-0 bg-cover bg-center opacity-25" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1517433456452-f9633a875f6f?q=80&w=1200&auto=format&fit=crop')" }} />
               
               <div className="relative z-10 max-w-4xl space-y-6">
@@ -652,7 +652,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     onClick={() => {
                       document.getElementById("catalog-section")?.scrollIntoView({ behavior: 'smooth' });
                     }}
-                    className="px-8 py-4 bg-[#C4956A] hover:bg-[#B3855C] text-cream font-sans font-semibold text-xs uppercase tracking-[0.2em] transition-all shadow-md"
+                    className="px-8 py-4 bg-primary hover:bg-primary/95 text-cream font-sans font-semibold text-xs uppercase tracking-[0.2em] transition-all shadow-md cursor-pointer"
                   >
                     Shop Cakes
                   </button>
@@ -673,7 +673,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
             <ScrollReveal>
               <section className="py-24 max-w-6xl mx-auto px-6 border-b border-cocoa/5">
                 <div className="text-center space-y-2 mb-16">
-                  <span className="text-xs uppercase tracking-[0.3em] text-[#C4956A] font-bold font-sans">Signature Selections</span>
+                  <span className="text-xs uppercase tracking-[0.3em] text-primary font-bold font-sans">Signature Selections</span>
                   <h2 className="font-serif text-3xl md:text-5xl font-medium tracking-tight">The Bestsellers Row</h2>
                 </div>
 
@@ -716,7 +716,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
               <section id="catalog-section" className="py-24 max-w-7xl mx-auto px-6 text-left scroll-mt-20">
                 <div className="flex flex-col md:flex-row items-baseline justify-between mb-12 border-b border-cocoa/10 pb-6 gap-4">
                   <div className="space-y-2">
-                    <span className="text-xs uppercase tracking-[0.25em] text-[#C4956A] font-bold font-sans">Freshly Baked Catalog</span>
+                    <span className="text-xs uppercase tracking-[0.25em] text-primary font-bold font-sans">Freshly Baked Catalog</span>
                     <h2 className="font-serif text-3xl md:text-5xl font-medium tracking-tight">The Product Catalogue</h2>
                   </div>
                   <span className="text-xs font-sans uppercase text-stone tracking-widest">
@@ -730,7 +730,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     <button
                       key={tab}
                       onClick={() => setSelectedCategoryTab(tab)}
-                      className={`px-4 py-2 text-[10px] font-sans uppercase tracking-widest transition-all ${selectedCategoryTab === tab ? "bg-[#C4956A] text-cream" : "bg-cream text-cocoa border border-cocoa/20 hover:border-primary"}`}
+                      className={`px-4 py-2 text-[10px] font-sans uppercase tracking-widest transition-all ${selectedCategoryTab === tab ? "bg-primary text-cream" : "bg-cream text-cocoa border border-cocoa/20 hover:border-primary"}`}
                     >
                       {tab}
                     </button>
@@ -800,7 +800,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
               <section className="bg-cocoa text-cream py-20 text-left">
                 <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                   <div className="aspect-[3/4] bg-[#D7CCC8]/10 max-w-sm mx-auto w-full p-2 border border-primary/20 relative">
-                    <div className="absolute inset-2 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=500&auto=format&fit=crop')" }} />
+                    <div className="absolute inset-2 bg-cover bg-center" style={{ backgroundImage: "url('/images/chef-shalini-portrait.jpg')" }} />
                     <div className="absolute bottom-4 right-4 bg-primary text-cream py-2 px-4 text-[10px] font-sans uppercase tracking-widest font-semibold">
                       Chef Shalini Singh
                     </div>
@@ -839,7 +839,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
             <ScrollReveal>
               <section className="py-24 max-w-7xl mx-auto px-6 text-left border-t border-cocoa/10 bg-cream/20">
                 <div className="space-y-2 mb-12">
-                  <span className="text-xs uppercase tracking-[0.25em] text-[#C4956A] font-bold font-sans">Patron Appreciations</span>
+                  <span className="text-xs uppercase tracking-[0.25em] text-primary font-bold font-sans">Patron Appreciations</span>
                   <h2 className="font-serif text-3xl md:text-5xl font-medium tracking-tight">Customer Testimonials</h2>
                 </div>
 
@@ -950,7 +950,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
               {/* Left Column: Portrait */}
               <div className="lg:col-span-5 space-y-4">
                 <div className="aspect-[3/4] bg-cocoa/5 p-3 border border-cocoa/10 relative shadow-sm">
-                  <div className="absolute inset-3 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=600&auto=format&fit=crop')" }} />
+                  <div className="absolute inset-3 bg-cover bg-center" style={{ backgroundImage: "url('/images/chef-shalini-portrait.jpg')" }} />
                   <div className="absolute bottom-6 right-6 bg-primary text-cream py-2.5 px-5 text-[10px] font-sans uppercase tracking-[0.15em] font-semibold shadow-md">
                     Chef Shalini Singh
                   </div>

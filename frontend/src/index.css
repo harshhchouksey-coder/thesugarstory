@@ -5,7 +5,7 @@
 @layer base {
   body {
     background-color: #F6EFE3; /* Cream */
-    color: #5D4037; /* Cocoa */
+    color: #1F1410; /* Cocoa */
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
@@ -13,11 +13,11 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Cormorant Garamond', Georgia, serif;
-    color: #5D4037;
+    color: #1F1410;
   }
 
   ::selection {
-    background-color: #C4956A; /* Caramel primary */
+    background-color: #6B3F2A; /* Caramel primary */
     color: #F6EFE3; /* Cream */
   }
 
@@ -32,12 +32,12 @@
   }
   
   ::-webkit-scrollbar-thumb {
-    background: #C4956A;
+    background: #6B3F2A;
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #5D4037;
+    background: #1F1410;
   }
 }
 

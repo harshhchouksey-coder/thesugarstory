@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { 
   ShieldCheck, 
@@ -14,9 +14,9 @@ import {
   MessageCircle,
   CreditCard
 } from "lucide-react";
-import { seedProducts } from "../../../backend/src/scripts/seed";
+import { seedProducts } from "../../../../backend/src/scripts/seed";
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -627,5 +627,17 @@ export default function CheckoutPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-cream">
+        <span className="text-stone text-xs uppercase tracking-widest">Gathering Cart Context...</span>
+      </div>
+    }>
+      <CheckoutContent />
+    </Suspense>
   );
 }
