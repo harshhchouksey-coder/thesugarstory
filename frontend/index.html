@@ -8,6 +8,54 @@
     <!-- Title and Metadata for local SEO -->
     <title>The Sugar Story | Premium Homemade Bakery by Chef Shalini Singh</title>
     <meta name="description" content="Exquisite customized celebration cakes, cookies, and artisanal breads handcrafted in Bhopal by ex-Taj Pastry Chef Shalini Singh." />
+    
+    <!-- Open Graph tags for social share -->
+    <meta property="og:title" content="The Sugar Story | Premium Homemade Bakery by Chef Shalini Singh" />
+    <meta property="og:description" content="Exquisite customized celebration cakes, cookies, and artisanal breads handcrafted in Bhopal by ex-Taj Pastry Chef Shalini Singh." />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&auto=format&fit=crop" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://localhost:3000/" />
+
+    <!-- Local Business Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Bakery",
+      "name": "The Sugar Story",
+      "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1200&auto=format&fit=crop",
+      "@id": "http://localhost:3000/#bakery",
+      "url": "http://localhost:3000/",
+      "telephone": "+917906759188",
+      "priceRange": "₹₹",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Arera Colony",
+        "addressLocality": "Bhopal",
+        "addressRegion": "MP",
+        "postalCode": "462016",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 23.216,
+        "longitude": 77.436
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ],
+        "opens": "09:00",
+        "closes": "21:00"
+      }
+    }
+    </script>
 
     <!-- Modern Google Fonts Loaders -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

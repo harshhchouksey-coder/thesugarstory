@@ -481,6 +481,14 @@ async def update_order_status(id: str, payload: UpdateStatusRequest):
 
 @app.get("/api/settings")
 async def get_settings():
+    if db_instance.db is not None:
+        try:
+            settings = await db_instance.db.settings.find_one({}, {"_id": 0})
+            if settings:
+                delivery_settings.update(settings)
+                return settings
+        except Exception as e:
+            print(f"Error loading settings from MongoDB: {e}")
     return delivery_settings
 
 @app.put("/api/settings")
@@ -489,6 +497,20 @@ async def update_settings(payload: SettingsRequest):
     delivery_settings["deliveryFee"] = payload.deliveryFee
     delivery_settings["freeThreshold"] = payload.freeThreshold
     delivery_settings["sameDayActive"] = payload.sameDayActive
+    
+    if db_instance.db is not None:
+        try:
+            await db_instance.db.settings.update_one(
+                {},
+                {"$set": {
+                    "deliveryFee": payload.deliveryFee,
+                    "freeThreshold": payload.freeThreshold,
+                    "sameDayActive": payload.sameDayActive
+                }},
+                upsert=True
+            )
+        except Exception as e:
+            print(f"Error updating settings in MongoDB: {e}")
     return delivery_settings
 
 @app.post("/api/admin/upload")

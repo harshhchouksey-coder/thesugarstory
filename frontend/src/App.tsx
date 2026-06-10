@@ -314,9 +314,12 @@ function ProductCard({
 
 export default function App() {
   // Navigation Routing States
-  const [currentPage, setCurrentPage] = useState<"home" | "shop" | "product" | "checkout" | "confirm" | "story" | "admin">("home");
+  const [currentPage, setCurrentPage] = useState<"home" | "shop" | "cart" | "product" | "checkout" | "confirm" | "story" | "admin" | "404">("home");
   const [selectedProduct, setSelectedProduct] = useState<any>(MASTER_PRODUCTS[0]);
   const [cart, setCart] = useState<any[]>([]);
+  const [selectedQty, setSelectedQty] = useState(1);
+  const [openAccordion, setOpenAccordion] = useState("ingredients");
+  const [activeGalleryImage, setActiveGalleryImage] = useState("");
 
   // Products Database list
   const [productsList, setProductsList] = useState<any[]>(MASTER_PRODUCTS);
@@ -448,30 +451,53 @@ export default function App() {
     setDeliverySlot(DELIVERY_SLOTS[0]);
   }, [deliverySettings.sameDayActive]);
 
-  const handleCheckServiceability = (e: React.FormEvent) => {
+  const handleCheckServiceability = async (e: React.FormEvent) => {
     e.preventDefault();
     if (pincode.length !== 6 || isNaN(Number(pincode))) {
       alert("Please enter a valid 6-digit Indian Pincode.");
       return;
     }
 
-    const isBhopal = BHOPAL_PINCODES.includes(pincode);
-    const isCake = selectedProduct.category === "Cakes" || selectedProduct.category === "Cheesecakes";
-
-    if (isCake) {
-      if (isBhopal) {
-        setServiceStatus("serviceable");
-        setServiceMessage("Serviced by Bhopal Salon. Local fresh delivery fee applies.");
+    try {
+      const res = await fetch(`${API_BASE}/api/serviceability/bhopal?pin=${pincode}&productId=${selectedProduct.id}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.serviceable) {
+          setServiceStatus("serviceable");
+          setServiceMessage(data.isBhopal 
+            ? "Serviced by Bhopal Salon. Local fresh delivery fee applies." 
+            : "Serviced via express air cargo (arrives in 3-5 business days).");
+          if (data.rollingDates && data.rollingDates.length > 0) {
+            setRollingDates(data.rollingDates);
+            setDeliveryDate(data.rollingDates[0]);
+          }
+        } else {
+          setServiceStatus("blocked");
+          setServiceMessage(data.message || "This item is restricted to Bhopal fresh delivery only.");
+        }
       } else {
-        setServiceStatus("blocked");
-        setServiceMessage("This delicate celebration item is restricted to Bhopal fresh delivery only.");
+        const errData = await res.json();
+        alert(errData.detail || "Error checking serviceability.");
       }
-    } else {
-      // Pan India ship-stable items are serviceable everywhere
-      setServiceStatus("serviceable");
-      setServiceMessage(isBhopal 
-        ? "Serviced via local fresh courier." 
-        : "Serviced via express air cargo (arrives in 3-5 business days).");
+    } catch (err) {
+      console.error("Serviceability check error:", err);
+      // Fallback
+      const isBhopal = BHOPAL_PINCODES.includes(pincode);
+      const isCake = selectedProduct.category === "Cakes" || selectedProduct.category === "Cheesecakes";
+      if (isCake) {
+        if (isBhopal) {
+          setServiceStatus("serviceable");
+          setServiceMessage("Serviced by Bhopal Salon. Local fresh delivery fee applies.");
+        } else {
+          setServiceStatus("blocked");
+          setServiceMessage("This delicate celebration item is restricted to Bhopal fresh delivery only.");
+        }
+      } else {
+        setServiceStatus("serviceable");
+        setServiceMessage(isBhopal 
+          ? "Serviced via local fresh courier." 
+          : "Serviced via express air cargo.");
+      }
     }
   };
 
@@ -483,17 +509,18 @@ export default function App() {
     const existingIndex = cart.findIndex(item => item.id === selectedProduct.id && item.isEggless === isEggless);
     if (existingIndex > -1) {
       const updatedCart = [...cart];
-      updatedCart[existingIndex].quantity += 1;
+      updatedCart[existingIndex].quantity += selectedQty;
       setCart(updatedCart);
     } else {
       setCart([...cart, {
         ...selectedProduct,
-        quantity: selectedProduct.min_quantity || 1,
+        quantity: selectedQty,
         isEggless,
         cakeMessage
       }]);
     }
-    setCurrentPage("checkout");
+    setCurrentPage("cart");
+    window.scrollTo(0, 0);
   };
 
   // Calculations based on dynamic rules from Shalini's admin panel
@@ -684,11 +711,20 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
   // Clean navigation helper
   const navigateToProduct = (prod: any) => {
     setSelectedProduct(prod);
+    setActiveGalleryImage(prod.image || "");
     setPincode("");
-    setServiceStatus("idle");
-    setServiceMessage("");
+    const isLocalOnly = ["Cakes", "Cheesecakes"].includes(prod.category) || prod.name.toLowerCase().includes("theme cake");
+    if (isLocalOnly) {
+      setServiceStatus("idle");
+      setServiceMessage("");
+    } else {
+      setServiceStatus("serviceable");
+      setServiceMessage("");
+    }
     setIsEggless(false);
     setCakeMessage("");
+    setSelectedQty(prod.min_quantity || 1);
+    setOpenAccordion("ingredients");
     setCurrentPage("product");
     window.scrollTo(0, 0);
   };
@@ -763,11 +799,8 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
           <div className="flex items-center gap-4">
             <button 
               onClick={() => {
-                if (cart.length > 0) {
-                  setCurrentPage("checkout");
-                  window.scrollTo(0, 0);
-                }
-                else alert("Your shopping bag is empty. Please select a bake!");
+                setCurrentPage("cart");
+                window.scrollTo(0, 0);
               }} 
               className="relative p-2 text-cocoa hover:text-primary transition-colors cursor-pointer"
               aria-label="Bag"
@@ -1131,6 +1164,153 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
         )}
 
         {/* ==========================================
+            ROUTER 1.6: CART PAGE
+            ========================================== */}
+        {currentPage === "cart" && (
+          <Container className="py-16">
+            <SectionHeading eyebrow="Gourmet Selections" title="Your Shopping Bag" className="mb-12" />
+
+            {cart.length === 0 ? (
+              <div className="text-center py-20 max-w-md mx-auto space-y-6">
+                <ShoppingBag size={64} className="text-gold mx-auto opacity-30 animate-pulse" />
+                <h2 className="font-serif text-3xl font-light text-cocoa">Your story hasn't started yet.</h2>
+                <p className="font-sans text-stone text-xs leading-relaxed">
+                  Select from our five-star Taj-quality bakes and customized celebration chapters to begin.
+                </p>
+                <div className="pt-4">
+                  <Button 
+                    variant="primary" 
+                    onClick={() => {
+                      setCurrentPage("shop");
+                      window.scrollTo(0, 0);
+                    }}
+                  >
+                    Choose a chapter →
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start text-left">
+                {/* Cart items list (8 cols) */}
+                <div className="lg:col-span-8 space-y-6">
+                  {cart.map((item, idx) => (
+                    <div key={idx} className="flex gap-6 border border-stone/20 p-6 rounded-2xl bg-cream/40">
+                      <div 
+                        className="w-24 h-24 bg-cocoa/5 bg-cover bg-center border border-stone/20 rounded-xl flex-shrink-0" 
+                        style={{ backgroundImage: `url(${item.image})` }} 
+                      />
+                      <div className="flex-grow flex flex-col justify-between">
+                        <div className="flex justify-between items-start gap-4">
+                          <div>
+                            <h3 className="font-serif text-xl font-semibold text-cocoa leading-tight">{item.name}</h3>
+                            <p className="text-[10px] font-sans text-stone uppercase tracking-wider font-semibold mt-1">
+                              {item.weight} • ₹{item.price} each
+                            </p>
+                          </div>
+                          <button 
+                            type="button"
+                            onClick={() => handleRemoveFromCart(item.id, item.isEggless)}
+                            className="text-stone hover:text-red-700 transition-colors p-1 bg-transparent border-none cursor-pointer"
+                            title="Remove item"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+
+                        <div className="flex justify-between items-center mt-4 pt-4 border-t border-stone/10">
+                          {/* Quantity edits */}
+                          <div className="flex items-center gap-2">
+                            <button 
+                              type="button"
+                              disabled={item.quantity <= (item.min_quantity || 1)}
+                              onClick={() => handleUpdateQuantity(item.id, item.isEggless, -1)}
+                              className="w-6 h-6 rounded-md bg-cocoa/5 hover:bg-cocoa/10 text-cocoa disabled:opacity-40 flex items-center justify-center font-sans font-bold text-xs transition-colors cursor-pointer"
+                            >
+                              –
+                            </button>
+                            <span className="font-sans text-xs font-semibold text-cocoa w-6 text-center">{item.quantity}</span>
+                            <button 
+                              type="button"
+                              onClick={() => handleUpdateQuantity(item.id, item.isEggless, 1)}
+                              className="w-6 h-6 rounded-md bg-cocoa/5 hover:bg-cocoa/10 text-cocoa flex items-center justify-center font-sans font-bold text-xs transition-colors cursor-pointer"
+                            >
+                              +
+                            </button>
+                            {item.min_quantity > 1 && (
+                              <span className="text-[8px] font-sans text-stone uppercase tracking-widest font-semibold ml-2">
+                                Min: {item.min_quantity}
+                              </span>
+                            )}
+                          </div>
+
+                          <span className="font-serif text-lg font-bold text-cocoa">
+                            ₹{item.price * item.quantity}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Totals & Summary card (4 cols) */}
+                <div className="lg:col-span-4 space-y-6">
+                  <div className="border border-stone/20 bg-cream/40 p-6 rounded-2xl space-y-6">
+                    <h3 className="font-serif text-xl font-semibold border-b border-stone/10 pb-4">Order Summary</h3>
+
+                    {/* Free delivery progress bar */}
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-[10px] font-sans uppercase tracking-wider font-semibold text-stone">
+                        {cartSubtotal < deliverySettings.freeThreshold ? (
+                          <span>Add <strong className="text-cocoa">₹{deliverySettings.freeThreshold - cartSubtotal}</strong> more for FREE delivery</span>
+                        ) : (
+                          <span className="text-green-700 font-bold">✓ You qualify for FREE delivery!</span>
+                        )}
+                        <span>₹{cartSubtotal} / ₹{deliverySettings.freeThreshold}</span>
+                      </div>
+                      <div className="w-full h-1.5 bg-cocoa/5 rounded-full overflow-hidden border border-stone/20">
+                        <div 
+                          className="h-full bg-gold transition-all duration-500 rounded-full" 
+                          style={{ width: `${Math.min(100, (cartSubtotal / deliverySettings.freeThreshold) * 100)}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Calculations */}
+                    <div className="space-y-3 font-sans text-xs text-stone">
+                      <div className="flex justify-between">
+                        <span>Subtotal</span>
+                        <span className="font-semibold text-cocoa">₹{cartSubtotal}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Delivery Charge</span>
+                        <span className="font-semibold text-cocoa">
+                          {deliveryFee === 0 ? "FREE" : `₹${deliveryFee}`}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-baseline border-t border-stone/20 pt-4 text-base text-cocoa">
+                        <span className="font-serif text-lg font-medium">Total Amount</span>
+                        <span className="font-serif text-2xl font-bold">₹{totalAmount}</span>
+                      </div>
+                    </div>
+
+                    <Button 
+                      variant="primary" 
+                      onClick={() => {
+                        setCurrentPage("checkout");
+                        window.scrollTo(0, 0);
+                      }}
+                      className="w-full py-4 tracking-widest text-xs"
+                    >
+                      Proceed to Checkout
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </Container>
+        )}
+
+        {/* ==========================================
             ROUTER 5: OUR STORY PAGE
             ========================================== */}
         {currentPage === "story" && (
@@ -1241,143 +1421,206 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
             ========================================== */}
         {currentPage === "product" && (
           <section className="max-w-6xl mx-auto px-6 py-20 text-left">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
               
-              {/* Product Media Column */}
-              <div className="space-y-6">
-                <div className="aspect-square bg-cocoa/10 border border-cocoa/10 relative p-2">
-                  <img src={selectedProduct.image} alt={selectedProduct.name} className="w-full h-full object-cover" />
+              {/* Product Media Column - 6 Columns */}
+              <div className="lg:col-span-6 space-y-6">
+                <div className="aspect-square bg-cocoa/5 border border-stone/20 relative overflow-hidden rounded-3xl shadow-sm">
+                  <img 
+                    src={activeGalleryImage || selectedProduct.image} 
+                    alt={selectedProduct.name} 
+                    className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" 
+                  />
                   <div className="absolute top-6 left-6">
-                    <span className="bg-cocoa text-cream text-[9px] font-sans font-bold uppercase tracking-widest px-3 py-1">
+                    <span className="bg-cocoa text-cream text-[9px] font-sans font-bold uppercase tracking-widest px-3 py-1 rounded-md">
                       {selectedProduct.category}
                     </span>
                   </div>
                 </div>
 
+                {/* Gallery Thumbnails Row */}
+                <div className="grid grid-cols-3 gap-4">
+                  {/* Thumbnail 1: Main Image */}
+                  <button
+                    type="button"
+                    onClick={() => setActiveGalleryImage(selectedProduct.image)}
+                    className={`aspect-square overflow-hidden rounded-2xl border-2 transition-all ${
+                      (activeGalleryImage === selectedProduct.image) ? "border-gold scale-[1.02]" : "border-stone/20 opacity-70 hover:opacity-100"
+                    }`}
+                  >
+                    <img src={selectedProduct.image} alt="Main view" className="w-full h-full object-cover" />
+                  </button>
+
+                  {/* Thumbnail 2: Detailed Macro Close-up */}
+                  <button
+                    type="button"
+                    onClick={() => setActiveGalleryImage(selectedProduct.image + "&auto=format&fit=crop&w=600&h=600&q=80&fp-z=2&fp-x=0.5&fp-y=0.5")}
+                    className={`aspect-square overflow-hidden rounded-2xl border-2 transition-all ${
+                      (activeGalleryImage.includes("fp-z=2")) ? "border-gold scale-[1.02]" : "border-stone/20 opacity-70 hover:opacity-100"
+                    }`}
+                  >
+                    <img src={selectedProduct.image} alt="Close-up detail" className="w-full h-full object-cover transform scale-125 origin-center" />
+                  </button>
+
+                  {/* Thumbnail 3: Lifestyle Presentation */}
+                  <button
+                    type="button"
+                    onClick={() => setActiveGalleryImage("https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=600&auto=format&fit=crop")}
+                    className={`aspect-square overflow-hidden rounded-2xl border-2 transition-all ${
+                      (activeGalleryImage.includes("photo-1556910103-1c02745aae4d")) ? "border-gold scale-[1.02]" : "border-stone/20 opacity-70 hover:opacity-100"
+                    }`}
+                  >
+                    <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=150&auto=format&fit=crop" alt="Chef presentation" className="w-full h-full object-cover" />
+                  </button>
+                </div>
+
                 {/* Storage block */}
-                <div className="bg-cream border border-cocoa/10 p-6 space-y-3">
-                  <h4 className="font-serif text-base font-semibold text-cocoa flex items-center gap-1.5">
+                <div className="bg-[#FAF6EE] border border-stone/25 p-6 rounded-2xl space-y-3">
+                  <h4 className="font-serif text-sm font-semibold text-cocoa flex items-center gap-1.5">
                     <ShieldCheck className="text-gold" size={16} />
-                    <span>Storage & Care Guidelines</span>
+                    <span>Taj-Class Preservation & Care</span>
                   </h4>
                   <div className="grid grid-cols-2 gap-4 text-xs font-sans">
                     <div>
-                      <span className="text-stone uppercase text-[9px] block">Shelf Life</span>
-                      <span className="font-semibold text-cocoa">{selectedProduct.shelfLife || "5 Days"}</span>
+                      <span className="text-stone uppercase text-[8px] tracking-wider block font-semibold">Recommended Temp</span>
+                      <span className="font-semibold text-cocoa">
+                        {["Cakes", "Cheesecakes"].includes(selectedProduct.category) || selectedProduct.name.toLowerCase().includes("theme cake") ? "Refrigerated (4°C - 6°C)" : "Room Temp (Airtight)"}
+                      </span>
                     </div>
                     <div>
-                      <span className="text-stone uppercase text-[9px] block">Delivery Rate</span>
-                      <span className="font-semibold text-cocoa">₹100 Flat (FREE &gt; ₹1k)</span>
+                      <span className="text-stone uppercase text-[8px] tracking-wider block font-semibold">Bhopal Transit</span>
+                      <span className="font-semibold text-cocoa">Fresh Insulated Courier</span>
                     </div>
                     <div className="col-span-2">
-                      <span className="text-stone uppercase text-[9px] block">Storage Instructions</span>
-                      <p className="text-cocoa/90 italic mt-0.5 font-medium">"{selectedProduct.description}"</p>
+                      <span className="text-stone uppercase text-[8px] tracking-wider block font-semibold">Storage Guidelines</span>
+                      <p className="text-cocoa/90 italic mt-0.5">
+                        {["Cakes", "Cheesecakes"].includes(selectedProduct.category) || selectedProduct.name.toLowerCase().includes("theme cake")
+                          ? "Keep boxed and chilled. Best within 48h."
+                          : "Store away from heat and direct sunlight."}
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Product Details Column */}
-              <div className="space-y-8">
+              {/* Product Details Column - 6 Columns */}
+              <div className="lg:col-span-6 space-y-8">
                 <div className="space-y-3">
-                  <span className="text-xs uppercase tracking-[0.25em] text-primary font-bold font-sans">Chef Shalini's Signature Selection</span>
-                  <h1 className="font-serif text-3xl md:text-5xl font-medium tracking-tight">{selectedProduct.name}</h1>
+                  <span className="text-xs uppercase tracking-[0.25em] text-stone font-semibold font-sans">Chef Shalini's Signature Selection</span>
+                  <h1 className="font-serif text-3xl md:text-5xl font-medium tracking-tight text-cocoa">{selectedProduct.name}</h1>
                   
-                  <div className="flex items-center gap-4 border-b border-cocoa/10 pb-4">
-                    <span className="font-serif text-2xl font-bold text-cocoa">₹{selectedProduct.price}</span>
-                    <span className="text-[10px] font-sans text-stone uppercase tracking-widest">Bhopal Flat Delivery feerates apply</span>
+                  <div className="flex items-baseline gap-4 border-b border-cocoa/10 pb-4">
+                    <span className="font-serif text-3xl font-semibold text-primary">₹{selectedProduct.price}</span>
+                    <span className="text-xs font-sans text-stone">{selectedProduct.weight}</span>
                   </div>
                   
                   <p className="font-sans text-stone text-xs md:text-sm leading-relaxed">{selectedProduct.description}</p>
                 </div>
 
-                {/* Pincode checker gate */}
-                <div className="border border-cocoa/15 p-6 bg-cream/40 space-y-4">
-                  <div className="space-y-1">
-                    <h4 className="font-serif text-base font-medium text-cocoa flex items-center gap-1.5">
-                      <MapPin size={16} className="text-gold" />
-                      <span>Delivery Service Check</span>
-                    </h4>
-                    <p className="text-[10px] font-sans text-stone uppercase leading-relaxed">
-                      {(selectedProduct.category === "Cakes" || selectedProduct.category === "Cheesecakes")
-                        ? "Delicate celebration cakes are hand-delivered only inside Bhopal."
-                        : "Premium brownies and tea cakes ship pan-India."}
-                    </p>
-                  </div>
-
-                  <form onSubmit={handleCheckServiceability} className="flex gap-2">
-                    <input
-                      type="text"
-                      maxLength={6}
-                      value={pincode}
-                      onChange={e => setPincode(e.target.value.replace(/\D/g, ""))}
-                      placeholder="Enter 6-digit Pincode"
-                      className="flex-grow px-4 py-3 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary"
-                    />
-                    <button
-                      type="submit"
-                      className="px-6 py-3 bg-cocoa text-cream text-[10px] font-sans font-bold uppercase tracking-widest hover:bg-primary transition-all"
-                    >
-                      Verify
-                    </button>
-                  </form>
-
-                  {serviceStatus !== "idle" && (
-                    <div className={`p-4 text-xs font-sans flex items-start gap-2 ${serviceStatus === "serviceable" ? "bg-green-50 text-green-700 border-l-2 border-green-600" : "bg-red-50 text-red-700 border-l-2 border-red-600"}`}>
-                      {serviceStatus === "serviceable" ? (
-                        <>
-                          <Check size={14} className="mt-0.5" />
-                          <p className="font-semibold">{serviceMessage}</p>
-                        </>
-                      ) : (
-                        <>
-                          <AlertCircle size={14} className="mt-0.5" />
-                          <p className="font-semibold">{serviceMessage}</p>
-                        </>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Dynamic Slots Picker (only when serviceable and local cake) */}
-                  {serviceStatus === "serviceable" && (selectedProduct.category === "Cakes" || selectedProduct.category === "Cheesecakes") && (
-                    <div className="space-y-4 pt-4 border-t border-cocoa/10">
-                      <h4 className="font-serif text-sm font-semibold text-cocoa flex items-center gap-1.5">
-                        <Clock size={14} className="text-gold" />
-                        <span>Select Date & Time Slot</span>
-                      </h4>
-
-                      <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
-                        {rollingDates.map(date => (
-                          <button
-                            key={date}
-                            type="button"
-                            onClick={() => setDeliveryDate(date)}
-                            className={`px-3.5 py-2 border text-[9px] font-sans uppercase tracking-widest whitespace-nowrap transition-all ${deliveryDate === date ? "bg-primary text-cream border-primary" : "bg-cream text-cocoa border-cocoa/20 hover:border-primary"}`}
-                          >
-                            {date}
-                          </button>
-                        ))}
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {DELIVERY_SLOTS.map(slot => (
-                          <button
-                            key={slot}
-                            type="button"
-                            onClick={() => setDeliverySlot(slot)}
-                            className={`p-3 border text-left font-sans text-xs flex justify-between items-center transition-all ${deliverySlot === slot ? "bg-primary/10 border-primary ring-1 ring-primary" : "bg-cream border-cocoa/20"}`}
-                          >
-                            <span>{slot}</span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                {/* From Shalini's Notebook Note */}
+                <div className="p-5 border-l-2 border-gold bg-[#FAF6EE] rounded-r-xl space-y-1">
+                  <h4 className="font-serif italic text-sm text-primary font-bold tracking-wide flex items-center gap-1.5">
+                    <span className="font-signature text-2xl text-gold font-normal">Shalini's</span> Notebook
+                  </h4>
+                  <p className="font-sans text-xs text-cocoa/90 leading-relaxed italic">
+                    {["Cakes", "Cheesecakes"].includes(selectedProduct.category) || selectedProduct.name.toLowerCase().includes("theme cake")
+                      ? "Inspired by my Taj pastry kitchen days—this recipe balances fresh sponge with delicate layers. We slow-bake in small batches for that fine, hotel-grade texture."
+                      : "A classic recipe refined over years. We use pure dairy butter, single-origin cocoa, and natural flavorings to deliver a warm, preservative-free gourmet bite."}
+                  </p>
                 </div>
 
-                {/* Customisations workspace */}
+                {/* Pincode Checker Gate (only for local-only items) */}
+                {(() => {
+                  const isLocalOnly = ["Cakes", "Cheesecakes"].includes(selectedProduct.category) || selectedProduct.name.toLowerCase().includes("theme cake");
+                  return (
+                    <div className="border border-stone/20 p-6 rounded-2xl bg-cream/40 space-y-4">
+                      <div className="space-y-1">
+                        <h4 className="font-serif text-base font-semibold text-cocoa flex items-center gap-1.5">
+                          <MapPin size={16} className="text-gold" />
+                          <span>Delivery Service Verification</span>
+                        </h4>
+                        <p className="text-[10px] font-sans text-stone uppercase leading-relaxed font-semibold">
+                          {isLocalOnly
+                            ? "Delicate celebration cakes are hand-delivered only inside Bhopal pincodes."
+                            : "Premium brownies, jars, and cookies ship pan-India."}
+                        </p>
+                      </div>
+
+                      <form onSubmit={handleCheckServiceability} className="flex gap-2">
+                        <input
+                          type="text"
+                          maxLength={6}
+                          value={pincode}
+                          onChange={e => setPincode(e.target.value.replace(/\D/g, ""))}
+                          placeholder="Enter 6-digit Pincode"
+                          className="flex-grow px-4 py-3 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary rounded-xl"
+                        />
+                        <button
+                          type="submit"
+                          className="px-6 py-3 bg-cocoa text-cream text-[10px] font-sans font-bold uppercase tracking-widest hover:bg-primary transition-all rounded-xl"
+                        >
+                          Verify
+                        </button>
+                      </form>
+
+                      {serviceStatus !== "idle" && (
+                        <div className={`p-4 text-xs font-sans flex items-start gap-2 rounded-xl ${serviceStatus === "serviceable" ? "bg-green-50 text-green-700 border-l-2 border-green-600" : "bg-red-50 text-red-700 border-l-2 border-red-600"}`}>
+                          {serviceStatus === "serviceable" ? (
+                            <>
+                              <Check size={14} className="mt-0.5" />
+                              <p className="font-semibold">{serviceMessage}</p>
+                            </>
+                          ) : (
+                            <>
+                              <AlertCircle size={14} className="mt-0.5" />
+                              <p className="font-semibold">{serviceMessage}</p>
+                            </>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Dynamic Slots Picker (only when serviceable and local cake) */}
+                      {serviceStatus === "serviceable" && isLocalOnly && (
+                        <div className="space-y-4 pt-4 border-t border-cocoa/10">
+                          <h4 className="font-serif text-sm font-semibold text-cocoa flex items-center gap-1.5">
+                            <Clock size={14} className="text-gold" />
+                            <span>Select Date & Time Slot</span>
+                          </h4>
+
+                          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
+                            {rollingDates.map(date => (
+                              <button
+                                key={date}
+                                type="button"
+                                onClick={() => setDeliveryDate(date)}
+                                className={`px-3.5 py-2 border text-[9px] font-sans uppercase tracking-widest whitespace-nowrap transition-all rounded-lg ${deliveryDate === date ? "bg-primary text-cream border-primary" : "bg-cream text-cocoa border-cocoa/20 hover:border-primary"}`}
+                              >
+                                {date}
+                              </button>
+                            ))}
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {DELIVERY_SLOTS.map(slot => (
+                              <button
+                                key={slot}
+                                type="button"
+                                onClick={() => setDeliverySlot(slot)}
+                                className={`p-3 border text-left font-sans text-xs flex justify-between items-center transition-all rounded-lg ${deliverySlot === slot ? "bg-primary/10 border-primary ring-1 ring-primary" : "bg-cream border-cocoa/20"}`}
+                              >
+                                <span>{slot}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* Customisations workspace (only shown when serviceable) */}
                 {serviceStatus === "serviceable" && (
-                  <div className="border border-cocoa/15 p-6 bg-cream/40 space-y-6">
+                  <div className="border border-stone/20 p-6 rounded-2xl bg-cream/40 space-y-6">
                     <h3 className="font-serif text-lg font-medium text-cocoa flex items-center gap-2 border-b border-cocoa/10 pb-3">
                       <Cake size={16} className="text-gold" />
                       <span>Customisation Directives</span>
@@ -1398,16 +1641,16 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     </div>
 
                     {/* Message plaque */}
-                    {(selectedProduct.category === "Cakes" || selectedProduct.category === "Cheesecakes") && (
+                    {(["Cakes", "Cheesecakes"].includes(selectedProduct.category) || selectedProduct.name.toLowerCase().includes("theme cake")) && (
                       <div className="space-y-2">
-                        <label className="block font-sans text-xs uppercase tracking-widest text-stone">Cake Message (Max 500 Characters)</label>
+                        <label className="block font-sans text-xs uppercase tracking-widest text-stone font-semibold">Cake Message (Max 500 Characters)</label>
                         <input
                           type="text"
                           maxLength={500}
                           value={cakeMessage}
                           onChange={e => setCakeMessage(e.target.value)}
                           placeholder="e.g. Happy Anniversary Shalini!"
-                          className="w-full px-4 py-3 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary"
+                          className="w-full px-4 py-3 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary rounded-xl"
                         />
                         <div className="flex justify-between text-[9px] font-sans text-stone uppercase">
                           <span>Write clearly in capitals</span>
@@ -1418,30 +1661,170 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                   </div>
                 )}
 
+                {/* Quantity selector */}
+                <div className="flex items-center gap-4 bg-cream/45 border border-stone/20 p-4 rounded-2xl">
+                  <span className="text-xs uppercase tracking-widest text-stone font-semibold">Quantity</span>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      disabled={selectedQty <= (selectedProduct.min_quantity || 1)}
+                      onClick={() => setSelectedQty(selectedQty - 1)}
+                      className="w-8 h-8 rounded-lg bg-cocoa/5 hover:bg-cocoa/10 text-cocoa disabled:opacity-40 flex items-center justify-center font-sans font-bold text-sm transition-colors cursor-pointer"
+                    >
+                      –
+                    </button>
+                    <span className="font-sans text-sm font-bold text-cocoa w-6 text-center">{selectedQty}</span>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedQty(selectedQty + 1)}
+                      className="w-8 h-8 rounded-lg bg-cocoa/5 hover:bg-cocoa/10 text-cocoa flex items-center justify-center font-sans font-bold text-sm transition-colors cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
+                  {selectedProduct.min_quantity > 1 && (
+                    <span className="text-[9px] font-sans text-stone uppercase tracking-widest font-semibold">
+                      (Min: {selectedProduct.min_quantity})
+                    </span>
+                  )}
+                </div>
+
                 {/* Add to shopping bag & WhatsApp Quick Order actions */}
                 <div className="flex flex-col sm:flex-row gap-3">
                   <button
                     type="button"
                     disabled={serviceStatus !== "serviceable"}
                     onClick={handleAddToCart}
-                    className={`flex-1 py-4 text-xs font-sans font-bold uppercase tracking-[0.25em] transition-all flex items-center justify-center gap-2 ${serviceStatus !== "serviceable" ? "bg-cocoa/10 text-cocoa/40 border border-cocoa/20 cursor-not-allowed" : "bg-cocoa hover:bg-primary text-cream shadow-md cursor-pointer"}`}
+                    className={`flex-1 py-4 text-xs font-sans font-bold uppercase tracking-[0.25em] transition-all flex items-center justify-center gap-2 rounded-2xl ${
+                      serviceStatus !== "serviceable" 
+                        ? "bg-cocoa/10 text-cocoa/40 border border-cocoa/20 cursor-not-allowed" 
+                        : "bg-cocoa hover:bg-primary text-cream shadow-md cursor-pointer"
+                    }`}
                   >
                     <ShoppingBag size={14} />
-                    <span>Configure Checkout Card</span>
+                    <span>Add to Shopping Bag</span>
                   </button>
                   <a
                     href={`https://wa.me/917906759188?text=Hello%20Chef%20Shalini!%20I%20would%20like%20to%20order%20the%20${encodeURIComponent(selectedProduct.name)}%20(Price:%20₹${selectedProduct.price}).`}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex-1 py-4 border border-[#25D366] hover:bg-[#25D366]/5 text-[#25D366] text-xs font-sans font-bold uppercase tracking-[0.25em] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    className="flex-1 py-4 border border-[#25D366] hover:bg-[#25D366]/5 text-[#25D366] text-xs font-sans font-bold uppercase tracking-[0.25em] transition-all flex items-center justify-center gap-2 cursor-pointer rounded-2xl"
                   >
                     <MessageCircle size={14} className="fill-current stroke-none" />
                     <span>Order on WhatsApp</span>
                   </a>
                 </div>
 
+                {/* Details Accordion */}
+                <div className="border border-cocoa/10 rounded-2xl overflow-hidden font-sans text-xs">
+                  {/* Ingredients Section */}
+                  <div className="border-b border-cocoa/10">
+                    <button
+                      type="button"
+                      onClick={() => setOpenAccordion(openAccordion === "ingredients" ? "" : "ingredients")}
+                      className="w-full py-4 px-5 bg-cream hover:bg-[#FAF6EE] text-cocoa font-medium text-left flex justify-between items-center transition-colors"
+                    >
+                      <span className="uppercase tracking-widest font-semibold text-[10px]">Ingredients & Craftsmanship</span>
+                      <ChevronRight size={16} className={`transform transition-transform ${openAccordion === "ingredients" ? "rotate-90 text-gold" : "text-stone"}`} />
+                    </button>
+                    {openAccordion === "ingredients" && (
+                      <div className="p-5 bg-cream/35 text-stone leading-relaxed space-y-2 border-t border-cocoa/5">
+                        <p>
+                          Our bakes are prepared daily with pure unbleached flour, premium farm-fresh dairy butter, organic sugarcane extract, and zero preservatives.
+                        </p>
+                        <p className="font-semibold text-cocoa">
+                          Key highlights: Belgian dark chocolate chunks, real Madagascar vanilla bean pods, and local seasonal fruits.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Preparation & Care Section */}
+                  <div className="border-b border-cocoa/10">
+                    <button
+                      type="button"
+                      onClick={() => setOpenAccordion(openAccordion === "care" ? "" : "care")}
+                      className="w-full py-4 px-5 bg-cream hover:bg-[#FAF6EE] text-cocoa font-medium text-left flex justify-between items-center transition-colors"
+                    >
+                      <span className="uppercase tracking-widest font-semibold text-[10px]">Preparation & Hygiene Standards</span>
+                      <ChevronRight size={16} className={`transform transition-transform ${openAccordion === "care" ? "rotate-90 text-gold" : "text-stone"}`} />
+                    </button>
+                    {openAccordion === "care" && (
+                      <div className="p-5 bg-cream/35 text-stone leading-relaxed border-t border-cocoa/5">
+                        Freshly baked & hygienically packed under strict professional five-star patisserie safety standards. Hand-delivered via climate-controlled courier bags inside Bhopal.
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Shelf Life Section */}
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => setOpenAccordion(openAccordion === "shelf" ? "" : "shelf")}
+                      className="w-full py-4 px-5 bg-cream hover:bg-[#FAF6EE] text-cocoa font-medium text-left flex justify-between items-center transition-colors"
+                    >
+                      <span className="uppercase tracking-widest font-semibold text-[10px]">Shelf Life & Serving Guidelines</span>
+                      <ChevronRight size={16} className={`transform transition-transform ${openAccordion === "shelf" ? "rotate-90 text-gold" : "text-stone"}`} />
+                    </button>
+                    {openAccordion === "shelf" && (
+                      <div className="p-5 bg-cream/35 text-stone leading-relaxed border-t border-cocoa/5">
+                        {["Cakes", "Cheesecakes"].includes(selectedProduct.category) || selectedProduct.name.toLowerCase().includes("theme cake") ? (
+                          <span className="font-medium text-red-800">
+                            Cakes & Cheesecakes are best consumed fresh within 24–48 hours for optimal taste. Keep refrigerated.
+                          </span>
+                        ) : (
+                          <span>
+                            Cookies, brownies, and muffins are best consumed within a few days when stored in a cool, dry place inside an airtight container.
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
               </div>
 
+            </div>
+
+            {/* You May Also Like Section */}
+            <div className="border-t border-cocoa/10 pt-16 mt-16">
+              <h3 className="font-serif text-2xl md:text-3xl font-light text-cocoa mb-8">You May Also Like</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {(() => {
+                  let related = productsList.filter(p => p.category === selectedProduct.category && p.id !== selectedProduct.id);
+                  if (related.length < 4) {
+                    const extra = productsList.filter(p => p.id !== selectedProduct.id && !related.find(r => r.id === p.id));
+                    related = [...related, ...extra];
+                  }
+                  return related.slice(0, 4).map(prod => (
+                    <div 
+                      key={prod.id} 
+                      onClick={() => navigateToProduct(prod)}
+                      className="group cursor-pointer space-y-3"
+                    >
+                      <div className="aspect-square overflow-hidden rounded-2xl border border-stone/20 bg-cream/40 relative">
+                        <img 
+                          src={prod.image} 
+                          alt={prod.name} 
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                        />
+                        {prod.min_quantity > 1 && (
+                          <div className="absolute top-3 left-3 bg-cocoa text-cream text-[8px] font-sans font-bold uppercase tracking-wider px-2 py-0.5 rounded">
+                            Min Qty: {prod.min_quantity}
+                          </div>
+                        )}
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="font-serif text-base font-semibold text-cocoa leading-tight group-hover:text-primary transition-colors">{prod.name}</h4>
+                        <div className="flex justify-between items-center text-xs">
+                          <span className="text-stone">{prod.weight}</span>
+                          <span className="font-serif font-bold text-cocoa">₹{prod.price}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ));
+                })()}
+              </div>
             </div>
           </section>
         )}
@@ -1543,9 +1926,12 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                           <label className="block text-[9px] font-sans uppercase tracking-widest text-stone font-semibold">Pincode *</label>
                           <input
                             type="text"
-                            disabled
-                            value={pincode || "462016"}
-                            className="w-full px-4 py-3 bg-cocoa/5 border border-cocoa/20 text-xs font-sans text-stone cursor-not-allowed"
+                            maxLength={6}
+                            required
+                            value={pincode}
+                            onChange={e => setPincode(e.target.value.replace(/\D/g, ""))}
+                            placeholder="e.g. 462016"
+                            className="w-full px-4 py-3 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary"
                           />
                         </div>
                         <div className="space-y-1">
@@ -2665,6 +3051,30 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
               </form>
             </div>
           </div>
+        )}
+
+        {/* ==========================================
+            ROUTER 6: PREMIUM 404 FALLBACK PAGE
+            ========================================== */}
+        {!["home", "shop", "cart", "product", "checkout", "confirm", "story", "admin"].includes(currentPage) && (
+          <section className="max-w-md mx-auto px-6 py-24 text-center space-y-6">
+            <h1 className="font-serif text-6xl text-gold font-light animate-pulse">404</h1>
+            <h2 className="font-serif text-2xl font-semibold text-cocoa">This page wandered out of the kitchen.</h2>
+            <p className="font-sans text-stone text-xs leading-relaxed">
+              Let's get you back to the salon catalog where Chef Shalini's fresh Taj-quality bakes await.
+            </p>
+            <div className="pt-4">
+              <button 
+                onClick={() => {
+                  setCurrentPage("home");
+                  window.scrollTo(0, 0);
+                }}
+                className="px-8 py-3.5 bg-cocoa hover:bg-primary text-cream font-sans font-bold text-xs uppercase tracking-widest transition-colors shadow-md rounded-xl cursor-pointer"
+              >
+                Let's get you home
+              </button>
+            </div>
+          </section>
         )}
 
       </main>
