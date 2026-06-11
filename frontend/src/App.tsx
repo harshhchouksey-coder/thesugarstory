@@ -655,7 +655,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
         }
 
         const options = {
-          key: razorpay_key_id,
+          key: (import.meta as any).env.VITE_RAZORPAY_KEY_ID || razorpay_key_id,
           amount: createdOrder.billing.total * 100, // paise
           currency: "INR",
           name: "The Sugar Story",

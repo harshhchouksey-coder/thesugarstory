@@ -64,3 +64,22 @@ docker compose up -d
 
 ## 🔒 Security & Administration
 To log into Chef Shalini's Admin Portal, set the `ADMIN_PASSWORD` environment variable in your server environment (or local `.env`). There is no hardcoded default fallback.
+
+---
+
+## 🌐 Production Deployment
+
+### 1. Backend Service (e.g. Railway, Render)
+- **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT` (managed via `backend/Procfile`)
+- **Required Env Variables**:
+  - `MONGO_URI`: Connection string to your MongoDB Atlas cluster.
+  - `RAZORPAY_KEY_ID`: Razorpay API Key ID.
+  - `RAZORPAY_KEY_SECRET`: Razorpay API Key Secret.
+  - `ADMIN_PASSWORD`: Authentication password to secure the Admin dashboard.
+  - `ALLOWED_ORIGINS`: Comma-separated origins allowed to request the API (e.g. `https://your-frontend.vercel.app`).
+
+### 2. Frontend Service (e.g. Vercel, Netlify)
+- **Build Command**: `npm run build` (produces compile assets inside `dist/` directory)
+- **Required Env Variables**:
+  - `VITE_API_URL`: Live public endpoint of your backend (e.g. `https://your-backend.railway.app`).
+  - `VITE_RAZORPAY_KEY_ID`: Same Razorpay API Key ID used on the backend.
