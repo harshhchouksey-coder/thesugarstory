@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Hero from "./components/Hero";
 import { 
   ShoppingBag, 
   MapPin, 
@@ -836,42 +837,15 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
         {currentPage === "home" && (
           <div className="w-full">
             {/* 3. HERO Section */}
-            <section className="relative h-[80vh] bg-cocoa text-cream flex items-center justify-center text-center px-6 overflow-hidden">
-              <div 
-                className="absolute inset-0 bg-cover bg-center opacity-30" 
-                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1517433456452-f9633a875f6f?q=80&w=1200&auto=format&fit=crop')" }} 
-              />
-              <div className="relative z-10 max-w-4xl space-y-6">
-                <span className="text-xs uppercase tracking-[0.35em] text-gold font-semibold font-sans">Artisanal Patisserie • Bhopal</span>
-                <h1 className="font-serif text-5xl md:text-8xl tracking-tight leading-tight italic font-light text-cream/95">
-                  Every bite, a chapter.
-                </h1>
-                <p className="font-sans text-stone text-xs md:text-sm max-w-xl mx-auto leading-relaxed text-[#F6EFE3]/80">
-                  Premium handcrafted bakery in Bhopal, by ex-Taj chef Shalini Singh.
-                </p>
-                <div className="pt-6 flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button 
-                    variant="primary" 
-                    onClick={() => {
-                      setCurrentPage("shop");
-                      window.scrollTo(0, 0);
-                    }}
-                  >
-                    Shop the Menu
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    className="border-cream text-cream hover:bg-cream hover:text-cocoa"
-                    onClick={() => {
-                      window.open("https://wa.me/917906759188?text=Hello%20Chef%20Shalini!%20I'd%20like%20to%20order%20some%20fresh%20pastries.", "_blank");
-                    }}
-                  >
-                    <MessageCircle size={14} className="fill-current stroke-none mr-1 inline-block" />
-                    Order on WhatsApp
-                  </Button>
-                </div>
-              </div>
-            </section>
+            <Hero 
+              onShopClick={() => {
+                setCurrentPage("shop");
+                window.scrollTo(0, 0);
+              }}
+              onWhatsAppClick={() => {
+                window.open("https://wa.me/917906759188?text=Hello%20Chef%20Shalini!%20I'd%20like%20to%20order%20some%20fresh%20pastries.", "_blank");
+              }}
+            />
 
             {/* 4. Trust strip */}
             <div className="bg-primary/5 border-t border-b border-stone/20 py-6 text-center">

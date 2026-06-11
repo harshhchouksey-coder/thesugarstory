@@ -1,0 +1,306 @@
+/* ============================================================
+   THE SUGAR STORY — Hero section styles
+   Palette: caramel #6B3F2A · cream #F6EFE3 · gold #C9962B ·
+            cocoa #1F1410 · stone #A8A095
+   All looping animations are transform/opacity only (GPU-safe).
+   ============================================================ */
+
+.ts-hero {
+  --ts-caramel: #6B3F2A;
+  --ts-cream:   #F6EFE3;
+  --ts-gold:    #C9962B;
+  --ts-cocoa:   #1F1410;
+  --ts-stone:   #A8A095;
+
+  position: relative;
+  height: 100svh;
+  min-height: 560px;          /* space fully reserved up-front → CLS 0 */
+  overflow: hidden;
+  background: var(--ts-cocoa); /* paints before the image arrives */
+  color: var(--ts-cream);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ---------- Layer 1 · background image ---------- */
+.ts-hero__bg { position: absolute; inset: 0; }
+
+.ts-hero__kenburns {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  /* Ambient: barely-perceptible drift, starts after the intro settles */
+  animation: ts-kenburns 24s linear 1.8s infinite alternate;
+}
+@keyframes ts-kenburns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.05); }
+}
+
+.ts-hero__kenburns img,
+.ts-hero__kenburns video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------- Layer 2 · legibility scrim ---------- */
+.ts-hero__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, rgba(246, 239, 227, 0.38) 0%, rgba(246, 239, 227, 0) 38%),
+    linear-gradient(rgba(31, 20, 16, 0.62), rgba(31, 20, 16, 0.44) 55%, rgba(31, 20, 16, 0.30));
+}
+
+/* ---------- Layer 3 · flour-dust particles ---------- */
+.ts-hero__dust { position: absolute; inset: 0; pointer-events: none; }
+
+.ts-hero__dust span {
+  position: absolute;
+  bottom: -2%;
+  border-radius: 50%;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+/* Two drift directions, transform + opacity only */
+@keyframes ts-dust-a {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  10%  { opacity: var(--dust-o, 0.12); }
+  85%  { opacity: var(--dust-o, 0.12); }
+  100% { transform: translate3d(6vw, -108vh, 0); opacity: 0; }
+}
+@keyframes ts-dust-b {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  10%  { opacity: var(--dust-o, 0.10); }
+  85%  { opacity: var(--dust-o, 0.10); }
+  100% { transform: translate3d(-5vw, -104vh, 0); opacity: 0; }
+}
+/* 6 particles · 3–5px · cream/gold · 18–30s loops · negative delays */
+.ts-hero__dust span:nth-child(1) { left: 12%; width: 4px; height: 4px; background: var(--ts-cream); --dust-o: .11; animation: ts-dust-a 22s linear -6s  infinite; }
+.ts-hero__dust span:nth-child(2) { left: 30%; width: 3px; height: 3px; background: var(--ts-gold);  --dust-o: .10; animation: ts-dust-b 27s linear -14s infinite; }
+.ts-hero__dust span:nth-child(3) { left: 47%; width: 5px; height: 5px; background: var(--ts-cream); --dust-o: .08; animation: ts-dust-a 30s linear -3s  infinite; }
+.ts-hero__dust span:nth-child(4) { left: 62%; width: 3px; height: 3px; background: var(--ts-cream); --dust-o: .14; animation: ts-dust-b 19s linear -9s  infinite; }
+.ts-hero__dust span:nth-child(5) { left: 76%; width: 4px; height: 4px; background: var(--ts-gold);  --dust-o: .09; animation: ts-dust-a 25s linear -18s infinite; }
+.ts-hero__dust span:nth-child(6) { left: 88%; width: 3px; height: 3px; background: var(--ts-cream); --dust-o: .12; animation: ts-dust-b 18s linear -1s  infinite; }
+
+/* ---------- Layer 4 · content ---------- */
+.ts-hero__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  text-align: center;
+  padding: 0 24px;
+  will-change: transform, opacity; /* scroll parallax */
+}
+
+.ts-hero__eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ts-gold);
+}
+
+/* H1 — Cormorant italic, word-by-word mask reveal */
+.ts-hero__title {
+  margin: 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(3.4rem, 6.5vw, 6rem);
+  line-height: 1.08;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 0.26em;
+  max-width: 16ch;
+}
+.ts-hero__wordwrap  { position: relative; display: inline-block; }
+.ts-hero__word-mask {
+  display: block;
+  overflow: hidden;
+  padding: 0.06em 0.14em 0.08em;
+  margin: -0.06em -0.14em 0;
+}
+.ts-hero__word      { display: block; will-change: transform, opacity; }
+
+/* Hand-drawn gold underline beneath “chapter” */
+.ts-hero__underline {
+  position: absolute;
+  left: 2%;
+  bottom: -0.06em;
+  width: 88%;            /* underlines the word, stops before the period */
+  height: 0.16em;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.ts-hero__sub {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  color: rgba(246, 239, 227, 0.85);
+  max-width: 44ch;
+}
+
+/* ---------- CTAs ---------- */
+.ts-hero__ctas {
+  display: flex;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.ts-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 17px 34px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 2px;
+  transition:
+    background-color 250ms ease-out,
+    border-color     250ms ease-out,
+    color            250ms ease-out,
+    transform        250ms ease-out,
+    box-shadow       250ms ease-out;
+}
+
+/* Primary — caramel → cocoa, lifts, arrow slides in (space reserved) */
+.ts-btn--primary {
+  background: var(--ts-caramel);
+  color: var(--ts-cream);
+  border: 1px solid transparent;
+  box-shadow: 0 4px 14px rgba(15, 8, 4, 0.18);
+}
+.ts-btn--primary .ts-btn__arrow {
+  display: inline-block;
+  width: 1.1em;                 /* width reserved → no layout shift on hover */
+  margin-left: 0.5em;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 250ms ease-out, transform 250ms ease-out;
+}
+.ts-btn--primary:hover,
+.ts-btn--primary:focus-visible {
+  background: var(--ts-cocoa);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(15, 8, 4, 0.35);
+}
+.ts-btn--primary:hover .ts-btn__arrow,
+.ts-btn--primary:focus-visible .ts-btn__arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Ghost — border + text turn gold */
+.ts-btn--ghost {
+  background: transparent;
+  color: var(--ts-cream);
+  border: 1px solid rgba(246, 239, 227, 0.45);
+}
+.ts-btn--ghost:hover,
+.ts-btn--ghost:focus-visible {
+  border-color: var(--ts-gold);
+  color: var(--ts-gold);
+}
+
+/* ---------- Signature stamp (bottom-right) ---------- */
+.ts-hero__signature {
+  position: absolute;
+  right: 44px;
+  bottom: 38px;
+  font-family: 'Allison', cursive;
+  font-size: 40px;
+  line-height: 1;
+  color: var(--ts-gold);
+  pointer-events: none;
+}
+
+/* ---------- Scroll cue (bottom-center) ---------- */
+.ts-hero__cue {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+.ts-hero__cue-label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ts-stone);
+}
+.ts-hero__cue-line {
+  position: relative;
+  width: 1px;
+  height: 40px;
+  background: rgba(168, 160, 149, 0.45);
+}
+.ts-hero__cue-dot {
+  position: absolute;
+  top: 0;
+  left: -1.5px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--ts-stone);
+  animation: ts-cue 2.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  will-change: transform, opacity;
+}
+@keyframes ts-cue {
+  0%   { transform: translateY(0);    opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(36px); opacity: 0; }
+}
+
+/* ---------- Mobile (<640px) ---------- */
+@media (max-width: 639px) {
+  .ts-hero__scrim {
+    background:
+      linear-gradient(to top, rgba(246, 239, 227, 0.34) 0%, rgba(246, 239, 227, 0) 38%),
+      linear-gradient(rgba(31, 20, 16, 0.50), rgba(31, 20, 16, 0.36) 55%, rgba(31, 20, 16, 0.24));
+  }
+  .ts-hero__title { font-size: clamp(2.2rem, 9vw, 3.5rem); }
+  .ts-hero__ctas {
+    flex-direction: column;
+    width: 100%;
+    max-width: 360px;
+  }
+  .ts-btn { width: 100%; }
+  .ts-hero__dust span:nth-child(n + 4) { display: none; }
+  .ts-hero__signature { right: 22px; bottom: 64px; font-size: 32px; }
+}
+
+/* ---------- prefers-reduced-motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .ts-hero__kenburns,
+  .ts-hero__cue-dot { animation: none; }
+  .ts-hero__dust { display: none; }
+  .ts-btn--primary:hover { transform: none; }
+}
+.ts-hero--reduced .ts-hero__kenburns,
+.ts-hero--reduced .ts-cue-dot { animation: none; }
+.ts-hero--reduced .ts-hero__dust { display: none; }
+.ts-hero--reduced .ts-btn--primary:hover { transform: none; }
