@@ -3115,11 +3115,11 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
         href="https://wa.me/917906759188?text=Hello%20Chef%20Shalini!%20I%20would%20love%20to%20explore%20customized%20celebration%20bakes."
         target="_blank"
         rel="noreferrer"
-        className="fixed bottom-6 right-6 z-40 bg-[#25D366] hover:bg-[#20BA5A] text-cream p-4 rounded-full shadow-2xl hover:scale-115 active:scale-95 transition-all duration-300 flex items-center justify-center border border-white/20 group cursor-pointer"
+        className="fixed bottom-6 right-6 z-40 bg-[#C9962B] hover:bg-[#1F1410] text-[#F6EFE3] p-4 rounded-full shadow-2xl hover:scale-115 active:scale-95 transition-all duration-300 flex items-center justify-center border border-[#C9962B]/20 group cursor-pointer"
         aria-label="Contact Chef on WhatsApp"
       >
-        <MessageCircle size={24} className="fill-current stroke-none text-cream" />
-        <span className="max-w-0 overflow-hidden group-hover:max-w-xs group-hover:ml-2 transition-all duration-500 font-sans text-xs uppercase tracking-widest font-bold text-cream whitespace-nowrap">
+        <MessageCircle size={24} className="fill-current stroke-none text-[#F6EFE3]" />
+        <span className="max-w-0 overflow-hidden group-hover:max-w-xs group-hover:ml-2 transition-all duration-500 font-sans text-xs uppercase tracking-widest font-bold text-[#F6EFE3] whitespace-nowrap">
           Order on WhatsApp
         </span>
       </a>
