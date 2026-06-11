@@ -25,6 +25,11 @@ import {
 
 const API_BASE = (import.meta as any).env.VITE_API_URL || "http://localhost:8000";
 
+const resolveImageUrl = (img: string | undefined): string => {
+  if (!img) return "";
+  return img.startsWith("/uploads") ? `${API_BASE}${img}` : img;
+};
+
 // ScrollReveal component for premium, subtle fade-in-up animations on scroll
 function ScrollReveal({ children, className = "" }: { children: React.ReactNode, className?: string }) {
   const [ref, setRef] = useState<HTMLElement | null>(null);
@@ -258,7 +263,7 @@ function ProductCard({
         {/* Product Card Image Box with rounded-2xl image */}
         <div className="relative aspect-square overflow-hidden rounded-2xl bg-cocoa/5">
           <img 
-            src={product.image} 
+            src={resolveImageUrl(product.image)} 
             alt={product.name} 
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
@@ -1171,7 +1176,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     <div key={idx} className="flex gap-6 border border-stone/20 p-6 rounded-2xl bg-cream/40">
                       <div 
                         className="w-24 h-24 bg-cocoa/5 bg-cover bg-center border border-stone/20 rounded-xl flex-shrink-0" 
-                        style={{ backgroundImage: `url(${item.image})` }} 
+                        style={{ backgroundImage: `url(${resolveImageUrl(item.image)})` }} 
                       />
                       <div className="flex-grow flex flex-col justify-between">
                         <div className="flex justify-between items-start gap-4">
@@ -1401,7 +1406,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
               <div className="lg:col-span-6 space-y-6">
                 <div className="aspect-square bg-cocoa/5 border border-stone/20 relative overflow-hidden rounded-3xl shadow-sm">
                   <img 
-                    src={activeGalleryImage || selectedProduct.image} 
+                    src={resolveImageUrl(activeGalleryImage || selectedProduct.image)} 
                     alt={selectedProduct.name} 
                     className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" 
                   />
@@ -1422,7 +1427,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                       (activeGalleryImage === selectedProduct.image) ? "border-gold scale-[1.02]" : "border-stone/20 opacity-70 hover:opacity-100"
                     }`}
                   >
-                    <img src={selectedProduct.image} alt="Main view" className="w-full h-full object-cover" />
+                    <img src={resolveImageUrl(selectedProduct.image)} alt="Main view" className="w-full h-full object-cover" />
                   </button>
 
                   {/* Thumbnail 2: Detailed Macro Close-up */}
@@ -1433,7 +1438,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                       (activeGalleryImage.includes("fp-z=2")) ? "border-gold scale-[1.02]" : "border-stone/20 opacity-70 hover:opacity-100"
                     }`}
                   >
-                    <img src={selectedProduct.image} alt="Close-up detail" className="w-full h-full object-cover transform scale-125 origin-center" />
+                    <img src={resolveImageUrl(selectedProduct.image)} alt="Close-up detail" className="w-full h-full object-cover transform scale-125 origin-center" />
                   </button>
 
                   {/* Thumbnail 3: Lifestyle Presentation */}
@@ -1778,7 +1783,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     >
                       <div className="aspect-square overflow-hidden rounded-2xl border border-stone/20 bg-cream/40 relative">
                         <img 
-                          src={prod.image} 
+                          src={resolveImageUrl(prod.image)} 
                           alt={prod.name} 
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
                         />
@@ -2082,7 +2087,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     <div className="space-y-4 max-h-[40vh] overflow-y-auto pr-2 scrollbar-thin">
                       {cart.map((item, idx) => (
                         <div key={idx} className="flex gap-4 border-b border-cocoa/10 pb-4">
-                          <div className="w-16 h-16 bg-cocoa/10 bg-cover bg-center border border-cocoa/10 flex-shrink-0" style={{ backgroundImage: `url(${item.image})` }} />
+                          <div className="w-16 h-16 bg-cocoa/10 bg-cover bg-center border border-cocoa/10 flex-shrink-0" style={{ backgroundImage: `url(${resolveImageUrl(item.image)})` }} />
                           <div className="flex-grow space-y-1">
                             <div className="flex justify-between items-start">
                               <h4 className="font-serif text-base font-semibold text-cocoa leading-tight">{item.name}</h4>
@@ -2638,7 +2643,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                           return (
                             <div key={product.id} className="bg-cream border border-cocoa/10 p-4 flex gap-4 text-cocoa shadow-sm text-left">
                               <img 
-                                src={product.image || "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=200&auto=format&fit=crop"} 
+                                src={resolveImageUrl(product.image) || "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=200&auto=format&fit=crop"} 
                                 alt={product.name}
                                 className="w-20 h-20 object-cover border border-cocoa/10 shrink-0"
                               />
@@ -2973,7 +2978,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     {productForm.image && (
                       <div className="mt-1 flex items-center gap-2 border border-cocoa/10 p-2 bg-white rounded">
                         <img 
-                          src={productForm.image} 
+                          src={resolveImageUrl(productForm.image)} 
                           alt="Bake preview"
                           className="w-10 h-10 object-cover border border-cocoa/5 shrink-0" 
                         />

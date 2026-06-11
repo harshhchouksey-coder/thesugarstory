@@ -556,8 +556,8 @@ async def upload_image(file: UploadFile = File(...)):
             while chunk := await file.read(1024 * 1024):
                 buffer.write(chunk)
                 
-        # Return local absolute URL
-        image_url = f"http://localhost:8000/uploads/{secure_filename}"
+        # Return relative URL
+        image_url = f"/uploads/{secure_filename}"
         return {"success": True, "imageUrl": image_url}
     except Exception as e:
         print(f"Error saving uploaded file: {e}")
