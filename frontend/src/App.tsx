@@ -59,95 +59,152 @@ function ScrollReveal({ children, className = "" }: { children: React.ReactNode,
 
 // Fallback Master list of all 72 products seeded on the frontend for instant offline load
 const MASTER_PRODUCTS = [
-  // ---- JAR CAKES ----
-  {"id": "jar-1", "name": "Pineapple Jar", "category": "Jar Cakes", "price": 140, "weight": "1 Jar", "min_quantity": 1, "description": "Refreshing pineapple cream layers", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop"},
-  {"id": "jar-2", "name": "Butterscotch Jar", "category": "Jar Cakes", "price": 140, "weight": "1 Jar", "min_quantity": 1, "description": "Crunchy butterscotch swirls", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop"},
-  {"id": "jar-3", "name": "Vanilla Caramel Jar", "category": "Jar Cakes", "price": 140, "weight": "1 Jar", "min_quantity": 1, "description": "Classic vanilla with caramel", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop"},
-  {"id": "jar-4", "name": "Black Forest Jar", "category": "Jar Cakes", "price": 150, "weight": "1 Jar", "min_quantity": 1, "description": "Chocolate cherry delight", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop"},
-  {"id": "jar-5", "name": "White Forest Jar", "category": "Jar Cakes", "price": 150, "weight": "1 Jar", "min_quantity": 1, "description": "White chocolate cherry compote", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop"},
-  {"id": "jar-6", "name": "Choco Choco Chip Jar", "category": "Jar Cakes", "price": 150, "weight": "1 Jar", "min_quantity": 1, "description": "Double chocolate indulgence", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop"},
-  {"id": "jar-7", "name": "Mix Fruit Jar", "category": "Jar Cakes", "price": 170, "weight": "1 Jar", "min_quantity": 1, "description": "Seasonal fruits with cream", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop"},
-  {"id": "jar-8", "name": "Blueberry Bliss Jar", "category": "Jar Cakes", "price": 170, "weight": "1 Jar", "min_quantity": 1, "description": "Fresh blueberry compote layers", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop"},
-  {"id": "jar-9", "name": "Oreo Choco Jar", "category": "Jar Cakes", "price": 170, "weight": "1 Jar", "min_quantity": 1, "description": "Oreo chocolate cream", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop"},
-  {"id": "jar-10", "name": "Tiramisu Jar", "category": "Jar Cakes", "price": 170, "weight": "1 Jar", "min_quantity": 1, "description": "Coffee-flavored delight", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop"},
-  {"id": "jar-11", "name": "Rasmalai Fusion Jar", "category": "Jar Cakes", "price": 190, "weight": "1 Jar", "min_quantity": 1, "description": "Traditional fusion dessert", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop"},
-  {"id": "jar-12", "name": "Choco Hazelnut Jar", "category": "Jar Cakes", "price": 190, "weight": "1 Jar", "min_quantity": 1, "description": "Rich hazelnut chocolate cream", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop"},
-  {"id": "jar-13", "name": "Red Velvet Jar", "category": "Jar Cakes", "price": 190, "weight": "1 Jar", "min_quantity": 1, "description": "Velvet layers with cream cheese", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop"},
-  {"id": "jar-14", "name": "Lotus Biscoff Jar", "category": "Jar Cakes", "price": 190, "weight": "1 Jar", "min_quantity": 1, "description": "Biscoff biscuit cream", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop"},
-
-  // ---- BROWNIES ----
-  {"id": "br-1", "name": "Chocolate Walnut Brownie", "category": "Brownies", "price": 250, "weight": "200g", "min_quantity": 1, "description": "Dense fudgy brownie loaded with walnuts", "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=400&auto=format&fit=crop"},
-  {"id": "br-2", "name": "Chocolate Fudge Brownie", "category": "Brownies", "price": 250, "weight": "200g", "min_quantity": 1, "description": "Ultra rich chocolate fudge brownie", "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=400&auto=format&fit=crop"},
-
-  // ---- TEA CAKES ----
-  {"id": "tc-1", "name": "Banana Walnut Tea Cake", "category": "Tea Cakes", "price": 220, "weight": "200g", "min_quantity": 1, "description": "Banana cake with crunchy walnuts", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop"},
-  {"id": "tc-2", "name": "Tutti Frutti Tea Cake", "category": "Tea Cakes", "price": 200, "weight": "200g", "min_quantity": 1, "description": "Frutti bits in soft butter cake", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop"},
-  {"id": "tc-3", "name": "Dry Fruit Tea Cake", "category": "Tea Cakes", "price": 240, "weight": "200g", "min_quantity": 1, "description": "Loaded with premium dry fruits", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop"},
-  {"id": "tc-4", "name": "Orange Chiffon Slice Cake", "category": "Tea Cakes", "price": 200, "weight": "200g", "min_quantity": 1, "description": "Fluffy orange flavored tea cake", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop"},
-  {"id": "tc-5", "name": "Marble Tea Cake", "category": "Tea Cakes", "price": 210, "weight": "200g", "min_quantity": 1, "description": "Vanilla & chocolate swirl cake", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop"},
-  {"id": "tc-6", "name": "Coffee Walnut Tea Cake", "category": "Tea Cakes", "price": 230, "weight": "200g", "min_quantity": 1, "description": "Aromatic coffee cake with walnuts", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop"},
-  {"id": "tc-7", "name": "Chocolate Chip Tea Cake", "category": "Tea Cakes", "price": 220, "weight": "200g", "min_quantity": 1, "description": "Studded with premium chocolate chips", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop"},
-  {"id": "tc-8", "name": "Rose Pistachio Tea Cake", "category": "Tea Cakes", "price": 240, "weight": "200g", "min_quantity": 1, "description": "Fragrant rose with pistachios", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop"},
-  {"id": "tc-9", "name": "Date & Honey Tea Cake", "category": "Tea Cakes", "price": 230, "weight": "200g", "min_quantity": 1, "description": "Natural date honey sweetness", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop"},
-
-  // ---- MUFFINS ----
-  {"id": "muf-1", "name": "Chocolate Muffin", "category": "Muffins", "price": 90, "weight": "1 pc", "min_quantity": 5, "description": "Rich double chocolate muffin", "image": "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?q=80&w=400&auto=format&fit=crop"},
-  {"id": "muf-2", "name": "Vanilla Muffin", "category": "Muffins", "price": 90, "weight": "1 pc", "min_quantity": 5, "description": "Classic vanilla bean muffin", "image": "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?q=80&w=400&auto=format&fit=crop"},
-  {"id": "muf-3", "name": "Choco Chip Muffin", "category": "Muffins", "price": 90, "weight": "1 pc", "min_quantity": 5, "description": "Loaded with chocolate chips", "image": "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?q=80&w=400&auto=format&fit=crop"},
-  {"id": "muf-4", "name": "Red Velvet Muffin", "category": "Muffins", "price": 110, "weight": "1 pc", "min_quantity": 5, "description": "Red velvet with cream cheese swirl", "image": "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?q=80&w=400&auto=format&fit=crop"},
-  {"id": "muf-5", "name": "Blueberry Muffin", "category": "Muffins", "price": 110, "weight": "1 pc", "min_quantity": 5, "description": "Bursting with fresh blueberries", "image": "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?q=80&w=400&auto=format&fit=crop"},
-
-  // ---- DONUTS ----
-  {"id": "don-1", "name": "Bombay Loni Donut", "category": "Donuts", "price": 150, "weight": "1 pc", "min_quantity": 4, "description": "Butter-rich local specialty donut", "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=400&auto=format&fit=crop"},
-  {"id": "don-2", "name": "Cinnamon Donut", "category": "Donuts", "price": 80, "weight": "1 pc", "min_quantity": 4, "description": "Warm cinnamon sugar coated", "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=400&auto=format&fit=crop"},
-  {"id": "don-3", "name": "Chocolate Donut", "category": "Donuts", "price": 100, "weight": "1 pc", "min_quantity": 4, "description": "Rich chocolate glazed donut", "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=400&auto=format&fit=crop"},
-
-  // ---- COOKIES ----
-  {"id": "ck-1", "name": "Salted Cookies", "category": "Cookies", "price": 200, "weight": "200g", "min_quantity": 1, "description": "Perfect balance of sweet & salty", "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ck-2", "name": "Coconut Cookies", "category": "Cookies", "price": 220, "weight": "200g", "min_quantity": 1, "description": "Crispy desiccated coconut cookies", "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ck-3", "name": "Vanilla Butter Cookies", "category": "Cookies", "price": 200, "weight": "200g", "min_quantity": 1, "description": "Melt-in-mouth butter cookies", "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ck-4", "name": "Choco Chip Cookies", "category": "Cookies", "price": 240, "weight": "200g", "min_quantity": 1, "description": "Caramelized dough with chocolate chips", "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ck-5", "name": "Oats Cookies", "category": "Cookies", "price": 250, "weight": "200g", "min_quantity": 1, "description": "Healthy high-fiber oats cookies", "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ck-6", "name": "Ragi Cookies", "category": "Cookies", "price": 250, "weight": "200g", "min_quantity": 1, "description": "Nutritious ragi farm grain cookies", "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ck-7", "name": "Desi Ghee Nankhatai", "category": "Cookies", "price": 280, "weight": "200g", "min_quantity": 1, "description": "Traditional pure ghee nankhatai", "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop"},
-
-  // ---- CAKES ----
-  {"id": "cake-1", "name": "Theme Cake (Half Kg)", "category": "Cakes", "price": 1400, "weight": "500g", "min_quantity": 1, "description": "Custom designed celebration cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-  {"id": "cake-2", "name": "Theme Cake (1 Kg)", "category": "Cakes", "price": 2500, "weight": "1kg", "min_quantity": 1, "description": "Custom designed celebration cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-  {"id": "cake-3", "name": "Pineapple Cake (Half Kg)", "category": "Cakes", "price": 800, "weight": "500g", "min_quantity": 1, "description": "Fresh pineapple cream cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-  {"id": "cake-4", "name": "Pineapple Cake (1 Kg)", "category": "Cakes", "price": 1500, "weight": "1kg", "min_quantity": 1, "description": "Fresh pineapple cream cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-  {"id": "cake-5", "name": "Butterscotch Cake (Half Kg)", "category": "Cakes", "price": 800, "weight": "500g", "min_quantity": 1, "description": "Crunchy butterscotch cream delight", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-  {"id": "cake-6", "name": "Butterscotch Cake (1 Kg)", "category": "Cakes", "price": 1500, "weight": "1kg", "min_quantity": 1, "description": "Crunchy butterscotch cream delight", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-  {"id": "cake-7", "name": "Mix Fruit Cake (Half Kg)", "category": "Cakes", "price": 900, "weight": "500g", "min_quantity": 1, "description": "Assorted fresh seasonal fruits cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-  {"id": "cake-8", "name": "Mix Fruit Cake (1 Kg)", "category": "Cakes", "price": 1700, "weight": "1kg", "min_quantity": 1, "description": "Assorted fresh seasonal fruits cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-  {"id": "cake-9", "name": "Red Velvet Cake (Half Kg)", "category": "Cakes", "price": 1000, "weight": "500g", "min_quantity": 1, "description": "Velvet crumb with cream cheese layers", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-  {"id": "cake-10", "name": "Red Velvet Cake (1 Kg)", "category": "Cakes", "price": 1800, "weight": "1kg", "min_quantity": 1, "description": "Velvet crumb with cream cheese layers", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-  {"id": "cake-11", "name": "Hazelnut Cake (Half Kg)", "category": "Cakes", "price": 1000, "weight": "500g", "min_quantity": 1, "description": "Chocolate sponge with roasted hazelnut", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-  {"id": "cake-12", "name": "Hazelnut Cake (1 Kg)", "category": "Cakes", "price": 1800, "weight": "1kg", "min_quantity": 1, "description": "Chocolate sponge with roasted hazelnut", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-  {"id": "cake-13", "name": "Truffle Cake (Half Kg)", "category": "Cakes", "price": 900, "weight": "500g", "min_quantity": 1, "description": "Decadent chocolate ganache truffle cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-  {"id": "cake-14", "name": "Truffle Cake (1 Kg)", "category": "Cakes", "price": 1700, "weight": "1kg", "min_quantity": 1, "description": "Decadent chocolate ganache truffle cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-  {"id": "cake-15", "name": "Black Forest Cake (Half Kg)", "category": "Cakes", "price": 800, "weight": "500g", "min_quantity": 1, "description": "Classic chocolate sponge with cherries", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-  {"id": "cake-16", "name": "Black Forest Cake (1 Kg)", "category": "Cakes", "price": 1500, "weight": "1kg", "min_quantity": 1, "description": "Classic chocolate sponge with cherries", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop"},
-
-  // ---- CHEESECAKES ----
-  {"id": "ch-1", "name": "Biscoff Cheesecake (Half Kg)", "category": "Cheesecakes", "price": 1000, "weight": "500g", "min_quantity": 1, "description": "Baked cheesecake with Lotus biscoff glaze", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ch-2", "name": "Biscoff Cheesecake (1 Kg)", "category": "Cheesecakes", "price": 1800, "weight": "1kg", "min_quantity": 1, "description": "Baked cheesecake with Lotus biscoff glaze", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ch-3", "name": "New York Cheesecake (Half Kg)", "category": "Cheesecakes", "price": 900, "weight": "500g", "min_quantity": 1, "description": "Classic dense New York style baked cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ch-4", "name": "New York Cheesecake (1 Kg)", "category": "Cheesecakes", "price": 1700, "weight": "1kg", "min_quantity": 1, "description": "Classic dense New York style baked cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ch-5", "name": "Oreo Cheesecake (Half Kg)", "category": "Cheesecakes", "price": 900, "weight": "500g", "min_quantity": 1, "description": "Cookies & cream folded cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ch-6", "name": "Oreo Cheesecake (1 Kg)", "category": "Cheesecakes", "price": 1700, "weight": "1kg", "min_quantity": 1, "description": "Cookies & cream folded cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ch-7", "name": "Blueberry Cheesecake (Half Kg)", "category": "Cheesecakes", "price": 1000, "weight": "500g", "min_quantity": 1, "description": "Topped with fresh blueberry glaze", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ch-8", "name": "Blueberry Cheesecake (1 Kg)", "category": "Cheesecakes", "price": 1800, "weight": "1kg", "min_quantity": 1, "description": "Topped with fresh blueberry glaze", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ch-9", "name": "Strawberry Cold Cheesecake (Half Kg)", "category": "Cheesecakes", "price": 800, "weight": "500g", "min_quantity": 1, "description": "Refreshing strawberry cold cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ch-10", "name": "Strawberry Cold Cheesecake (1 Kg)", "category": "Cheesecakes", "price": 1500, "weight": "1kg", "min_quantity": 1, "description": "Refreshing strawberry cold cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ch-11", "name": "Classic Cold Cheesecake (Half Kg)", "category": "Cheesecakes", "price": 800, "weight": "500g", "min_quantity": 1, "description": "Simple classic cold set cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop"},
-  {"id": "ch-12", "name": "Classic Cold Cheesecake (1 Kg)", "category": "Cheesecakes", "price": 1500, "weight": "1kg", "min_quantity": 1, "description": "Simple classic cold set cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop"},
-
-  // ---- VALENTINE HAMPERS ----
-  {"id": "val-1", "name": "Mini Love Hamper", "category": "Valentine Hampers", "price": 499, "weight": "1 Unit", "min_quantity": 1, "description": "2 Dessert Jars, 2 Muffins, Greeting Note", "image": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=400&auto=format&fit=crop"},
-  {"id": "val-2", "name": "Sweetheart Hamper", "category": "Valentine Hampers", "price": 799, "weight": "1 Unit", "min_quantity": 1, "description": "4 Dessert Jars, 250g Cookies, Gift Packaging", "image": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=400&auto=format&fit=crop"},
-  {"id": "val-3", "name": "Couple Special Hamper", "category": "Valentine Hampers", "price": 1199, "weight": "1 Unit", "min_quantity": 1, "description": "Bento Cake, Jar Cake, Chocolate Box, Rose Bouquet", "image": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=400&auto=format&fit=crop"},
-  {"id": "val-4", "name": "Luxury Valentine Hamper", "category": "Valentine Hampers", "price": 1999, "weight": "1 Unit", "min_quantity": 1, "description": "Half Kg Cheesecake, Chocolate Box, Muffin, Note, Rose Bouquet", "image": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=400&auto=format&fit=crop"}
+  {"id": "jar-1", "name": "Pineapple Jar", "category": "Jar Cakes", "price": 140, "weight": "1 Jar", "min_quantity": 1, "description": "Refreshing pineapple cream layers", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "jar-2", "name": "Butterscotch Jar", "category": "Jar Cakes", "price": 140, "weight": "1 Jar", "min_quantity": 1, "description": "Crunchy butterscotch swirls", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "jar-3", "name": "Vanilla Caramel Jar", "category": "Jar Cakes", "price": 140, "weight": "1 Jar", "min_quantity": 1, "description": "Classic vanilla with caramel", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "jar-4", "name": "Black Forest Jar", "category": "Jar Cakes", "price": 150, "weight": "1 Jar", "min_quantity": 1, "description": "Chocolate cherry delight", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "jar-5", "name": "White Forest Jar", "category": "Jar Cakes", "price": 150, "weight": "1 Jar", "min_quantity": 1, "description": "White chocolate cherry compote", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "jar-6", "name": "Choco Choco Chip Jar", "category": "Jar Cakes", "price": 150, "weight": "1 Jar", "min_quantity": 1, "description": "Double chocolate indulgence", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "jar-7", "name": "Mix Fruit Jar", "category": "Jar Cakes", "price": 170, "weight": "1 Jar", "min_quantity": 1, "description": "Seasonal fruits with cream", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "jar-8", "name": "Blueberry Bliss Jar", "category": "Jar Cakes", "price": 170, "weight": "1 Jar", "min_quantity": 1, "description": "Fresh blueberry compote layers", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "jar-9", "name": "Oreo Choco Jar", "category": "Jar Cakes", "price": 170, "weight": "1 Jar", "min_quantity": 1, "description": "Oreo chocolate cream", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "jar-10", "name": "Tiramisu Jar", "category": "Jar Cakes", "price": 170, "weight": "1 Jar", "min_quantity": 1, "description": "Coffee-flavored delight", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "jar-11", "name": "Rasmalai Fusion Jar", "category": "Jar Cakes", "price": 190, "weight": "1 Jar", "min_quantity": 1, "description": "Traditional fusion dessert", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "jar-12", "name": "Choco Hazelnut Jar", "category": "Jar Cakes", "price": 190, "weight": "1 Jar", "min_quantity": 1, "description": "Rich hazelnut chocolate cream", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "jar-13", "name": "Red Velvet Jar", "category": "Jar Cakes", "price": 190, "weight": "1 Jar", "min_quantity": 1, "description": "Velvet layers with cream cheese", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "jar-14", "name": "Lotus Biscoff Jar", "category": "Jar Cakes", "price": 190, "weight": "1 Jar", "min_quantity": 1, "description": "Biscoff biscuit cream", "image": "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "br-1", "name": "Chocolate Walnut Brownie", "category": "Brownies", "price": 250, "weight": "200g", "min_quantity": 1, "description": "Dense fudgy brownie loaded with walnuts", "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "br-2", "name": "Chocolate Fudge Brownie", "category": "Brownies", "price": 250, "weight": "200g", "min_quantity": 1, "description": "Ultra rich chocolate fudge brownie", "image": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "tc-1", "name": "Banana Walnut Tea Cake", "category": "Tea Cakes", "price": 220, "weight": "200g", "min_quantity": 1, "description": "Banana cake with crunchy walnuts", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "tc-2", "name": "Tutti Frutti Tea Cake", "category": "Tea Cakes", "price": 200, "weight": "200g", "min_quantity": 1, "description": "Frutti bits in soft butter cake", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "tc-3", "name": "Dry Fruit Tea Cake", "category": "Tea Cakes", "price": 240, "weight": "200g", "min_quantity": 1, "description": "Loaded with premium dry fruits", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "tc-4", "name": "Orange Chiffon Slice Cake", "category": "Tea Cakes", "price": 200, "weight": "200g", "min_quantity": 1, "description": "Fluffy orange flavored tea cake", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "tc-5", "name": "Marble Tea Cake", "category": "Tea Cakes", "price": 210, "weight": "200g", "min_quantity": 1, "description": "Vanilla & chocolate swirl cake", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "tc-6", "name": "Coffee Walnut Tea Cake", "category": "Tea Cakes", "price": 230, "weight": "200g", "min_quantity": 1, "description": "Aromatic coffee cake with walnuts", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "tc-7", "name": "Chocolate Chip Tea Cake", "category": "Tea Cakes", "price": 220, "weight": "200g", "min_quantity": 1, "description": "Studded with premium chocolate chips", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "tc-8", "name": "Rose Pistachio Tea Cake", "category": "Tea Cakes", "price": 240, "weight": "200g", "min_quantity": 1, "description": "Fragrant rose with pistachios", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "tc-9", "name": "Date & Honey Tea Cake", "category": "Tea Cakes", "price": 230, "weight": "200g", "min_quantity": 1, "description": "Natural date honey sweetness", "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "muf-1", "name": "Chocolate Muffin", "category": "Muffins", "price": 90, "weight": "1 pc", "min_quantity": 5, "description": "Rich double chocolate muffin", "image": "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "muf-2", "name": "Vanilla Muffin", "category": "Muffins", "price": 90, "weight": "1 pc", "min_quantity": 5, "description": "Classic vanilla bean muffin", "image": "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "muf-3", "name": "Choco Chip Muffin", "category": "Muffins", "price": 90, "weight": "1 pc", "min_quantity": 5, "description": "Loaded with chocolate chips", "image": "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "muf-4", "name": "Red Velvet Muffin", "category": "Muffins", "price": 110, "weight": "1 pc", "min_quantity": 5, "description": "Red velvet with cream cheese swirl", "image": "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "muf-5", "name": "Blueberry Muffin", "category": "Muffins", "price": 110, "weight": "1 pc", "min_quantity": 5, "description": "Bursting with fresh blueberries", "image": "https://images.unsplash.com/photo-1607958996333-41aef7caefaa?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "don-1", "name": "Bombay Loni Donut", "category": "Donuts", "price": 150, "weight": "1 pc", "min_quantity": 4, "description": "Butter-rich local specialty donut", "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "don-2", "name": "Cinnamon Donut", "category": "Donuts", "price": 80, "weight": "1 pc", "min_quantity": 4, "description": "Warm cinnamon sugar coated", "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "don-3", "name": "Chocolate Donut", "category": "Donuts", "price": 100, "weight": "1 pc", "min_quantity": 4, "description": "Rich chocolate glazed donut", "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "ck-1", "name": "Salted Cookies", "category": "Cookies", "price": 200, "weight": "200g", "min_quantity": 1, "description": "Perfect balance of sweet & salty", "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "ck-2", "name": "Coconut Cookies", "category": "Cookies", "price": 220, "weight": "200g", "min_quantity": 1, "description": "Crispy desiccated coconut cookies", "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "ck-3", "name": "Vanilla Butter Cookies", "category": "Cookies", "price": 200, "weight": "200g", "min_quantity": 1, "description": "Melt-in-mouth butter cookies", "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "ck-4", "name": "Choco Chip Cookies", "category": "Cookies", "price": 240, "weight": "200g", "min_quantity": 1, "description": "Caramelized dough with chocolate chips", "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "ck-5", "name": "Oats Cookies", "category": "Cookies", "price": 250, "weight": "200g", "min_quantity": 1, "description": "Healthy high-fiber oats cookies", "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "ck-6", "name": "Ragi Cookies", "category": "Cookies", "price": 250, "weight": "200g", "min_quantity": 1, "description": "Nutritious ragi farm grain cookies", "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "ck-7", "name": "Desi Ghee Nankhatai", "category": "Cookies", "price": 280, "weight": "200g", "min_quantity": 1, "description": "Traditional pure ghee nankhatai", "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "cake-1", "name": "Theme Cake (Half Kg)", "category": "Cakes", "price": 1400, "weight": "500g", "min_quantity": 1, "description": "Custom designed celebration cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "cake-2", "name": "Theme Cake (1 Kg)", "category": "Cakes", "price": 2500, "weight": "1kg", "min_quantity": 1, "description": "Custom designed celebration cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "cake-3", "name": "Pineapple Cake (Half Kg)", "category": "Cakes", "price": 800, "weight": "500g", "min_quantity": 1, "description": "Fresh pineapple cream cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "cake-4", "name": "Pineapple Cake (1 Kg)", "category": "Cakes", "price": 1500, "weight": "1kg", "min_quantity": 1, "description": "Fresh pineapple cream cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "cake-5", "name": "Butterscotch Cake (Half Kg)", "category": "Cakes", "price": 800, "weight": "500g", "min_quantity": 1, "description": "Crunchy butterscotch cream delight", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "cake-6", "name": "Butterscotch Cake (1 Kg)", "category": "Cakes", "price": 1500, "weight": "1kg", "min_quantity": 1, "description": "Crunchy butterscotch cream delight", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "cake-7", "name": "Mix Fruit Cake (Half Kg)", "category": "Cakes", "price": 900, "weight": "500g", "min_quantity": 1, "description": "Assorted fresh seasonal fruits cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "cake-8", "name": "Mix Fruit Cake (1 Kg)", "category": "Cakes", "price": 1700, "weight": "1kg", "min_quantity": 1, "description": "Assorted fresh seasonal fruits cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "cake-9", "name": "Red Velvet Cake (Half Kg)", "category": "Cakes", "price": 1000, "weight": "500g", "min_quantity": 1, "description": "Velvet crumb with cream cheese layers", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "cake-10", "name": "Red Velvet Cake (1 Kg)", "category": "Cakes", "price": 1800, "weight": "1kg", "min_quantity": 1, "description": "Velvet crumb with cream cheese layers", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "cake-11", "name": "Hazelnut Cake (Half Kg)", "category": "Cakes", "price": 1000, "weight": "500g", "min_quantity": 1, "description": "Chocolate sponge with roasted hazelnut", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "cake-12", "name": "Hazelnut Cake (1 Kg)", "category": "Cakes", "price": 1800, "weight": "1kg", "min_quantity": 1, "description": "Chocolate sponge with roasted hazelnut", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "cake-13", "name": "Truffle Cake (Half Kg)", "category": "Cakes", "price": 900, "weight": "500g", "min_quantity": 1, "description": "Decadent chocolate ganache truffle cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "cake-14", "name": "Truffle Cake (1 Kg)", "category": "Cakes", "price": 1700, "weight": "1kg", "min_quantity": 1, "description": "Decadent chocolate ganache truffle cake", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "cake-15", "name": "Black Forest Cake (Half Kg)", "category": "Cakes", "price": 800, "weight": "500g", "min_quantity": 1, "description": "Classic chocolate sponge with cherries", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "cake-16", "name": "Black Forest Cake (1 Kg)", "category": "Cakes", "price": 1500, "weight": "1kg", "min_quantity": 1, "description": "Classic chocolate sponge with cherries", "image": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "ch-1", "name": "Biscoff Cheesecake (Half Kg)", "category": "Cheesecakes", "price": 1000, "weight": "500g", "min_quantity": 1, "description": "Baked cheesecake with Lotus biscoff glaze", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "ch-2", "name": "Biscoff Cheesecake (1 Kg)", "category": "Cheesecakes", "price": 1800, "weight": "1kg", "min_quantity": 1, "description": "Baked cheesecake with Lotus biscoff glaze", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "ch-3", "name": "New York Cheesecake (Half Kg)", "category": "Cheesecakes", "price": 900, "weight": "500g", "min_quantity": 1, "description": "Classic dense New York style baked cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "ch-4", "name": "New York Cheesecake (1 Kg)", "category": "Cheesecakes", "price": 1700, "weight": "1kg", "min_quantity": 1, "description": "Classic dense New York style baked cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "ch-5", "name": "Oreo Cheesecake (Half Kg)", "category": "Cheesecakes", "price": 900, "weight": "500g", "min_quantity": 1, "description": "Cookies & cream folded cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "ch-6", "name": "Oreo Cheesecake (1 Kg)", "category": "Cheesecakes", "price": 1700, "weight": "1kg", "min_quantity": 1, "description": "Cookies & cream folded cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "ch-7", "name": "Blueberry Cheesecake (Half Kg)", "category": "Cheesecakes", "price": 1000, "weight": "500g", "min_quantity": 1, "description": "Topped with fresh blueberry glaze", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "ch-8", "name": "Blueberry Cheesecake (1 Kg)", "category": "Cheesecakes", "price": 1800, "weight": "1kg", "min_quantity": 1, "description": "Topped with fresh blueberry glaze", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "ch-9", "name": "Strawberry Cold Cheesecake (Half Kg)", "category": "Cheesecakes", "price": 800, "weight": "500g", "min_quantity": 1, "description": "Refreshing strawberry cold cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "ch-10", "name": "Strawberry Cold Cheesecake (1 Kg)", "category": "Cheesecakes", "price": 1500, "weight": "1kg", "min_quantity": 1, "description": "Refreshing strawberry cold cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "ch-11", "name": "Classic Cold Cheesecake (Half Kg)", "category": "Cheesecakes", "price": 800, "weight": "500g", "min_quantity": 1, "description": "Simple classic cold set cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "ch-12", "name": "Classic Cold Cheesecake (1 Kg)", "category": "Cheesecakes", "price": 1500, "weight": "1kg", "min_quantity": 1, "description": "Simple classic cold set cheesecake", "image": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop", "delivery_scope": "local"},
+  {"id": "val-1", "name": "Mini Love Hamper", "category": "Valentine Hampers", "price": 499, "weight": "1 Unit", "min_quantity": 1, "description": "2 Dessert Jars, 2 Muffins, Greeting Note", "image": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "val-2", "name": "Sweetheart Hamper", "category": "Valentine Hampers", "price": 799, "weight": "1 Unit", "min_quantity": 1, "description": "4 Dessert Jars, 250g Cookies, Gift Packaging", "image": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "val-3", "name": "Couple Special Hamper", "category": "Valentine Hampers", "price": 1199, "weight": "1 Unit", "min_quantity": 1, "description": "Bento Cake, Jar Cake, Chocolate Box, Rose Bouquet", "image": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "val-4", "name": "Luxury Valentine Hamper", "category": "Valentine Hampers", "price": 1999, "weight": "1 Unit", "min_quantity": 1, "description": "Half Kg Cheesecake, Chocolate Box, Muffin, Note, Rose Bouquet", "image": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=400&auto=format&fit=crop", "delivery_scope": "pan_india"},
+  {"id": "cb1366be-dcf2-5e05-90ca-d60f447b8f64", "name": "Banana-Pecan Loaf", "category": "Healthy", "price": 288, "weight": "-", "min_quantity": 1, "description": "Savor the Comforting taste of Nostalgia with our gluten-free and plant based Banana Pecan Cake. This moist, te", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Banana Bread", "diet": "Gluten-free, vegan, refined-sugar-free"},
+  {"id": "9957cac9-ced1-5a1c-891d-6a3624ec8a1a", "name": "Cardamom & Almond Biscotti", "category": "Healthy", "price": 315, "weight": "150g", "min_quantity": 1, "description": "Inspired by the classic Italian Biscotti, this crunchy delight is crafted with nutrient-dense Almond Flour, li", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Biscotti", "diet": "Gluten-free, vegan, refined-sugar-free, millet-based"},
+  {"id": "649c2bb8-19a1-5158-8b07-4c210471f40d", "name": "Gluten Free Millet Bread", "category": "Healthy", "price": 157, "weight": "220g", "min_quantity": 1, "description": "If you can't handle gluten, our gluten-free bread is like a tasty lifesaver. It's made from a mix", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Bread", "diet": "Gluten-free, vegan, millet-based"},
+  {"id": "da67bb2b-a5b2-58da-88e3-b7e2384bcaf6", "name": "Jalapeno & Sundried Tomato Millet Focaccia", "category": "Healthy", "price": 225, "weight": "140g", "min_quantity": 1, "description": "Enjoy the Classic Flavors of our Gluten-Free, Vegan Focaccia Bread, topped with sun-dried cherry tomatoes and ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Bread", "diet": "Gluten-free, vegan, refined-sugar-free, millet-based"},
+  {"id": "30c11683-7849-5349-917d-5cc58ad4aa79", "name": "Cacao and Orange Brownie Cookie", "category": "Healthy", "price": 225, "weight": "90g", "min_quantity": 1, "description": "The best of both worlds\u2014this Brookie combines the rich, fudgy texture of a brownie with the crisp edges of a c", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Brookie", "diet": "Gluten-free, vegan, refined-sugar-free"},
+  {"id": "4773f22c-c799-5ea2-ac77-6bd5133cc244", "name": "Walnut-Cacao Millet Brownie", "category": "Healthy", "price": 288, "weight": "150g", "min_quantity": 1, "description": "Our Cacao & Walnut Millet Brownie is everything you want in a brownie. Intensely fudgy, deeply chocolatey,", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Brownie", "diet": "Gluten-free, vegan, refined-sugar-free, millet-based"},
+  {"id": "838abb6d-3d03-5b4f-95e0-24506b59cdc1", "name": "Apple-Blueberry Crumble Cake", "category": "Healthy", "price": 265, "weight": "120g", "min_quantity": 1, "description": "Apple blueberry crumble cake is a refreshing summer dessert, combining the sweetness of fresh green apples, ju", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Cake", "diet": "Gluten-free, vegan"},
+  {"id": "7f1fd464-1265-5d5a-b7a3-85ea96b08065", "name": "Orange-Cacao Millet Cake", "category": "Healthy", "price": 378, "weight": "150g", "min_quantity": 1, "description": "A 70% dark chocolate dense and moist cake with homemade candied orange peels and a dark chocolate ganache runn", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Cake", "diet": "Gluten-free, vegan, millet-based"},
+  {"id": "92c52b3a-11f2-52c5-bff8-6a29078d6929", "name": "Orange-Cacao Travel Loaf", "category": "Healthy", "price": 1440, "weight": "650g", "min_quantity": 1, "description": "Orange & Cacao Millet travel cake is made using 70% vegan dark chocolate, has a dense and moist texture wi", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Cake", "diet": "Gluten-free, vegan, refined-sugar-free"},
+  {"id": "3a79a86a-c4ac-56ac-8858-71fa6d356802", "name": "Rajgira Cacao Millet Cake", "category": "Healthy", "price": 355, "weight": "150g", "min_quantity": 1, "description": "This is chocolate cake\u2014reinvented for wellness. Our Amaranth & Almond Flour Cake brings together a moist, ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Cake", "diet": "Gluten-free, vegan, millet-based"},
+  {"id": "b86eb02b-12d7-5412-b2ca-5b9e36acff15", "name": "Saffron-Almond Orange Cake", "category": "Healthy", "price": 378, "weight": "150g", "min_quantity": 1, "description": "Saffron scented vanilla sponge with bits of orange and almond topped with pistachio and rose peta", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Cake", "diet": "Gluten-free, vegan, millet-based"},
+  {"id": "5f352dd5-82c4-590a-89dd-11a5eb7d07f2", "name": "Saffron-Almond Travel Loaf", "category": "Healthy", "price": 1260, "weight": "500g", "min_quantity": 1, "description": "Saffron flavored vanilla sponge with bits of homemade candied orange and roasted almond. It\u2019s topped with pist", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Cake", "diet": "Gluten-free, vegan, refined-sugar-free, millet-based"},
+  {"id": "474624d5-a21f-54d7-8c8a-d7e53a63d190", "name": "Sugar-Free Cacao Travel Loaf", "category": "Healthy", "price": 1620, "weight": "500g", "min_quantity": 1, "description": "An extremely fudgy & moist chocolate flourless travel cake with a chocolate ganache sweetened with xylitol", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Cake", "diet": "Gluten-free, vegan, refined-sugar-free, keto & diabetic-friendly"},
+  {"id": "ae5e7f06-2d14-51ee-8c26-2b41c0b82996", "name": "Sugar-Free Flourless Cacao Cake", "category": "Healthy", "price": 355, "weight": "500g", "min_quantity": 1, "description": "An extremely fudgy & moist chocolate flourless cake with a chocolate ganache sweetened with xylitol and st", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Cake", "diet": "Gluten-free, vegan, keto & diabetic-friendly"},
+  {"id": "4a7ff081-c825-5f56-883d-814735d1a6d5", "name": "Sugar-Free Mango-Strawberry Cake", "category": "Healthy", "price": 180, "weight": "-", "min_quantity": 1, "description": "Our Vegan Keto Mango and Strawberry Cake combines two of your favorite fruits in a light, fluffy dessert. It f", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Cake", "diet": "Gluten-free, vegan, refined-sugar-free, keto & diabetic-friendly"},
+  {"id": "748d1a45-e91c-5e8a-8dc5-e00189785f01", "name": "Cheesy Millet Chips", "category": "Healthy", "price": 140, "weight": "100g", "min_quantity": 1, "description": "Our Cheesy Millet Chips bring the bold flavor of vegan cheddar. Made from a blend of amaranth and jowar flours", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Chips", "diet": "Gluten-free, vegan, millet-based"},
+  {"id": "9229c8e7-7b22-59bf-afee-7b3dbc7ed9b0", "name": "Pineapple Cream Cake", "category": "Healthy", "price": 225, "weight": "-", "min_quantity": 1, "description": "A slice of tropical sunshine, Pineapple & Cream Cake wraps you in the bright tang of ripe pineapple, lifte", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Chips", "diet": "Gluten-free, vegan, refined-sugar-free"},
+  {"id": "f5380cb0-ca10-5ea4-abea-ac81def3babc", "name": "Almond-Berry Cacao Rocks", "category": "Healthy", "price": 405, "weight": "150g", "min_quantity": 1, "description": "These handcrafted chocolate rocks combine the deep, bold flavors of real Cacao with the nutty crunch of Almond", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Chocolate Bar", "diet": "Gluten-free, vegan"},
+  {"id": "36c81030-6859-51af-9346-f0247b8f1ecd", "name": "Sugar-Free Berry Cacao Rocks", "category": "Healthy", "price": 472, "weight": "150g", "min_quantity": 1, "description": "These handcrafted chocolate rocks combine the intense richness of cacao with the natural sweetness of cranberr", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Chocolate Bar", "diet": "Gluten-free, vegan, keto & diabetic-friendly"},
+  {"id": "0ea820a8-bd53-5b08-9ca7-56e445a743b8", "name": "Almond-Cacao Flourless Cookies", "category": "Healthy", "price": 495, "weight": "175g", "min_quantity": 1, "description": "Flaky and buttery flourless almond butter protein cookies with chunky pieces of chocolate and sea salt. A heal", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Cookies", "diet": "Gluten-free, vegan"},
+  {"id": "2634f864-8845-5878-9385-2c90fcb0385b", "name": "Berry-Cacao Oat Cookies", "category": "Healthy", "price": 355, "weight": "250g", "min_quantity": 1, "description": "Golden Berry-Cacao-Oat Cookies made with a mix of hearty oats, bright cranberries and rich dark chocolate chun", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Cookies", "diet": "Gluten-free, vegan"},
+  {"id": "dfed7088-4541-5552-a49a-b4933523608d", "name": "Cacao & Shortbread Cookie", "category": "Healthy", "price": 225, "weight": "100g", "min_quantity": 1, "description": "Cacao & shortbread cookies are famous for their thick, soft, and gooey centers with slightly crisp edges. ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Cookies", "diet": "Gluten-free, vegan"},
+  {"id": "0f4f9c53-e07a-5e00-bde7-eaf3ffc12e6a", "name": "Date & Shortbread Maamoul Cookies", "category": "Healthy", "price": 288, "weight": "-", "min_quantity": 1, "description": "Soft, chewy, and warmly spiced, our Date & shortbread Maamoul Cookies are an ode to traditional Middle Eas", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Cookies", "diet": "Gluten-free, refined-sugar-free"},
+  {"id": "50764736-8d40-5e49-95c0-2b546e225877", "name": "Ginger-Spice Almond Cookies", "category": "Healthy", "price": 288, "weight": "250g", "min_quantity": 1, "description": "These Ginger Spice Cookies are a nostalgic blend of warmth and sweetness. Made with bold, aromatic Ginger and ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Cookies", "diet": "Gluten-free, vegan"},
+  {"id": "84d52f98-04a0-5cf8-a28d-2e20710ea5b5", "name": "Jam-Heart Butter Cookies", "category": "Healthy", "price": 140, "weight": "60g", "min_quantity": 1, "description": "Relive the Taste of Childhood with our gluten-free Jim Jam Cookies Handcrafted with wholesome ingredients, the", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Cookies", "diet": "Gluten-free, vegan, refined-sugar-free"},
+  {"id": "5efb6523-d463-572c-94e9-fee3014dbff6", "name": "Lemon-Lavender Millet Cookies", "category": "Healthy", "price": 175, "weight": "100g", "min_quantity": 1, "description": "These Lime Lavender Cookies bring together the bright, citrusy zing of Lemon Zest with the soothing floral not", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Cookies", "diet": "Gluten-free, vegan, millet-based"},
+  {"id": "b431f0ad-98e5-53b9-ae10-41b006691fe5", "name": "Signature Cookie Trio", "category": "Healthy", "price": 405, "weight": "250g", "min_quantity": 1, "description": "A trio made for every craving, rich, chocolate-studded Almond Flour & cacao Cookies, tangy-sweet Berry-Cac", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Cookies", "diet": "Gluten-free, vegan"},
+  {"id": "67f0c83c-b620-52a5-81c3-e1b99b94584c", "name": "Cheddar Jowar Bites", "category": "Healthy", "price": 108, "weight": "100g", "min_quantity": 1, "description": "A crispy, cheesy blast from the past \u2014 our Cheddar Millet Bites are your childhood favourite, reimagined with ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Crackers", "diet": "Gluten-free, vegan, millet-based"},
+  {"id": "e2393229-e207-59f4-aeb9-aace38b9ac5f", "name": "Cheddar Nut & Seed Crackers", "category": "Healthy", "price": 180, "weight": "150g", "min_quantity": 1, "description": "These handcrafted crackers bring together the rich sharpness of Cheddar Cheese with the wholesome crunch of Pu", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Crackers", "diet": "Gluten-free, millet-based, keto & diabetic-friendly"},
+  {"id": "06827115-90ea-518a-b592-516c00f5aeda", "name": "Crispy Millet Pita", "category": "Healthy", "price": 135, "weight": "100g", "min_quantity": 1, "description": "These artisanal pita crackers bring together the goodness of our in-house Gluten free Flour blend and a medley", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Crackers", "diet": "Gluten-free, vegan"},
+  {"id": "1d26425d-5966-56cc-aea0-4dffca0f8c5c", "name": "Methi Millet Crackers", "category": "Healthy", "price": 135, "weight": "100g", "min_quantity": 1, "description": "These Methi-Millet Crackers offer a delicious blend of traditional Indian spices and the wholesome goodness of", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Crackers", "diet": "Gluten-free, vegan, millet-based"},
+  {"id": "3740023f-57b9-5d44-b28b-415401f8fcc8", "name": "Cashew & Date Energy Bites", "category": "Healthy", "price": 212, "weight": "120g", "min_quantity": 1, "description": "Soft, nutty, and naturally sweet \u2014 these cashew & dates energy bites are a wholesome way to fuel your day.", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Energy Bites", "diet": "Gluten-free, vegan"},
+  {"id": "83685c6b-8138-5ab3-bc88-f9e8548447c0", "name": "Gluten Free Millet Atta", "category": "Healthy", "price": 175, "weight": "500g", "min_quantity": 1, "description": "Our Gluten-Free Millet Aata looks and cooks like regular aata \u2014 but delivers way more nutrition. Made with a b", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Flour", "diet": "Gluten-free, vegan"},
+  {"id": "59448afc-9808-5905-adaa-00d5aa081f62", "name": "Cacao, Hazelnut & Date Fudge", "category": "Healthy", "price": 382, "weight": "150g", "min_quantity": 1, "description": "This decadent fudge is for true chocolate lovers. Made with deep, intense Cacao, crunchy Almonds, and naturall", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Fudge", "diet": "Gluten-free, vegan"},
+  {"id": "cd54cafc-0c0f-52a6-96d2-d52f02cce0a9", "name": "Cacao, Hazelnut & Date Fudge Balls", "category": "Healthy", "price": 809, "weight": "150g", "min_quantity": 1, "description": "For true chocolate lovers. Bittersweet dark chocolate meets crunchy and caramely hazelnut praline this Cacao, ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Fudge", "diet": "Gluten-free, vegan"},
+  {"id": "7abb0434-81ee-5262-a89a-8a36a7830962", "name": "Baklava Granola", "category": "Healthy", "price": 360, "weight": "-", "min_quantity": 1, "description": "Crunchy, warm, and layered with festive flavor, this granola takes inspiration from the richness of baklava. E", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Gifting", "diet": "Gluten-free, vegan, refined-sugar-free"},
+  {"id": "362cfa7f-4f59-572d-88b8-f1f9c040ac7b", "name": "Bespoke Celebration Hamper", "category": "Healthy", "price": 1890, "weight": "900g", "min_quantity": 1, "description": "This box brings together the best of both worlds sweet and savoury favourites like Cacao Hazelnut & Date F", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Gifting", "diet": ""},
+  {"id": "c8b9e21f-f82a-5aaa-bda8-67d6e07ce451", "name": "Best of Sugar Story Hamper", "category": "Healthy", "price": 2880, "weight": "-", "min_quantity": 1, "description": "This hamper is a perfect mix of savory and sweet delights from TCK. Our Hamper contains - 1) Almond Flour &", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Gifting", "diet": "Gluten-free, vegan"},
+  {"id": "b18b30bf-7e97-51bf-a93f-bd606380ecfb", "name": "Box of Joy Hamper", "category": "Healthy", "price": 2398, "weight": "-", "min_quantity": 1, "description": "Our bundle of joy contains an assortment of our most loved cookies, fudge, crackers and Cacao hazelnut Fudge s", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Gifting", "diet": "Gluten-free, vegan"},
+  {"id": "9724ea1c-4252-5d2b-bbb3-91bba366e758", "name": "Cacao & Orange Truffle", "category": "Healthy", "price": 675, "weight": "-", "min_quantity": 1, "description": "Crafted from a smooth blend of almonds, cocoa, and dates, each bite carries the richness of dark chocolate wit", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Gifting", "diet": "Gluten-free, vegan, refined-sugar-free"},
+  {"id": "b7ffa250-3822-5235-b5ae-cebd261e0961", "name": "Healthy Trial Pack", "category": "Healthy", "price": 355, "weight": "178g", "min_quantity": 1, "description": "Sweet or savoury \u2014 this trial pack has you covered. A curated selection of our bestsellers, it's perfect for f", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Gifting", "diet": "Gluten-free, vegan"},
+  {"id": "3c573232-5d8e-51de-be0b-7ec6c472dbd3", "name": "Podi & Millet Pita Combo", "category": "Healthy", "price": 553, "weight": "300g", "min_quantity": 1, "description": "A bold, savory Podi masala spread paired with juicy cherry tomatoes, crafted to balance festive sweetness. Ins", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Gifting", "diet": ""},
+  {"id": "e5191022-598c-5eb3-a561-653e4782dd28", "name": "Berry & Banana Millet Granola", "category": "Healthy", "price": 405, "weight": "175g", "min_quantity": 1, "description": "Unlike most granolas that are made with oats. Strawberry, Banana and Cacao crunch granola is made using amaran", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Granola", "diet": "Gluten-free, vegan, millet-based"},
+  {"id": "84ba2f4a-883d-5839-9b33-d2a16a8a75c6", "name": "Oat Fig & Almond Granola", "category": "Healthy", "price": 315, "weight": "200g", "min_quantity": 1, "description": "Start your day with a deliciously nourishing bowl of granola, packed with fiber-rich Oats, sweet chewy Figs, a", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Granola", "diet": "Gluten-free, vegan"},
+  {"id": "abadeb90-39bc-51a3-aa72-25e4b02d096a", "name": "Sugar-Free Almond & Seed Granola", "category": "Healthy", "price": 468, "weight": "200g", "min_quantity": 1, "description": "This keto-friendly granola is designed for those who want a low-carb, high-energy breakfast without compromisi", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Granola", "diet": "Gluten-free, vegan, keto & diabetic-friendly"},
+  {"id": "4206e26b-54ec-5d80-ade7-130363e7c041", "name": "Cacao Almond Butter", "category": "Healthy", "price": 495, "weight": "200g", "min_quantity": 1, "description": "Silky-smooth, rich, and made with just four real ingredients. Our Cacao Almond Butter is your new family favor", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Nut Butter", "diet": "Gluten-free, vegan"},
+  {"id": "1f8fe044-5d28-5bd0-9720-bc5fb9c277a8", "name": "Cacao Peanut Butter", "category": "Healthy", "price": 252, "weight": "200g", "min_quantity": 1, "description": "A creamy, nutrient-packed spread for peanut butter lovers who crave a chocolatey twist. Made with roasted Pean", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Nut Butter", "diet": "Gluten-free, vegan"},
+  {"id": "a497f0b9-b0a5-509d-afa7-56bbe700cf5e", "name": "Crunchy & Cacao Peanut Butter", "category": "Healthy", "price": 252, "weight": "200g", "min_quantity": 1, "description": "This Crunchy Chocolate Peanut Butter is a wholesome twist on a classic favorite. Made using 82% peanuts, rich ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Nut Butter", "diet": "Gluten-free, vegan"},
+  {"id": "0336d8a1-6296-58bb-aa74-841c87b3dfbf", "name": "Crunchy Peanut Butter", "category": "Healthy", "price": 252, "weight": "200g", "min_quantity": 1, "description": "If you love peanut butter but crave a bit of crunch, this spread is for you. Made with roasted Peanuts, it del", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Nut Butter", "diet": "Gluten-free, vegan, refined-sugar-free"},
+  {"id": "e518014d-bee3-5889-9c69-b24dec70f4c8", "name": "Hazelnut Cacao Spread", "category": "Healthy", "price": 558, "weight": "200g", "min_quantity": 1, "description": "This indulgent yet wholesome spread is crafted from slow-roasted Hazelnuts and rich, bold Cacao for a decadent", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Nut Butter", "diet": "Gluten-free, vegan"},
+  {"id": "d24f05e3-e332-5dd5-aded-0a175291eaf9", "name": "Just Almond Butter", "category": "Healthy", "price": 445, "weight": "200g", "min_quantity": 1, "description": "This almond butter is as simple as it gets just premium, slow-roasted Almonds blended into a creamy, rich spre", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Nut Butter", "diet": "Gluten-free, vegan, keto & diabetic-friendly"},
+  {"id": "a3421ace-0fc7-5491-8928-4a938711330c", "name": "Just Peanut Butter", "category": "Healthy", "price": 230, "weight": "200g", "min_quantity": 1, "description": "This peanut butter is as simple and pure as it gets\u2014just premium, slow-roasted Peanuts blended into a smooth, ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Nut Butter", "diet": "Gluten-free, vegan"},
+  {"id": "29b8698e-9a0c-5e1f-894a-cd75bda00c96", "name": "Sugar-Free Hazelnut Cacao Spread", "category": "Healthy", "price": 675, "weight": "200g", "min_quantity": 1, "description": "Indulgent yet keto-friendly, this chocolate hazelnut spread is crafted with the finest roasted hazelnuts and d", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Nut Butter", "diet": "Gluten-free, vegan, keto & diabetic-friendly"},
+  {"id": "caf839a6-d832-50fe-90be-3a3afd76e253", "name": "Almond Crunch Katli", "category": "Healthy", "price": 765, "weight": "250g", "min_quantity": 1, "description": "Almond katli with the goodness of dates and three different textures of almonds. Available in TCK\u2019s gift box. ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Other", "diet": "Gluten-free, vegan"},
+  {"id": "54a0cbe1-5130-5fea-b118-73cdfc3b8f6e", "name": "Berry Cream Celebration Cake", "category": "Healthy", "price": 355, "weight": "200g", "min_quantity": 1, "description": "Our berry and cream cake is a combination of sweet and tangy treat for a refreshing summer experience. It is a", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Other", "diet": "Gluten-free, vegan"},
+  {"id": "46aaa52c-8bd1-56ab-b4dd-6125ad563f2b", "name": "Blueberry & Cheesecake Millet Jar", "category": "Healthy", "price": 212, "weight": "130g", "min_quantity": 1, "description": "Layers of juicy blueberry compote, silky vegan cheesecake, and a nutty almond butter biscuit come together in ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Other", "diet": "Gluten-free, vegan, refined-sugar-free, millet-based"},
+  {"id": "f29cfe17-7047-59d3-9b98-11ef00c77ba7", "name": "Brownie & Cheesecake Millet Jar", "category": "Healthy", "price": 212, "weight": "100g", "min_quantity": 1, "description": "Rich, fudgy walnut brownie paired with our inhouse vegan cheesecake base in a jar. It is creamy and chocolaty ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Other", "diet": "Gluten-free, vegan, refined-sugar-free, millet-based"},
+  {"id": "032bed70-4c2d-5c75-89ae-bfe0bf6f79c3", "name": "Cherry Cacao Millet Cake", "category": "Healthy", "price": 265, "weight": "-", "min_quantity": 1, "description": "Rich chocolate and silky vegan custard meet bursts of fresh cherries in every bite. Made with millets, almond ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Other", "diet": "Gluten-free, vegan, refined-sugar-free, millet-based"},
+  {"id": "d26f2b75-ee14-585f-9c56-9c2d81970277", "name": "Cherry Cobbler Tartlet", "category": "Healthy", "price": 265, "weight": "-", "min_quantity": 1, "description": "A warm cherry compote layered with smooth vanilla custard and finished with a golden oat and walnut crumble. C", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Other", "diet": "Gluten-free, refined-sugar-free"},
+  {"id": "4e2dcb56-b83e-50b9-8a19-c9117e54f965", "name": "Date & Orange Dog Cake", "category": "Healthy", "price": 675, "weight": "350g", "min_quantity": 1, "description": "A Pup Cake You Can Share Gluten-free, vegan pound cake made with using millets, rice and gluten free oats. It\u2019", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Other", "diet": "Gluten-free, vegan, refined-sugar-free, millet-based"},
+  {"id": "9a2adbd7-b07d-509a-acfd-afec2f1221e6", "name": "Festive Delight Hamper", "category": "Healthy", "price": 1935, "weight": "-", "min_quantity": 1, "description": "For celebrations that feel thoughtful and refined. Our Medium Festive Hamper is a well-balanced curation of fi", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Other", "diet": ""},
+  {"id": "44f97071-ad70-57ab-b5d6-9d1d48b6d51f", "name": "Gluten-Free Multi-Seed Millet Bread", "category": "Healthy", "price": 175, "weight": "-", "min_quantity": 1, "description": "Multi Seed Bread replaces your traditional gluten full bread and you would not even know the difference! It is", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Other", "diet": "Gluten-free, vegan, refined-sugar-free, millet-based"},
+  {"id": "530ee131-4015-577f-87f6-bb70d392284a", "name": "Grand Wedding Box", "category": "Healthy", "price": 2430, "weight": "-", "min_quantity": 1, "description": "This is our signature sweet and savory selection, handcrafted to blend comfort and contemporary taste. Whats I", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Other", "diet": ""},
+  {"id": "399f8169-ccb3-59c6-aa80-364a482b0efb", "name": "Kaju Katli Box", "category": "Healthy", "price": 765, "weight": "250g", "min_quantity": 1, "description": "Healthy & Tasty Take On Classic Kaju Katli - We have reimagined our Kaju Katli using 100% organic cashews ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Other", "diet": "Gluten-free, vegan"},
+  {"id": "534f1e42-3062-58e6-a293-844c7b0849cf", "name": "Mango & Cream Cheesecake Tub", "category": "Healthy", "price": 315, "weight": "-", "min_quantity": 1, "description": "We pulled this together with layers of buttery crumble, velvety mango cheese cream, and mango jelly that adds ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Other", "diet": "Gluten-free, refined-sugar-free"},
+  {"id": "97fcf026-24d8-5127-a3a6-ef3da2175ea1", "name": "Mango-Strawberry Cream Cake", "category": "Healthy", "price": 315, "weight": "-", "min_quantity": 1, "description": "Our Mango & Strawberry Cream Cake layers a soft sponge with luscious mango cream and a vibrant strawberry ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Other", "diet": "Gluten-free, refined-sugar-free"},
+  {"id": "7c2720c3-718a-5e26-956b-1fa62a2f5a47", "name": "Mango-Vanilla Cake", "category": "Healthy", "price": 315, "weight": "-", "min_quantity": 1, "description": "A moist, fruit-studded mango sponge layered with mango pulp and finished with a light vanilla coconut cream. E", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Other", "diet": "Gluten-free, refined-sugar-free"},
+  {"id": "621c1bea-c2b3-54da-bf69-b62d1544da85", "name": "Pistachio-Cacao Tart", "category": "Healthy", "price": 225, "weight": "-", "min_quantity": 1, "description": "Our Chocolate Pistachio Tart features a rich almond and rice flour base layered with homemade pistachio pralin", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Other", "diet": "Gluten-free, refined-sugar-free"},
+  {"id": "58ce0e6c-a231-5416-9c00-dc3bce84d67f", "name": "Rose-Cardamom Cake", "category": "Healthy", "price": 201, "weight": "120g", "min_quantity": 1, "description": "A fragrant cardamom-infused sponge, layered with velvety coconut cream, adorned with delicate rose candy, and ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Other", "diet": "Gluten-free, vegan"},
+  {"id": "64d6a8de-e1ba-5133-b194-e2cdb1d6942d", "name": "Salted Caramel Cacao Brownie", "category": "Healthy", "price": 315, "weight": "-", "min_quantity": 1, "description": "A rich, fudgy chocolate brownie layered with smooth salted caramel and finished with a hint of sea salt. Deep ", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Other", "diet": "Gluten-free, refined-sugar-free"},
+  {"id": "072845a2-15f8-5dcb-9226-9323e635a77f", "name": "Spiced Podi Spread", "category": "Healthy", "price": 334, "weight": "200g", "min_quantity": 1, "description": "This rich, velvety blend of roasted peanuts and sesame is elevated with the sharp tang of sundried tomatoes an", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Other", "diet": ""},
+  {"id": "0aaa1dda-fb53-5860-b2f5-316625727069", "name": "Sugar- Free Cacao Mousse Jar", "category": "Healthy", "price": 234, "weight": "140g", "min_quantity": 1, "description": "Enjoy our Keto Mousse Jar Cake as a delightful treat for those following a low-carb lifestyle. This silky mous", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Other", "diet": "Gluten-free, vegan, refined-sugar-free, keto & diabetic-friendly"},
+  {"id": "39811862-0182-5181-92b2-444acb917a30", "name": "Sugar-Free Rabdi Kulfi Cake Jar", "category": "Healthy", "price": 715, "weight": "300g", "min_quantity": 1, "description": "Delicate saffron and cardamom notes blend into a creamy almond-cashew rabdi, layered over a soft, vegan sponge", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "local", "subtype": "Other", "diet": "Gluten-free, vegan, refined-sugar-free, keto & diabetic-friendly"},
+  {"id": "41c85905-ff34-5bb2-aaf1-a39226b883d4", "name": "The Sugar Story Wedding Box", "category": "Healthy", "price": 2047, "weight": "-", "min_quantity": 1, "description": "This thoughtful box is made to impress. It brings together our signature sweet and savoury favourites, handcra", "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop", "is_available": true, "delivery_scope": "pan_india", "subtype": "Other", "diet": ""},
 ];
 
 const CATEGORIES = [
@@ -163,7 +220,8 @@ const IMAGE_CATEGORIES_MAPPING: Record<string, string> = {
   "Cookies": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?q=80&w=400&auto=format&fit=crop",
   "Cakes": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400&auto=format&fit=crop",
   "Cheesecakes": "https://images.unsplash.com/photo-1524351199679-46cddf530c04?q=80&w=400&auto=format&fit=crop",
-  "Valentine Hampers": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=400&auto=format&fit=crop"
+  "Valentine Hampers": "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=400&auto=format&fit=crop",
+  "Healthy": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop"
 };
 
 // Seeded Bhopal Pincodes (462001 - 462044)
@@ -289,6 +347,29 @@ function ProductCard({
           <p className="text-stone text-[11px] leading-relaxed line-clamp-2">
             {product.description}
           </p>
+
+          {/* Diet badges for Healthy category */}
+          {product.category === "Healthy" && product.diet && (
+            <div className="flex flex-wrap gap-1 pt-1">
+              {product.diet.split(",").map((d: string) => {
+                const badge = d.trim();
+                if (!badge) return null;
+                return (
+                  <span key={badge} className="bg-[#FAF6EE] text-primary border border-gold/20 text-[8px] font-sans font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded">
+                    {badge}
+                  </span>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Delivery scope hint */}
+          <div className="text-[8px] font-sans text-stone uppercase tracking-wider flex items-center gap-1.5 pt-1">
+            <span className={`w-1.5 h-1.5 rounded-full ${product.delivery_scope === "local" ? "bg-amber-500" : "bg-emerald-500"}`}></span>
+            <span>
+              {product.delivery_scope === "pan_india" ? "Ships across India" : "Bhopal fresh delivery"}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -381,7 +462,10 @@ export default function App() {
     min_quantity: 1,
     description: "",
     image: "",
-    is_available: true
+    is_available: true,
+    delivery_scope: "pan_india",
+    subtype: "",
+    diet: ""
   });
 
   // Fetch admin orders helper
@@ -489,8 +573,8 @@ export default function App() {
       console.error("Serviceability check error:", err);
       // Fallback
       const isBhopal = BHOPAL_PINCODES.includes(pincode);
-      const isCake = selectedProduct.category === "Cakes" || selectedProduct.category === "Cheesecakes";
-      if (isCake) {
+      const isLocal = selectedProduct.delivery_scope === "local";
+      if (isLocal) {
         if (isBhopal) {
           setServiceStatus("serviceable");
           setServiceMessage("Serviced by Bhopal Salon. Local fresh delivery fee applies.");
@@ -598,7 +682,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
             title: item.name,
             price: item.price,
             quantity: item.quantity,
-            isLocalOnly: item.category === "Cakes" || item.category === "Cheesecakes",
+            isLocalOnly: item.delivery_scope === "local",
             isEggless: item.isEggless || false,
             cakeMessage: item.cakeMessage || cakeMessage || ""
           })),
@@ -719,7 +803,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
     setSelectedProduct(prod);
     setActiveGalleryImage(prod.image || "");
     setPincode("");
-    const isLocalOnly = ["Cakes", "Cheesecakes"].includes(prod.category) || prod.name.toLowerCase().includes("theme cake");
+    const isLocalOnly = prod.delivery_scope === "local";
     if (isLocalOnly) {
       setServiceStatus("idle");
       setServiceMessage("");
@@ -969,6 +1053,68 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                       </button>
                     );
                   })}
+                </div>
+              </section>
+            </ScrollReveal>
+
+            {/* The Healthy Edit Section */}
+            <ScrollReveal>
+              <section className="py-24 bg-[#FAF6EE]/60 border-b border-stone/10">
+                <div className="max-w-7xl mx-auto px-6 space-y-12">
+                  <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 text-left">
+                    <div className="space-y-3">
+                      <span className="text-xs uppercase tracking-[0.25em] text-primary font-bold font-sans block">
+                        MINDFUL INDULGENCE
+                      </span>
+                      <h2 className="font-serif text-3xl md:text-5xl font-medium tracking-tight text-cocoa">
+                        The Healthy Edit
+                      </h2>
+                      <p className="font-sans text-stone text-xs leading-relaxed max-w-xl">
+                        Chef Shalini's collection of gluten-free, vegan, millet-based, and refined-sugar-free creations—crafted with premium alternative grains and natural sweeteners, without compromising on five-star Taj standards.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setSelectedCategoryTab("Healthy");
+                        setCurrentPage("shop");
+                        window.scrollTo(0, 0);
+                      }}
+                      className="inline-flex items-center text-xs font-sans font-bold uppercase tracking-widest text-primary hover:text-cocoa transition-colors group cursor-pointer"
+                    >
+                      <span>Explore the Healthy Edit</span>
+                      <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform ml-1" />
+                    </button>
+                  </div>
+
+                  {/* Horizontal Scroll Carousel */}
+                  <div className="relative">
+                    <div 
+                      id="healthy-edit-carousel"
+                      className="flex gap-6 overflow-x-auto scroll-smooth scrollbar-none snap-x snap-mandatory pb-6"
+                    >
+                      {(() => {
+                        let healthyEditProducts = productsList.filter(p => p.category === "Healthy").slice(0, 6);
+                        if (healthyEditProducts.length === 0) {
+                          healthyEditProducts = MASTER_PRODUCTS.filter(p => p.category === "Healthy").slice(0, 6);
+                        }
+                        return healthyEditProducts.map(prod => (
+                          <div 
+                            key={prod.id} 
+                            className="min-w-[280px] sm:min-w-[320px] max-w-[320px] snap-start flex-shrink-0"
+                          >
+                            <ProductCard 
+                              product={prod}
+                              onSelect={navigateToProduct}
+                              onQuickWhatsApp={(p) => {
+                                const msg = `Hello Chef Shalini! I'd like to order the Healthy bake: ${p.name} (${p.weight}) for ₹${p.price}.`;
+                                window.open(`https://wa.me/917906759188?text=${encodeURIComponent(msg)}`, "_blank");
+                              }}
+                            />
+                          </div>
+                        ));
+                      })()}
+                    </div>
+                  </div>
                 </div>
               </section>
             </ScrollReveal>
@@ -1492,7 +1638,31 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     <span className="font-serif text-3xl font-semibold text-primary">₹{selectedProduct.price}</span>
                     <span className="text-xs font-sans text-stone">{selectedProduct.weight}</span>
                   </div>
-                  
+
+                  {/* Diet badges & Delivery Scope for PDP */}
+                  <div className="flex flex-wrap items-center gap-3 pt-2">
+                    {selectedProduct.category === "Healthy" && selectedProduct.diet && (
+                      <div className="flex flex-wrap gap-1.5">
+                        {selectedProduct.diet.split(",").map((d: string) => {
+                          const badge = d.trim();
+                          if (!badge) return null;
+                          return (
+                            <span key={badge} className="bg-[#FAF6EE] text-primary border border-gold/20 text-[10px] font-sans font-semibold uppercase tracking-wider px-2.5 py-1 rounded-md">
+                              {badge}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center gap-1.5 bg-cocoa/5 px-3 py-1 rounded-md border border-cocoa/10">
+                      <span className={`w-2 h-2 rounded-full ${selectedProduct.delivery_scope === "local" ? "bg-amber-500" : "bg-emerald-500"}`}></span>
+                      <span className="text-[10px] font-sans font-bold text-cocoa uppercase tracking-wider">
+                        {selectedProduct.delivery_scope === "pan_india" ? "Ships across India" : "Bhopal fresh delivery"}
+                      </span>
+                    </div>
+                  </div>
+
                   <p className="font-sans text-stone text-xs md:text-sm leading-relaxed">{selectedProduct.description}</p>
                 </div>
 
@@ -1510,7 +1680,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
 
                 {/* Pincode Checker Gate (only for local-only items) */}
                 {(() => {
-                  const isLocalOnly = ["Cakes", "Cheesecakes"].includes(selectedProduct.category) || selectedProduct.name.toLowerCase().includes("theme cake");
+                  const isLocalOnly = selectedProduct.delivery_scope === "local";
                   return (
                     <div className="border border-stone/20 p-6 rounded-2xl bg-cream/40 space-y-4">
                       <div className="space-y-1">
@@ -2591,7 +2761,10 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                             min_quantity: 1,
                             description: "",
                             image: "",
-                            is_available: true
+                            is_available: true,
+                            delivery_scope: "pan_india",
+                            subtype: "",
+                            diet: ""
                           });
                           setIsProductModalOpen(true);
                         }}
@@ -2682,7 +2855,10 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                                           min_quantity: product.min_quantity || 1,
                                           description: product.description,
                                           image: product.image || "",
-                                          is_available: product.is_available !== false
+                                          is_available: product.is_available !== false,
+                                          delivery_scope: product.delivery_scope || "pan_india",
+                                          subtype: product.subtype || "",
+                                          diet: product.diet || ""
                                         });
                                         setIsProductModalOpen(true);
                                       }}
@@ -2878,7 +3054,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                       className="w-full bg-[#FAFAFA] border border-cocoa/20 px-3.5 py-2 font-sans focus:outline-none focus:border-gold transition-colors text-cocoa"
                       required
                     >
-                      {["Jar Cakes", "Brownies", "Tea Cakes", "Muffins", "Donuts", "Cookies", "Cakes", "Cheesecakes", "Valentine Hampers"].map(cat => (
+                      {["Jar Cakes", "Brownies", "Tea Cakes", "Muffins", "Donuts", "Cookies", "Cakes", "Cheesecakes", "Valentine Hampers", "Healthy"].map(cat => (
                         <option key={cat} value={cat}>{cat}</option>
                       ))}
                     </select>
@@ -2918,6 +3094,41 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                       className="w-full bg-[#FAFAFA] border border-cocoa/20 px-3.5 py-2 font-sans focus:outline-none focus:border-gold transition-colors text-cocoa"
                       required
                       min="1"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="font-bold text-stone uppercase text-[9px] tracking-wider">Delivery Scope</label>
+                    <select 
+                      value={productForm.delivery_scope}
+                      onChange={(e) => setProductForm({ ...productForm, delivery_scope: e.target.value })}
+                      className="w-full bg-[#FAFAFA] border border-cocoa/20 px-3.5 py-2 font-sans focus:outline-none focus:border-gold transition-colors text-cocoa"
+                      required
+                    >
+                      <option value="pan_india">Ships across India</option>
+                      <option value="local">Bhopal fresh delivery</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="font-bold text-stone uppercase text-[9px] tracking-wider">Subtype (e.g. Bread, Biscotti)</label>
+                    <input 
+                      type="text"
+                      value={productForm.subtype}
+                      onChange={(e) => setProductForm({ ...productForm, subtype: e.target.value })}
+                      placeholder="e.g. Banana Bread"
+                      className="w-full bg-[#FAFAFA] border border-cocoa/20 px-3.5 py-2 font-sans focus:outline-none focus:border-gold transition-colors text-cocoa"
+                    />
+                  </div>
+
+                  <div className="space-y-1 sm:col-span-2">
+                    <label className="font-bold text-stone uppercase text-[9px] tracking-wider">Dietary Tags (comma separated)</label>
+                    <input 
+                      type="text"
+                      value={productForm.diet}
+                      onChange={(e) => setProductForm({ ...productForm, diet: e.target.value })}
+                      placeholder="e.g. Gluten-free, vegan, refined-sugar-free"
+                      className="w-full bg-[#FAFAFA] border border-cocoa/20 px-3.5 py-2 font-sans focus:outline-none focus:border-gold transition-colors text-cocoa"
                     />
                   </div>
 

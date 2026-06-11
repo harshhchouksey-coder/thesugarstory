@@ -115,6 +115,9 @@ class ProductRequest(BaseModel):
     description: str
     image: Optional[str] = None
     is_available: bool = True
+    delivery_scope: Optional[str] = "pan_india"
+    subtype: Optional[str] = None
+    diet: Optional[str] = None
 
 # ==========================================
 # ENDPOINTS
@@ -243,10 +246,10 @@ async def check_serviceability(pin: str, productId: str = None):
     is_local_only = False
     product_name = "This item"
     if product:
-        category = product.get("category", "")
         name = product.get("name", "")
         product_name = name
-        if category in ["Cakes", "Cheesecakes"] or "theme cake" in name.lower():
+        delivery_scope = product.get("delivery_scope", "pan_india")
+        if delivery_scope == "local":
             is_local_only = True
 
     if is_local_only and not is_bhopal:
