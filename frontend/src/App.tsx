@@ -20,7 +20,8 @@ import {
   LogOut,
   RefreshCw,
   Search,
-  X
+  X,
+  Menu
 } from "lucide-react";
 
 const API_BASE = (import.meta as any).env.VITE_API_URL || "http://localhost:8000";
@@ -208,7 +209,7 @@ const MASTER_PRODUCTS = [
 ];
 
 const CATEGORIES = [
-  "Jar Cakes", "Brownies", "Tea Cakes", "Muffins", "Donuts", "Cookies", "Cakes", "Cheesecakes", "Valentine Hampers"
+  "Jar Cakes", "Brownies", "Tea Cakes", "Muffins", "Donuts", "Cookies", "Cakes", "Cheesecakes", "Valentine Hampers", "Healthy"
 ];
 
 const IMAGE_CATEGORIES_MAPPING: Record<string, string> = {
@@ -381,7 +382,7 @@ function ProductCard({
           {onQuickWhatsApp && (
             <button
               onClick={() => onQuickWhatsApp(product)}
-              className="p-2 border border-[#25D366]/40 hover:bg-[#25D366]/5 rounded-lg text-[#25D366] transition-all cursor-pointer"
+              className="p-3 md:p-2 border border-[#25D366]/40 hover:bg-[#25D366]/5 rounded-lg text-[#25D366] transition-all cursor-pointer"
               title="Order on WhatsApp"
             >
               <MessageCircle size={14} className="fill-current stroke-none" />
@@ -389,7 +390,7 @@ function ProductCard({
           )}
           <button
             onClick={() => onSelect(product)}
-            className="px-4 py-2 bg-primary hover:bg-cocoa text-cream text-[10px] font-sans font-bold uppercase tracking-widest transition-all rounded-lg cursor-pointer"
+            className="px-5 py-3 md:px-4 md:py-2 bg-primary hover:bg-cocoa text-cream text-[10px] font-sans font-bold uppercase tracking-widest transition-all rounded-lg cursor-pointer"
           >
             Select
           </button>
@@ -402,6 +403,7 @@ function ProductCard({
 export default function App() {
   // Navigation Routing States
   const [currentPage, setCurrentPage] = useState<"home" | "shop" | "cart" | "product" | "checkout" | "confirm" | "story" | "admin" | "404">("home");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(MASTER_PRODUCTS[0]);
   const [cart, setCart] = useState<any[]>([]);
   const [selectedQty, setSelectedQty] = useState(1);
@@ -886,7 +888,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
             <button onClick={handleContactClick} className="hover:text-primary transition-colors cursor-pointer">Contact</button>
           </nav>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 md:gap-4">
             <button 
               onClick={() => {
                 setCurrentPage("cart");
@@ -907,11 +909,19 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
               href="https://wa.me/917906759188?text=Hello%20Chef%20Shalini!%20I'd%20like%20to%20place%20an%20order."
               target="_blank"
               rel="noreferrer"
-              className="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-cream text-[10px] font-sans font-bold uppercase tracking-widest transition-all rounded-lg flex items-center gap-1.5"
+              className="px-4 py-2 border border-primary text-primary hover:bg-primary hover:text-cream text-[10px] font-sans font-bold uppercase tracking-widest transition-all rounded-lg hidden sm:flex items-center gap-1.5"
             >
               <MessageCircle size={12} className="fill-current stroke-none" />
-              <span className="hidden sm:inline">WhatsApp</span>
+              <span>WhatsApp</span>
             </a>
+
+            <button 
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="p-2 text-cocoa hover:text-primary transition-colors cursor-pointer md:hidden"
+              aria-label="Open Menu"
+            >
+              <Menu size={22} />
+            </button>
           </div>
 
         </div>
@@ -949,14 +959,14 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
 
             {/* 5. Bestsellers */}
             <ScrollReveal>
-              <section className="py-24 max-w-7xl mx-auto px-6 border-b border-stone/10">
+              <section className="py-12 md:py-24 max-w-7xl mx-auto px-6 border-b border-stone/10">
                 <SectionHeading 
                   eyebrow="Signature Selections" 
                   title="The Bestsellers Row" 
                   className="mb-16"
                 />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                   {bestsellerProducts.map((prod) => (
                     <ProductCard 
                       key={prod.id} 
@@ -974,7 +984,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
 
             {/* 6. Founder strip */}
             <ScrollReveal>
-              <section className="bg-cocoa text-cream py-20 text-left">
+              <section className="bg-cocoa text-cream py-10 md:py-20 text-left">
                 <Container className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                   <div className="aspect-[3/4] bg-[#D7CCC8]/10 max-w-sm mx-auto w-full p-2 border border-primary/20 relative rounded-2xl overflow-hidden shadow-xl">
                     <div className="absolute inset-2 bg-cover bg-center rounded-xl" style={{ backgroundImage: "url('/images/chef-shalini-portrait.jpg')" }} />
@@ -1014,7 +1024,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
 
             {/* 7. Shop by Category */}
             <ScrollReveal>
-              <section className="py-24 max-w-7xl mx-auto px-6 border-b border-stone/10">
+              <section className="py-12 md:py-24 max-w-7xl mx-auto px-6 border-b border-stone/10">
                 <SectionHeading 
                   eyebrow="Gourmet Catalog" 
                   title="Shop by Category" 
@@ -1059,7 +1069,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
 
             {/* The Healthy Edit Section */}
             <ScrollReveal>
-              <section className="py-24 bg-[#FAF6EE]/60 border-b border-stone/10">
+              <section className="py-12 md:py-24 bg-[#FAF6EE]/60 border-b border-stone/10">
                 <div className="max-w-7xl mx-auto px-6 space-y-12">
                   <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 text-left">
                     <div className="space-y-3">
@@ -1091,6 +1101,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     <div 
                       id="healthy-edit-carousel"
                       className="flex gap-6 overflow-x-auto scroll-smooth scrollbar-none snap-x snap-mandatory pb-6"
+                      style={{ WebkitOverflowScrolling: "touch" }}
                     >
                       {(() => {
                         let healthyEditProducts = productsList.filter(p => p.category === "Healthy").slice(0, 6);
@@ -1155,7 +1166,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
 
             {/* 9. Reviews */}
             <ScrollReveal>
-              <section className="py-24 max-w-7xl mx-auto px-6 border-b border-stone/10 bg-cream/20">
+              <section className="py-12 md:py-24 max-w-7xl mx-auto px-6 border-b border-stone/10 bg-cream/20">
                 <SectionHeading 
                   eyebrow="Patron Appreciations" 
                   title="Customer Testimonials" 
@@ -1212,7 +1223,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
             </ScrollReveal>
 
             {/* 10. Final CTA */}
-            <section className="bg-cocoa text-cream py-20 text-center relative overflow-hidden">
+            <section className="bg-cocoa text-cream py-10 md:py-20 text-center relative overflow-hidden">
               <div className="absolute inset-0 bg-cover bg-center opacity-10" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1517433456452-f9633a875f6f?q=80&w=1200&auto=format&fit=crop')" }} />
               <Container className="relative z-10 space-y-6">
                 <span className="text-xs uppercase tracking-[0.3em] text-gold font-bold font-sans block">Begin Your Story</span>
@@ -1253,7 +1264,10 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
             </div>
 
             {/* Premium Category Tabs */}
-            <div className="flex border-b border-stone/20 overflow-x-auto gap-8 mb-12 pb-3 scrollbar-none">
+            <div 
+              className="flex border-b border-stone/20 overflow-x-auto gap-8 mb-12 pb-3 scrollbar-none"
+              style={{ WebkitOverflowScrolling: "touch" }}
+            >
               {CATEGORIES.map(tab => (
                 <button
                   key={tab}
@@ -1441,7 +1455,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
         {currentPage === "story" && (
           <div className="w-full">
             {/* Elegant Hero Header */}
-            <section className="py-20 text-center max-w-4xl mx-auto px-6 space-y-6">
+            <section className="py-10 md:py-20 text-center max-w-4xl mx-auto px-6 space-y-6">
               <span className="text-xs uppercase tracking-[0.35em] text-primary font-bold font-sans">Our Story</span>
               <h1 className="font-serif text-4xl md:text-7xl font-light tracking-tight leading-tight">
                 From a Taj kitchen,<br />
@@ -1500,7 +1514,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
             </section>
 
             {/* Three Trust Pillars Grid */}
-            <section className="bg-cocoa text-cream py-24 text-left">
+            <section className="bg-cocoa text-cream py-12 md:py-24 text-left">
               <Container className="space-y-16">
                 <div className="text-center space-y-3">
                   <span className="text-xs uppercase tracking-[0.3em] text-primary font-bold font-sans">Our Core Values</span>
@@ -1545,7 +1559,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
             ROUTER 2: INTERACTIVE PRODUCT DETAIL
             ========================================== */}
         {currentPage === "product" && (
-          <section className="max-w-6xl mx-auto px-6 py-20 text-left">
+          <section className="max-w-6xl mx-auto px-6 py-10 md:py-20 text-left">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
               
               {/* Product Media Column - 6 Columns */}
@@ -1682,7 +1696,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                 {(() => {
                   const isLocalOnly = selectedProduct.delivery_scope === "local";
                   return (
-                    <div className="border border-stone/20 p-6 rounded-2xl bg-cream/40 space-y-4">
+                    <div id="pincode-checker-section" className="border border-stone/20 p-6 rounded-2xl bg-cream/40 space-y-4">
                       <div className="space-y-1">
                         <h4 className="font-serif text-base font-semibold text-cocoa flex items-center gap-1.5">
                           <MapPin size={16} className="text-gold" />
@@ -1699,14 +1713,16 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                         <input
                           type="text"
                           maxLength={6}
+                          inputMode="numeric"
+                          pattern="[0-9]*"
                           value={pincode}
                           onChange={e => setPincode(e.target.value.replace(/\D/g, ""))}
                           placeholder="Enter 6-digit Pincode"
-                          className="flex-grow px-4 py-3 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary rounded-xl"
+                          className="flex-grow h-11 px-4 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary rounded-xl"
                         />
                         <button
                           type="submit"
-                          className="px-6 py-3 bg-cocoa text-cream text-[10px] font-sans font-bold uppercase tracking-widest hover:bg-primary transition-all rounded-xl"
+                          className="px-6 h-11 bg-cocoa text-cream text-[10px] font-sans font-bold uppercase tracking-widest hover:bg-primary transition-all rounded-xl cursor-pointer"
                         >
                           Verify
                         </button>
@@ -1975,6 +1991,42 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                 })()}
               </div>
             </div>
+
+            {/* Sticky Mobile Cart Bar */}
+            <div className="fixed bottom-0 left-0 right-0 z-30 bg-cream/95 backdrop-blur-sm border-t border-gold/20 p-4 flex items-center justify-between gap-4 shadow-2xl md:hidden">
+              <div className="flex items-center gap-3 min-w-0">
+                <img 
+                  src={resolveImageUrl(selectedProduct.image)} 
+                  alt={selectedProduct.name} 
+                  className="w-10 h-10 object-cover rounded-lg border border-cocoa/10 shrink-0" 
+                />
+                <div className="min-w-0 text-left">
+                  <h4 className="font-serif text-sm font-bold text-cocoa leading-tight truncate">{selectedProduct.name}</h4>
+                  <p className="font-sans text-[11px] text-primary font-bold mt-0.5">₹{selectedProduct.price}</p>
+                </div>
+              </div>
+              
+              {serviceStatus === "serviceable" ? (
+                <button
+                  onClick={handleAddToCart}
+                  className="h-11 px-5 bg-cocoa hover:bg-primary text-cream text-[10px] font-sans font-bold uppercase tracking-widest transition-all rounded-xl shadow-md flex items-center gap-2 cursor-pointer shrink-0"
+                >
+                  <ShoppingBag size={12} />
+                  <span>Add to Bag</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    document.getElementById("pincode-checker-section")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="h-11 px-5 bg-gold hover:bg-cocoa text-cream text-[10px] font-sans font-bold uppercase tracking-widest transition-all rounded-xl shadow-md flex items-center gap-1.5 cursor-pointer shrink-0"
+                >
+                  <MapPin size={12} />
+                  <span>Verify Pincode</span>
+                </button>
+              )}
+            </div>
+
           </section>
         )}
 
@@ -1982,7 +2034,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
             ROUTER 3: MOBILE-FIRST UNIFIED CHECKOUT
             ========================================== */}
         {currentPage === "checkout" && (
-          <section className="max-w-6xl mx-auto px-6 py-20 text-left">
+          <section className="max-w-6xl mx-auto px-6 py-10 md:py-20 text-left">
             <h1 className="font-serif text-3xl md:text-5xl font-medium tracking-tight mb-12 border-b border-cocoa/15 pb-6">
               Bespoke Transaction Desk
             </h1>
@@ -2024,7 +2076,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                           value={custName}
                           onChange={e => setCustName(e.target.value)}
                           placeholder="Shalini Singh"
-                          className="w-full px-4 py-3 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary"
+                          className="w-full h-11 px-4 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary rounded-xl"
                         />
                       </div>
                       <div className="space-y-1">
@@ -2035,7 +2087,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                           value={custPhone}
                           onChange={e => setCustPhone(e.target.value.replace(/\D/g, ""))}
                           placeholder="7906759188"
-                          className="w-full px-4 py-3 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary"
+                          className="w-full h-11 px-4 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary rounded-xl"
                         />
                       </div>
                       <div className="sm:col-span-2 space-y-1">
@@ -2046,7 +2098,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                           value={custEmail}
                           onChange={e => setCustEmail(e.target.value)}
                           placeholder="patron@thesugarstory.co.in"
-                          className="w-full px-4 py-3 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary"
+                          className="w-full h-11 px-4 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary rounded-xl"
                         />
                       </div>
                     </div>
@@ -2067,7 +2119,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                           value={custAddress}
                           onChange={e => setCustAddress(e.target.value)}
                           placeholder="Flat no., block, street or colony, Bhopal"
-                          className="w-full px-4 py-3 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary"
+                          className="w-full h-11 px-4 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary rounded-xl"
                         />
                       </div>
                       <div className="grid grid-cols-2 gap-4">
@@ -2076,11 +2128,13 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                           <input
                             type="text"
                             maxLength={6}
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             required
                             value={pincode}
                             onChange={e => setPincode(e.target.value.replace(/\D/g, ""))}
                             placeholder="e.g. 462016"
-                            className="w-full px-4 py-3 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary"
+                            className="w-full h-11 px-4 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary rounded-xl"
                           />
                         </div>
                         <div className="space-y-1">
@@ -2089,7 +2143,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                             type="text"
                             disabled
                             value="Bhopal"
-                            className="w-full px-4 py-3 bg-cocoa/5 border border-cocoa/20 text-xs font-sans text-stone cursor-not-allowed"
+                            className="w-full h-11 px-4 bg-cocoa/5 border border-cocoa/20 text-xs font-sans text-stone cursor-not-allowed rounded-xl"
                           />
                         </div>
                       </div>
@@ -2111,7 +2165,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                           value={deliveryDate}
                           onChange={e => setDeliveryDate(e.target.value)}
                           min={new Date().toISOString().split('T')[0]}
-                          className="w-full px-4 py-3 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary"
+                          className="w-full h-11 px-4 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary rounded-xl"
                         />
                       </div>
                       <div className="space-y-1">
@@ -2119,7 +2173,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                         <select 
                           value={deliverySlot}
                           onChange={e => setDeliverySlot(e.target.value)}
-                          className="w-full px-4 py-3 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary"
+                          className="w-full h-11 px-4 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary rounded-xl"
                         >
                           {DELIVERY_SLOTS.map(sl => <option key={sl} value={sl}>{sl}</option>)}
                         </select>
@@ -2140,7 +2194,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                         value={cakeMessage}
                         onChange={e => setCakeMessage(e.target.value)}
                         placeholder="e.g. Write 'Happy Birthday Shalini' on the tag, keep cookies eggless..."
-                        className="w-full px-4 py-3 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary h-24 resize-none"
+                        className="w-full px-4 py-3 bg-cream border border-cocoa/30 text-xs font-sans focus:outline-none focus:border-primary h-24 resize-none rounded-xl"
                       />
                       <div className="flex justify-between text-[9px] font-sans text-stone uppercase">
                         <span>Directives for custom cake inscription</span>
@@ -2370,7 +2424,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
             ROUTER 4: SUCCESS RECEIPT & GRATITUDE
             ========================================== */}
         {currentPage === "confirm" && (
-          <section className="max-w-3xl mx-auto px-6 py-24 text-center space-y-12">
+          <section className="max-w-3xl mx-auto px-6 py-12 md:py-24 text-center space-y-12">
             <div className="space-y-4 flex flex-col items-center">
               <Check className="text-gold w-16 h-16 border-2 border-gold rounded-full p-2.5 animate-pulse" />
               <span className="text-[10px] font-sans text-gold uppercase tracking-[0.3em] font-semibold">Payment webhook success</span>
@@ -2551,7 +2605,10 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
               // Administrative Panel Workspace
               <div className="space-y-6 text-left">
                 {/* Tabs Selector */}
-                <div className="flex border-b border-cocoa/10 font-sans text-[10px] uppercase tracking-widest font-bold">
+                <div 
+                  className="flex border-b border-cocoa/10 font-sans text-[10px] uppercase tracking-widest font-bold overflow-x-auto whitespace-nowrap scrollbar-none flex-nowrap"
+                  style={{ WebkitOverflowScrolling: "touch" }}
+                >
                   <button 
                     onClick={() => { setAdminTab("orders"); fetchAdminOrders(); }}
                     className={`px-6 py-3 border-b-2 transition-all ${adminTab === "orders" ? "border-gold text-cocoa bg-cream/40" : "border-transparent text-stone hover:text-cocoa"}`}
@@ -3247,7 +3304,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
             ROUTER 6: PREMIUM 404 FALLBACK PAGE
             ========================================== */}
         {!["home", "shop", "cart", "product", "checkout", "confirm", "story", "admin"].includes(currentPage) && (
-          <section className="max-w-md mx-auto px-6 py-24 text-center space-y-6">
+          <section className="max-w-md mx-auto px-6 py-12 md:py-24 text-center space-y-6">
             <h1 className="font-serif text-6xl text-gold font-light animate-pulse">404</h1>
             <h2 className="font-serif text-2xl font-semibold text-cocoa">This page wandered out of the kitchen.</h2>
             <p className="font-sans text-stone text-xs leading-relaxed">
@@ -3331,7 +3388,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
         href="https://wa.me/917906759188?text=Hello%20Chef%20Shalini!%20I%20would%20love%20to%20explore%20customized%20celebration%20bakes."
         target="_blank"
         rel="noreferrer"
-        className="fixed bottom-6 right-6 z-40 bg-[#C9962B] hover:bg-[#1F1410] text-[#F6EFE3] p-4 rounded-full shadow-2xl hover:scale-115 active:scale-95 transition-all duration-300 flex items-center justify-center border border-[#C9962B]/20 group cursor-pointer"
+        className={`fixed z-40 bg-[#C9962B] hover:bg-[#1F1410] text-[#F6EFE3] p-4 rounded-full shadow-2xl hover:scale-115 active:scale-95 transition-all duration-300 flex items-center justify-center border border-[#C9962B]/20 group cursor-pointer ${currentPage === "product" ? "bottom-24 md:bottom-6 right-6" : "bottom-6 right-6"}`}
         aria-label="Contact Chef on WhatsApp"
       >
         <MessageCircle size={24} className="fill-current stroke-none text-[#F6EFE3]" />
@@ -3339,6 +3396,110 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
           Order on WhatsApp
         </span>
       </a>
+
+      {/* 4. Mobile slide-in menu drawer */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex justify-end md:hidden">
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-cocoa/40 backdrop-blur-xs transition-opacity duration-300"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          {/* Menu Panel */}
+          <div className="relative w-80 max-w-full bg-cream h-full shadow-2xl flex flex-col justify-between p-8 border-l border-gold/20 text-cocoa z-10 transition-transform duration-300 ease-out">
+            {/* Close button */}
+            <button 
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="absolute top-6 right-6 text-stone hover:text-cocoa transition-colors cursor-pointer p-1"
+              aria-label="Close menu"
+            >
+              <X size={24} />
+            </button>
+
+            {/* Content list */}
+            <div className="mt-12 space-y-8 text-left">
+              <div>
+                <h3 className="font-serif text-2xl italic tracking-wide text-cocoa pb-4 border-b border-cocoa/10">the sugar story</h3>
+                <p className="font-sans text-[10px] tracking-widest text-primary uppercase font-bold mt-2">Bhopal Patisserie</p>
+              </div>
+
+              <nav className="flex flex-col gap-6 font-serif text-2xl font-medium text-left">
+                <button 
+                  onClick={() => {
+                    setCurrentPage("shop");
+                    setSelectedCategoryTab("Jar Cakes"); // Default active category
+                    setIsMobileMenuOpen(false);
+                    window.scrollTo(0, 0);
+                  }} 
+                  className="hover:text-primary transition-colors cursor-pointer text-left py-1"
+                >
+                  Shop Catalog
+                </button>
+                <button 
+                  onClick={() => {
+                    setCurrentPage("story");
+                    setIsMobileMenuOpen(false);
+                    window.scrollTo(0, 0);
+                  }} 
+                  className="hover:text-primary transition-colors cursor-pointer text-left py-1"
+                >
+                  Our Story
+                </button>
+                <button 
+                  onClick={() => {
+                    setSelectedCategoryTab("Healthy");
+                    setCurrentPage("shop");
+                    setIsMobileMenuOpen(false);
+                    window.scrollTo(0, 0);
+                  }} 
+                  className="hover:text-primary transition-colors cursor-pointer text-left py-1 flex items-center justify-between"
+                >
+                  <span>The Healthy Edit</span>
+                  <span className="bg-gold text-cream text-[9px] font-sans uppercase tracking-[0.15em] px-2 py-0.5 rounded font-bold">New</span>
+                </button>
+                <button 
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    handleContactClick();
+                  }} 
+                  className="hover:text-primary transition-colors cursor-pointer text-left py-1"
+                >
+                  Contact Chef
+                </button>
+              </nav>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="space-y-6 pt-6 border-t border-cocoa/10 font-sans text-xs text-left">
+              <button
+                onClick={() => {
+                  setCurrentPage("cart");
+                  setIsMobileMenuOpen(false);
+                  window.scrollTo(0, 0);
+                }}
+                className="w-full py-3.5 bg-cocoa hover:bg-primary text-cream text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-colors cursor-pointer rounded-xl shadow-md"
+              >
+                <ShoppingBag size={14} />
+                <span>Bag ({cart.length})</span>
+              </button>
+
+              <a 
+                href="https://wa.me/917906759188?text=Hello%20Chef%20Shalini!%20I'd%20like%20to%20place%20an%20order."
+                target="_blank"
+                rel="noreferrer"
+                className="w-full py-3.5 border border-[#25D366] text-[#25D366] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#25D366]/5 transition-all text-center rounded-xl"
+              >
+                <MessageCircle size={14} className="fill-current stroke-none" />
+                <span>WhatsApp Order Line</span>
+              </a>
+
+              <div className="text-[10px] text-stone text-center tracking-wide">
+                Arera Colony, Bhopal
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
