@@ -121,13 +121,28 @@ IMAGE_CATEGORIES_MAPPING = {
 }
 
 # Attach complete ids, available statuses, and image hooks
+def get_slug(name: str) -> str:
+    n = name.replace(' (Half Kg)', '').replace(' (1 Kg)', '')
+    n = n.replace('&', ' ').replace('-', ' ').replace('/', ' ').replace(',', '')
+    n = n.lower().strip()
+    words = n.split()
+    return '-'.join(words) + '.png'
+
+# Path to the generated images directory
+IMAGES_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend", "public", "images", "products"))
+
 for idx, p in enumerate(PRODUCTS_SEED_LIST):
     p["id"] = str(uuid.uuid5(uuid.NAMESPACE_DNS, p["name"]))
     p["is_available"] = True
-    p["image"] = IMAGE_CATEGORIES_MAPPING.get(p["category"], "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop")
+    slug = get_slug(p["name"])
+    if os.path.exists(os.path.join(IMAGES_DIR, slug)):
+        p["image"] = f"/images/products/{slug}"
+    else:
+        p["image"] = IMAGE_CATEGORIES_MAPPING.get(p["category"], "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop")
     p["created_at"] = datetime.now().isoformat()
     # Backfill delivery_scope for existing items
     p["delivery_scope"] = "local" if (p["category"] in ["Cakes", "Cheesecakes"] or "theme cake" in p["name"].lower()) else "pan_india"
+
 
 # Complete list of 74 exact Healthy products
 HEALTHY_PRODUCTS_SEED_LIST = [
@@ -802,6 +817,12 @@ HEALTHY_PRODUCTS_SEED_LIST = [
 # Generate stable IDs and attributes for the 74 Healthy products list
 HEALTHY_PRODUCTS_FINAL = []
 for p in HEALTHY_PRODUCTS_SEED_LIST:
+    slug = get_slug(p["name"])
+    if os.path.exists(os.path.join(IMAGES_DIR, slug)):
+        img_path = f"/images/products/{slug}"
+    else:
+        img_path = "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop"
+        
     p_final = {
         "id": str(uuid.uuid5(uuid.NAMESPACE_DNS, p["name"])),
         "name": p["name"],
@@ -810,7 +831,7 @@ for p in HEALTHY_PRODUCTS_SEED_LIST:
         "weight": p["weight"],
         "min_quantity": 1,
         "description": p["description"],
-        "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=400&auto=format&fit=crop",
+        "image": img_path,
         "is_available": True,
         "delivery_scope": p["delivery_scope"],
         "subtype": p["subtype"],
@@ -818,6 +839,7 @@ for p in HEALTHY_PRODUCTS_SEED_LIST:
         "created_at": datetime.now().isoformat()
     }
     HEALTHY_PRODUCTS_FINAL.append(p_final)
+
 
 # Append healthy items to the master seed list so they are available in memory fallback
 PRODUCTS_SEED_LIST.extend(HEALTHY_PRODUCTS_FINAL)
@@ -862,6 +884,22 @@ async def connect_and_seed_db():
                 seeded_count += 1
                 
         print(f"✓ Idempotently seeded {seeded_count} new Healthy products to MongoDB (out of 74 total).")
+
+        # 3. Update existing MongoDB documents with new local image paths if the file exists
+        db_products = await products_col.find({}).to_list(length=None)
+        db_updated_count = 0
+        for doc in db_products:
+            slug = get_slug(doc["name"])
+            if os.path.exists(os.path.join(IMAGES_DIR, slug)):
+                new_image_path = f"/images/products/{slug}"
+                if doc.get("image") != new_image_path:
+                    await products_col.update_one(
+                        {"_id": doc["_id"]},
+                        {"$set": {"image": new_image_path}}
+                    )
+                    db_updated_count += 1
+        print(f"✓ One-time migration: updated {db_updated_count} product image paths in MongoDB.")
+
 
     except Exception as e:
         print(f"⚠ MongoDB connection failed. Staging memory fallback framework: {e}")
