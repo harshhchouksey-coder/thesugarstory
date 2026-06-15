@@ -244,7 +244,7 @@ const DELIVERY_SLOTS = [
 // Reusable premium styling components
 function Container({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`max-w-7xl mx-auto px-6 w-full ${className}`}>
+    <div className={`max-w-7xl mx-auto px-4 sm:px-6 w-full ${className}`}>
       {children}
     </div>
   );
@@ -377,23 +377,25 @@ function ProductCard({
         </div>
       </div>
 
-      <div className="flex justify-between items-center border-t border-stone/10 pt-3 mt-4">
-        <span className="font-serif text-lg font-bold text-cocoa">
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 border-t border-stone/10 pt-3 mt-4">
+        <span className="font-serif text-lg font-bold text-cocoa text-left">
           ₹{product.price}
         </span>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
           {onQuickWhatsApp && (
             <button
+              type="button"
               onClick={() => onQuickWhatsApp(product)}
-              className="p-3 md:p-2 border border-[#25D366]/40 hover:bg-[#25D366]/5 rounded-lg text-[#25D366] transition-all cursor-pointer"
+              className="p-3 md:p-2 border border-[#25D366]/40 hover:bg-[#25D366]/5 rounded-lg text-[#25D366] transition-all cursor-pointer flex-shrink-0 flex items-center justify-center min-h-[44px] min-w-[44px]"
               title="Order on WhatsApp"
             >
               <MessageCircle size={14} className="fill-current stroke-none" />
             </button>
           )}
           <button
+            type="button"
             onClick={() => onSelect(product)}
-            className="px-5 py-3 md:px-4 md:py-2 bg-primary hover:bg-cocoa text-cream text-[10px] font-sans font-bold uppercase tracking-widest transition-all rounded-lg cursor-pointer"
+            className="flex-grow sm:flex-grow-0 px-4 py-2.5 md:px-4 md:py-2 bg-primary hover:bg-cocoa text-cream text-[10px] font-sans font-bold uppercase tracking-widest transition-all rounded-lg cursor-pointer text-center flex items-center justify-center min-h-[44px]"
           >
             Select
           </button>
@@ -867,7 +869,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
   ];
 
   return (
-    <div className="min-h-screen bg-cream text-cocoa font-sans flex flex-col justify-between selection:bg-primary selection:text-cream">
+    <div className="min-h-screen bg-cream text-cocoa font-sans flex flex-col justify-between selection:bg-primary selection:text-cream overflow-x-hidden w-full max-w-full">
       
       {/* 1. Thin announcement bar */}
       <div className="bg-primary text-cream text-[10px] tracking-[0.2em] py-2 text-center uppercase font-sans font-semibold px-4 border-b border-stone/10">
@@ -897,12 +899,12 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                 setCurrentPage("cart");
                 window.scrollTo(0, 0);
               }} 
-              className="relative p-2 text-cocoa hover:text-primary transition-colors cursor-pointer"
+              className="relative p-3 text-cocoa hover:text-primary transition-colors cursor-pointer"
               aria-label="Bag"
             >
               <ShoppingBag size={20} strokeWidth={1.8} />
               {cart.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-gold text-cream text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold">
+                <span className="absolute top-1 right-1 bg-gold text-cream text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold">
                   {cart.length}
                 </span>
               )}
@@ -920,7 +922,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
 
             <button 
               onClick={() => setIsMobileMenuOpen(true)}
-              className="p-2 text-cocoa hover:text-primary transition-colors cursor-pointer md:hidden"
+              className="p-3 text-cocoa hover:text-primary transition-colors cursor-pointer md:hidden"
               aria-label="Open Menu"
             >
               <Menu size={22} />
@@ -1100,7 +1102,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                   </div>
 
                   {/* Horizontal Scroll Carousel */}
-                  <div className="relative">
+                  <div className="relative -mx-4 px-4 sm:-mx-6 sm:px-6 md:mx-0 md:px-0">
                     <div 
                       id="healthy-edit-carousel"
                       className="flex gap-6 overflow-x-auto scroll-smooth scrollbar-none snap-x snap-mandatory pb-6"
@@ -1268,7 +1270,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
 
             {/* Premium Category Tabs */}
             <div 
-              className="flex border-b border-stone/20 overflow-x-auto gap-8 mb-12 pb-3 scrollbar-none"
+              className="flex border-b border-stone/20 overflow-x-auto gap-8 mb-12 pb-3 scrollbar-none -mx-4 px-4 sm:-mx-6 sm:px-6 md:mx-0 md:px-0"
               style={{ WebkitOverflowScrolling: "touch" }}
             >
               {CATEGORIES.map(tab => (
@@ -1348,15 +1350,15 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     </p>
                   </div>
                   {cart.map((item, idx) => (
-                    <div key={idx} className="flex gap-6 border border-stone/20 p-6 rounded-2xl bg-cream/40">
+                    <div key={idx} className="flex gap-4 sm:gap-6 border border-stone/20 p-4 sm:p-6 rounded-2xl bg-cream/40">
                       <div 
-                        className="w-24 h-24 bg-cocoa/5 bg-cover bg-center border border-stone/20 rounded-xl flex-shrink-0" 
+                        className="w-20 h-20 sm:w-24 sm:h-24 bg-cocoa/5 bg-cover bg-center border border-stone/20 rounded-xl flex-shrink-0" 
                         style={{ backgroundImage: `url(${resolveImageUrl(item.image)})` }} 
                       />
                       <div className="flex-grow flex flex-col justify-between">
                         <div className="flex justify-between items-start gap-4">
                           <div>
-                            <h3 className="font-serif text-xl font-semibold text-cocoa leading-tight">{item.name}</h3>
+                            <h3 className="font-serif text-base sm:text-xl font-semibold text-cocoa leading-tight">{item.name}</h3>
                             <p className="text-[10px] font-sans text-stone uppercase tracking-wider font-semibold mt-1">
                               {item.weight} • ₹{item.price} each
                             </p>
@@ -1364,7 +1366,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                           <button 
                             type="button"
                             onClick={() => handleRemoveFromCart(item.id, item.isEggless)}
-                            className="text-stone hover:text-red-700 transition-colors p-1 bg-transparent border-none cursor-pointer"
+                            className="text-stone hover:text-red-700 transition-colors p-2 bg-transparent border-none cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
                             title="Remove item"
                           >
                             <Trash2 size={16} />
@@ -1378,7 +1380,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                               type="button"
                               disabled={item.quantity <= (item.min_quantity || 1)}
                               onClick={() => handleUpdateQuantity(item.id, item.isEggless, -1)}
-                              className="w-6 h-6 rounded-md bg-cocoa/5 hover:bg-cocoa/10 text-cocoa disabled:opacity-40 flex items-center justify-center font-sans font-bold text-xs transition-colors cursor-pointer"
+                              className="w-9 h-9 sm:w-6 sm:h-6 rounded-lg sm:rounded-md bg-cocoa/5 hover:bg-cocoa/10 text-cocoa disabled:opacity-40 flex items-center justify-center font-sans font-bold text-sm sm:text-xs transition-colors cursor-pointer"
                             >
                               –
                             </button>
@@ -1386,7 +1388,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                             <button 
                               type="button"
                               onClick={() => handleUpdateQuantity(item.id, item.isEggless, 1)}
-                              className="w-6 h-6 rounded-md bg-cocoa/5 hover:bg-cocoa/10 text-cocoa flex items-center justify-center font-sans font-bold text-xs transition-colors cursor-pointer"
+                              className="w-9 h-9 sm:w-6 sm:h-6 rounded-lg sm:rounded-md bg-cocoa/5 hover:bg-cocoa/10 text-cocoa flex items-center justify-center font-sans font-bold text-sm sm:text-xs transition-colors cursor-pointer"
                             >
                               +
                             </button>
@@ -1397,7 +1399,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                             )}
                           </div>
 
-                          <span className="font-serif text-lg font-bold text-cocoa">
+                          <span className="font-serif text-base sm:text-lg font-bold text-cocoa">
                             ₹{item.price * item.quantity}
                           </span>
                         </div>
@@ -1798,7 +1800,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                                 key={date}
                                 type="button"
                                 onClick={() => setDeliveryDate(date)}
-                                className={`px-3.5 py-2 border text-[9px] font-sans uppercase tracking-widest whitespace-nowrap transition-all rounded-lg ${deliveryDate === date ? "bg-primary text-cream border-primary" : "bg-cream text-cocoa border-cocoa/20 hover:border-primary"}`}
+                                className={`px-3.5 py-3 sm:py-2 border text-[10px] sm:text-[9px] font-sans uppercase tracking-widest whitespace-nowrap transition-all rounded-lg min-h-[44px] ${deliveryDate === date ? "bg-primary text-cream border-primary" : "bg-cream text-cocoa border-cocoa/20 hover:border-primary"}`}
                               >
                                 {date}
                               </button>
@@ -1811,7 +1813,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                                 key={slot}
                                 type="button"
                                 onClick={() => setDeliverySlot(slot)}
-                                className={`p-3 border text-left font-sans text-xs flex justify-between items-center transition-all rounded-lg ${deliverySlot === slot ? "bg-primary/10 border-primary ring-1 ring-primary" : "bg-cream border-cocoa/20"}`}
+                                className={`p-3.5 sm:p-3 border text-left font-sans text-xs flex justify-between items-center transition-all rounded-lg min-h-[44px] ${deliverySlot === slot ? "bg-primary/10 border-primary ring-1 ring-primary" : "bg-cream border-cocoa/20"}`}
                               >
                                 <span>{slot}</span>
                               </button>
@@ -1832,15 +1834,15 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     </h3>
 
                     {/* Eggless */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 py-1 cursor-pointer select-none">
                       <input
                         type="checkbox"
                         id="eggless-home"
                         checked={isEggless}
                         onChange={e => setIsEggless(e.target.checked)}
-                        className="w-4 h-4 text-primary bg-cream border-cocoa/30 focus:ring-0 cursor-pointer"
+                        className="w-5 h-5 text-primary bg-cream border-cocoa/30 focus:ring-0 cursor-pointer"
                       />
-                      <label htmlFor="eggless-home" className="font-sans text-xs font-semibold uppercase tracking-wider text-cocoa cursor-pointer">
+                      <label htmlFor="eggless-home" className="font-sans text-xs font-semibold uppercase tracking-wider text-cocoa cursor-pointer py-1 flex-grow">
                         100% Eggless Preparation
                       </label>
                     </div>
@@ -1874,15 +1876,15 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                       type="button"
                       disabled={selectedQty <= (selectedProduct.min_quantity || 1)}
                       onClick={() => setSelectedQty(selectedQty - 1)}
-                      className="w-8 h-8 rounded-lg bg-cocoa/5 hover:bg-cocoa/10 text-cocoa disabled:opacity-40 flex items-center justify-center font-sans font-bold text-sm transition-colors cursor-pointer"
+                      className="w-11 h-11 sm:w-8 sm:h-8 rounded-lg bg-cocoa/5 hover:bg-cocoa/10 text-cocoa disabled:opacity-40 flex items-center justify-center font-sans font-bold text-base sm:text-sm transition-colors cursor-pointer"
                     >
                       –
                     </button>
-                    <span className="font-sans text-sm font-bold text-cocoa w-6 text-center">{selectedQty}</span>
+                    <span className="font-sans text-base sm:text-sm font-bold text-cocoa w-6 text-center">{selectedQty}</span>
                     <button
                       type="button"
                       onClick={() => setSelectedQty(selectedQty + 1)}
-                      className="w-8 h-8 rounded-lg bg-cocoa/5 hover:bg-cocoa/10 text-cocoa flex items-center justify-center font-sans font-bold text-sm transition-colors cursor-pointer"
+                      className="w-11 h-11 sm:w-8 sm:h-8 rounded-lg bg-cocoa/5 hover:bg-cocoa/10 text-cocoa flex items-center justify-center font-sans font-bold text-base sm:text-sm transition-colors cursor-pointer"
                     >
                       +
                     </button>
@@ -2036,41 +2038,55 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
             </div>
 
             {/* Sticky Mobile Cart Bar */}
-            <div className="fixed bottom-0 left-0 right-0 z-30 bg-cream/95 backdrop-blur-sm border-t border-gold/20 p-4 flex items-center justify-between gap-4 shadow-2xl md:hidden">
-              <div className="flex items-center gap-3 min-w-0">
-                <img 
-                  src={resolveImageUrl(selectedProduct.image)} 
-                  alt={selectedProduct.name} 
-                  className="w-10 h-10 object-cover rounded-lg border border-cocoa/10 shrink-0" 
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = IMAGE_CATEGORIES_MAPPING[selectedProduct.category] || "https://images.unsplash.com/photo-1587314168485-3236d6710814?q=80&w=400&auto=format&fit=crop";
-                  }}
-                />
-                <div className="min-w-0 text-left">
-                  <h4 className="font-serif text-sm font-bold text-cocoa leading-tight truncate">{selectedProduct.name}</h4>
-                  <p className="font-sans text-[11px] text-primary font-bold mt-0.5">₹{selectedProduct.price}</p>
-                </div>
+            <div className="fixed bottom-0 left-0 right-0 z-30 bg-cream/95 backdrop-blur-sm border-t border-gold/20 px-4 py-3.5 flex items-center justify-between gap-3 shadow-2xl md:hidden">
+              <div className="flex flex-col items-start min-w-0 text-left">
+                <span className="text-[9px] uppercase tracking-wider text-stone font-semibold">Total Price</span>
+                <span className="font-serif text-lg font-bold text-primary leading-tight">₹{selectedProduct.price * selectedQty}</span>
               </div>
               
-              {serviceStatus === "serviceable" ? (
-                <button
-                  onClick={handleAddToCart}
-                  className="h-11 px-5 bg-cocoa hover:bg-primary text-cream text-[10px] font-sans font-bold uppercase tracking-widest transition-all rounded-xl shadow-md flex items-center gap-2 cursor-pointer shrink-0"
-                >
-                  <ShoppingBag size={12} />
-                  <span>Add to Bag</span>
-                </button>
-              ) : (
-                <button
-                  onClick={() => {
-                    document.getElementById("pincode-checker-section")?.scrollIntoView({ behavior: "smooth" });
-                  }}
-                  className="h-11 px-5 bg-gold hover:bg-cocoa text-cream text-[10px] font-sans font-bold uppercase tracking-widest transition-all rounded-xl shadow-md flex items-center gap-1.5 cursor-pointer shrink-0"
-                >
-                  <MapPin size={12} />
-                  <span>Verify Pincode</span>
-                </button>
-              )}
+              <div className="flex items-center gap-2.5 shrink-0">
+                {/* Mini Stepper */}
+                <div className="flex items-center gap-1 bg-cocoa/5 p-0.5 rounded-lg border border-cocoa/10">
+                  <button
+                    type="button"
+                    disabled={selectedQty <= (selectedProduct.min_quantity || 1)}
+                    onClick={() => setSelectedQty(selectedQty - 1)}
+                    className="w-8 h-8 rounded bg-cream hover:bg-cocoa/10 text-cocoa disabled:opacity-40 flex items-center justify-center font-sans font-bold text-xs cursor-pointer shadow-xs"
+                  >
+                    –
+                  </button>
+                  <span className="font-sans text-xs font-bold text-cocoa w-5 text-center">{selectedQty}</span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedQty(selectedQty + 1)}
+                    className="w-8 h-8 rounded bg-cream hover:bg-cocoa/10 text-cocoa flex items-center justify-center font-sans font-bold text-xs cursor-pointer shadow-xs"
+                  >
+                    +
+                  </button>
+                </div>
+
+                {serviceStatus === "serviceable" ? (
+                  <button
+                    type="button"
+                    onClick={handleAddToCart}
+                    className="h-9 px-4 bg-cocoa hover:bg-primary text-cream text-[10px] font-sans font-bold uppercase tracking-widest transition-all rounded-lg shadow-md flex items-center gap-1.5 cursor-pointer shrink-0"
+                  >
+                    <ShoppingBag size={12} />
+                    <span>Add</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      document.getElementById("pincode-checker-section")?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className="h-9 px-4 bg-gold hover:bg-cocoa text-cream text-[10px] font-sans font-bold uppercase tracking-widest transition-all rounded-lg shadow-md flex items-center gap-1.5 cursor-pointer shrink-0"
+                  >
+                    <MapPin size={12} />
+                    <span>Verify</span>
+                  </button>
+                )}
+              </div>
             </div>
 
           </section>
@@ -2129,6 +2145,8 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                         <label className="block text-[9px] font-sans uppercase tracking-widest text-stone font-semibold">Mobile *</label>
                         <input
                           type="tel"
+                          inputMode="tel"
+                          pattern="[0-9]*"
                           required
                           value={custPhone}
                           onChange={e => setCustPhone(e.target.value.replace(/\D/g, ""))}
@@ -2250,15 +2268,15 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                   </div>
 
                   {/* WhatsApp consent */}
-                  <div className="p-4 bg-cream border border-cocoa/25 flex items-start gap-3">
+                  <div className="p-4 bg-cream border border-cocoa/25 flex items-start gap-3 py-3.5 cursor-pointer">
                     <input
                       type="checkbox"
                       id="wa-consent"
                       checked={whatsappConsent}
                       onChange={e => setWhatsappConsent(e.target.checked)}
-                      className="w-4 h-4 text-primary bg-cream border-cocoa/30 focus:ring-0 cursor-pointer mt-0.5"
+                      className="w-5 h-5 text-primary bg-cream border-cocoa/30 focus:ring-0 cursor-pointer mt-0.5 flex-shrink-0"
                     />
-                    <label htmlFor="wa-consent" className="font-sans text-[11px] text-cocoa leading-relaxed cursor-pointer select-none">
+                    <label htmlFor="wa-consent" className="font-sans text-[11px] text-cocoa leading-relaxed cursor-pointer select-none flex-grow">
                       Subscribe to our transactional order progress, kitchen dispatch statuses, and baking journals directly on WhatsApp. 
                       <span className="text-stone block mt-0.5 font-semibold">Standard opt-in agreement for @the_sugar_story Business API channels.</span>
                     </label>
@@ -2273,13 +2291,13 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     
                     <div className="space-y-3">
                       {/* Handwritten note */}
-                      <div className={`p-4 border flex items-start gap-4 transition-all ${bumpNote ? "bg-primary/5 border-primary" : "bg-cream border-cocoa/25"}`}>
+                      <div className={`p-4 border flex items-start gap-4 transition-all py-3.5 ${bumpNote ? "bg-primary/5 border-primary" : "bg-cream border-cocoa/25"}`}>
                         <input
                           type="checkbox"
                           id="bump-note-check"
                           checked={bumpNote}
                           onChange={e => setBumpNote(e.target.checked)}
-                          className="w-4 h-4 text-primary border-cocoa/30 focus:ring-0 mt-1 cursor-pointer"
+                          className="w-5 h-5 text-primary border-cocoa/30 focus:ring-0 mt-1 cursor-pointer flex-shrink-0"
                         />
                         <div className="flex-grow space-y-2">
                           <div className="flex justify-between items-baseline">
@@ -2305,13 +2323,13 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                       </div>
 
                       {/* Ladurée Wrapping box */}
-                      <div className={`p-4 border flex items-start gap-4 transition-all ${bumpWrap ? "bg-primary/5 border-primary" : "bg-cream border-cocoa/25"}`}>
+                      <div className={`p-4 border flex items-start gap-4 transition-all py-3.5 ${bumpWrap ? "bg-primary/5 border-primary" : "bg-cream border-cocoa/25"}`}>
                         <input
                           type="checkbox"
                           id="bump-wrap-check"
                           checked={bumpWrap}
                           onChange={e => setBumpWrap(e.target.checked)}
-                          className="w-4 h-4 text-primary border-cocoa/30 focus:ring-0 mt-1 cursor-pointer"
+                          className="w-5 h-5 text-primary border-cocoa/30 focus:ring-0 mt-1 cursor-pointer flex-shrink-0"
                         />
                         <div className="flex-grow space-y-1">
                           <div className="flex justify-between items-baseline">
@@ -2380,7 +2398,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                                 type="button"
                                 disabled={item.quantity <= (item.min_quantity || 1)}
                                 onClick={() => handleUpdateQuantity(item.id, item.isEggless, -1)}
-                                className="w-5 h-5 rounded-full bg-cocoa/5 hover:bg-cocoa/10 text-cocoa disabled:opacity-40 disabled:hover:bg-cocoa/5 flex items-center justify-center font-sans font-bold text-xs transition-colors"
+                                className="w-8 h-8 sm:w-5 sm:h-5 rounded-full bg-cocoa/5 hover:bg-cocoa/10 text-cocoa disabled:opacity-40 disabled:hover:bg-cocoa/5 flex items-center justify-center font-sans font-bold text-xs transition-colors cursor-pointer"
                                 title={`Min quantity: ${item.min_quantity || 1}`}
                               >
                                 –
@@ -2389,7 +2407,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                               <button 
                                 type="button"
                                 onClick={() => handleUpdateQuantity(item.id, item.isEggless, 1)}
-                                className="w-5 h-5 rounded-full bg-cocoa/5 hover:bg-cocoa/10 text-cocoa flex items-center justify-center font-sans font-bold text-xs transition-colors"
+                                className="w-8 h-8 sm:w-5 sm:h-5 rounded-full bg-cocoa/5 hover:bg-cocoa/10 text-cocoa flex items-center justify-center font-sans font-bold text-xs transition-colors cursor-pointer"
                               >
                                 +
                               </button>
@@ -2704,7 +2722,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     </div>
 
                     {/* Orders List */}
-                    <div className="space-y-4">
+                    <div className="space-y-4 overflow-x-auto w-full">
                       {adminOrders.length === 0 ? (
                         <div className="text-center py-12 bg-cream/20 border border-dashed border-cocoa/10 rounded font-sans text-xs text-stone">
                           No orders staged in the database session yet. Create some mock orders on checkout!
@@ -2884,7 +2902,7 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     </div>
 
                     {/* Products Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-x-auto w-full">
                       {productsList
                         .filter(prod => {
                           const term = adminProductsSearch.toLowerCase();
