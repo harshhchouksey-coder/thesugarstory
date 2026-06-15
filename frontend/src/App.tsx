@@ -1287,6 +1287,13 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
               ))}
             </div>
 
+            {/* Slim illustrative banner */}
+            <div className="mb-6 text-left border-b border-stone/10 pb-4">
+              <p className="text-xs font-sans italic text-stone/50 tracking-wide">
+                All images are illustrative — actual handcrafted bakes may vary.
+              </p>
+            </div>
+
             {/* Product Card Grid (2 cols mobile, 3-4 desktop) with Fade-in on Scroll */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
               {activeTabProducts.map(prod => (
@@ -1335,6 +1342,11 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start text-left">
                 {/* Cart items list (8 cols) */}
                 <div className="lg:col-span-8 space-y-6">
+                  <div className="text-left mb-2">
+                    <p className="text-[11px] font-sans italic text-stone/65">
+                      Image for representation only — actual product may vary.
+                    </p>
+                  </div>
                   {cart.map((item, idx) => (
                     <div key={idx} className="flex gap-6 border border-stone/20 p-6 rounded-2xl bg-cream/40">
                       <div 
@@ -1582,6 +1594,11 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                     </span>
                   </div>
                 </div>
+                <div className="text-center mt-2.5">
+                  <p className="text-[11px] font-sans italic text-stone/60 tracking-wide">
+                    Image for representation only — actual product may vary.
+                  </p>
+                </div>
 
                 {/* Gallery Thumbnails Row */}
                 <div className="grid grid-cols-3 gap-4">
@@ -1698,8 +1715,8 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                   </div>
 
                   <p className="font-sans text-stone text-xs md:text-sm leading-relaxed">{selectedProduct.description}</p>
-                  <p className="text-[10px] text-stone/50 italic font-sans mt-2">
-                    * Please note: Product image is an AI-generated representation. The actual handmade bake may differ slightly in decoration and presentation.
+                  <p className="text-[11px] text-stone/60 italic font-sans mt-3 leading-relaxed border-t border-stone/10 pt-3 text-left">
+                    Product images are illustrative and for showcase purposes. Handcrafted items are made fresh to order, so the actual cake or bake may differ slightly in appearance, colour, and decoration from the photo shown.
                   </p>
                 </div>
 
@@ -2439,6 +2456,12 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
                       <div className="flex justify-between items-baseline border-t border-cocoa/15 pt-4 text-base text-cocoa">
                         <span className="font-serif text-lg font-medium">Grand Total</span>
                         <span className="font-serif text-2xl font-bold">₹{totalAmount}</span>
+                      </div>
+                      
+                      <div className="text-center border-t border-cocoa/10 pt-3.5">
+                        <p className="text-[10px] font-sans italic text-stone/50 leading-normal">
+                          Images are for representation; final product is made fresh and may vary.
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -3408,9 +3431,9 @@ Thank you so much! Looking forward to tasting your five-star Taj-quality bakes.`
         </div>
 
         <div className="max-w-6xl mx-auto px-6 pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] font-sans text-[#D7CCC8]/60 gap-4">
-          <div className="text-left space-y-1.5">
+          <div className="text-left space-y-1.5 max-w-2xl">
             <p>© 2026 The Sugar Story. All rights reserved. Managed by Chef Shalini Singh.</p>
-            <p className="text-[10px] text-[#D7CCC8]/40 italic">Note: All product images on this website are AI-generated representations. The actual handmade product may vary slightly in appearance and presentation.</p>
+            <p className="text-[10px] text-[#D7CCC8]/40 italic leading-relaxed">Product images are illustrative and for showcase purposes. Handcrafted items are made fresh to order, so the actual cake or bake may differ slightly in appearance, colour, and decoration from the photo shown.</p>
           </div>
           <div className="flex gap-6 uppercase tracking-wider text-[9px] font-semibold">
             <button onClick={() => { setCurrentPage("story"); window.scrollTo(0, 0); }} className="hover:text-cream">Our Story</button>
